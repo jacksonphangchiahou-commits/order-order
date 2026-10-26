@@ -1,0 +1,2288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Order! Order!</title>
+<meta name="description" content="A card game of the British constitution for 6 to 8 players on their phones.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;600&display=swap">
+
+<script>
+/* ===================== FIREBASE SETTINGS =====================
+   Replace the line below with the "const firebaseConfig = { ... };"
+   block copied from your Firebase project settings.               */
+const firebaseConfig = {
+  apiKey: "AIzaSyCJCHIGqLZFD_OZBdClU8kxJ8Wc7Z18jKw",
+  authDomain: "order-order-b0ab2.firebaseapp.com",
+  databaseURL: "https://order-order-b0ab2-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "order-order-b0ab2",
+  storageBucket: "order-order-b0ab2.firebasestorage.app",
+  messagingSenderId: "513802756719",
+  appId: "1:513802756719:web:acd76cc3ae269b4d12a39a"
+};
+/* ============================================================= */
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/11.1.0/firebase-app-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/11.1.0/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/11.1.0/firebase-database-compat.js"></script>
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-size:14px}
+img{max-width:100%}
+[hidden]{display:none!important}
+/* Layout: one phone column; Commons-green bench as the table, order-paper cards in a docked hand at the bottom. Single deliberate dark theme. */
+:root{
+  --bench:#0d2a21; --bench-2:#13382c; --bench-3:#1b4738; --line:rgba(226,214,168,.17);
+  --ink:#eef0e5; --muted:#a6bba9; --brass:#d8b257; --brass-ink:#1c1606;
+  --paper:#f3efe3; --paper-2:#e8e2d1; --paper-ink:#1d221e; --paper-muted:#5b6157;
+  --gov:#d8b257; --opp:#ee9479; --fp:#ae9ff4; --pm:#f1cf72; --alert:#ff8a76;
+  --f-display:"Alegreya SC", "Iowan Old Style", Georgia, serif;
+  --f-ui:"IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --r:10px;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bench);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.4;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+  background-image:radial-gradient(120% 60% at 50% 0%, rgba(216,178,87,.07), transparent 70%);background-attachment:fixed}
+#app{max-width:980px;margin:0 auto}
+button{font:inherit;color:inherit;cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.45}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+h1,h2,h3{text-wrap:balance;margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin:0}
+.muted{color:var(--muted)} .small{font-size:13px}
+em{font-style:normal;color:var(--brass);font-size:12px;margin-left:4px}
+
+/* buttons */
+.btn{display:block;width:100%;border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:transparent;font-weight:600;font-size:15px;text-align:center}
+.btn.brass{background:var(--brass);color:var(--brass-ink);border-color:var(--brass)}
+.btn.primary{background:var(--ink);color:var(--bench);border-color:var(--ink);width:auto;padding-inline:20px}
+.btn.ghost{background:rgba(255,255,255,.03)}
+.linkish{background:none;border:0;color:var(--brass);text-decoration:underline;text-underline-offset:3px;padding:0}
+
+/* home */
+.home{padding-block:clamp(28px,8vh,72px) 40px;display:grid;gap:28px;max-width:460px;margin:0 auto}
+.mast h1{font-family:var(--f-display);font-weight:700;font-size:clamp(46px,13vw,72px);line-height:.95;letter-spacing:.01em;margin:10px 0 14px;color:var(--ink)}
+.mast h1::after{content:"";display:block;width:64px;height:3px;background:var(--brass);margin-top:16px}
+.lede{color:var(--muted);font-size:16px;max-width:40ch;margin:0}
+.panel{display:grid;gap:12px;background:var(--bench-2);border:1px solid var(--line);border-radius:14px;padding:18px}
+.field{display:grid;gap:6px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.field input{font:inherit;font-size:17px;letter-spacing:normal;text-transform:none;color:var(--ink);background:var(--bench);border:1px solid var(--line);border-radius:8px;padding:11px 12px;min-width:0}
+#code{font-family:var(--f-mono);letter-spacing:.3em;text-transform:uppercase}
+.join-row{display:flex;gap:10px;align-items:end}.grow{flex:1;min-width:0}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* lobby */
+.lobby{padding-block:32px 40px;display:grid;gap:20px;max-width:460px;margin:0 auto}
+.lobby-head{text-align:center;display:grid;gap:8px}
+.code{font-family:var(--f-mono);font-size:56px;letter-spacing:.24em;margin:0;color:var(--pm);font-weight:500;padding-left:.24em}
+.panel h2{font-family:var(--f-display);font-size:22px;display:flex;justify-content:space-between;align-items:baseline}
+.panel h2 .muted{font-family:var(--f-ui);font-size:13px}
+.roll{margin:0;padding:0;list-style:none;display:grid;gap:6px;counter-reset:m}
+.roll li{counter-increment:m;padding:8px 10px;border-radius:8px;background:var(--bench);display:flex;gap:8px}
+.roll li::before{content:counter(m);font-family:var(--f-mono);color:var(--muted);width:1.5em}
+.roll .botline{color:var(--muted);font-style:italic}.roll .botline::before{content:"+"}
+.countrow{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.segs{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg{background:none;border:0;padding:8px 16px;font-family:var(--f-mono)}
+.seg.on{background:var(--brass);color:var(--brass-ink)}
+
+/* waiting */
+.waiting{padding-block:80px;display:grid;gap:14px;max-width:420px;margin:0 auto;text-align:center}
+.waiting h2{font-family:var(--f-display);font-size:28px}
+
+/* game */
+.game{padding-bottom:324px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:10px;padding-block:10px;background:var(--bench);border-bottom:1px solid var(--line);font-size:13px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bench)}
+.bar-code{font-family:var(--f-mono);letter-spacing:.18em;color:var(--pm)}
+.bar-deck{color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.clock{font-family:var(--f-mono);font-variant-numeric:tabular-nums;padding:3px 8px;border-radius:6px;background:var(--bench-3)}
+.clock.low{background:var(--alert);color:#2a0b05}.clock.paused{color:var(--muted)}
+.iconbtn{background:none;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:12px;color:var(--muted)}
+.alert{margin-top:10px;padding:10px 12px;border-radius:8px;background:rgba(255,138,118,.14);color:var(--alert);font-size:14px}
+
+.scores{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.score{padding:8px 10px;border-radius:8px;background:var(--bench-2);display:grid;gap:2px}
+.score span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score b{font-family:var(--f-display);font-size:26px;line-height:1;font-variant-numeric:tabular-nums}
+.score small{font-size:14px;color:var(--muted)}
+.s-G b{color:var(--gov)} .s-O b{color:var(--opp)} .s-F b{color:var(--fp)}
+
+.seats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+@media (min-width:720px){.seats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.seat{background:var(--bench-2);border:1px solid var(--line);border-radius:var(--r);padding:10px;display:grid;gap:6px;align-content:start;min-width:0;transition:border-color .15s, transform .15s}
+.camp-G{--camp:var(--gov)} .camp-O{--camp:var(--opp)} .camp-F{--camp:var(--fp)}
+.seat{border-color:color-mix(in srgb, var(--camp) 40%, transparent);background:color-mix(in srgb, var(--camp) 11%, var(--bench-2))}
+.seat .sname{color:var(--camp)}
+.seat.is-pm{border-width:2px;border-color:var(--camp)}
+.seat.is-me{background:color-mix(in srgb, var(--camp) 20%, var(--bench-2))}
+.seat.is-cur{box-shadow:0 0 0 2px var(--ink);position:relative}
+.seat.is-cur::after{content:"Has the floor";position:absolute;top:-9px;right:8px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:var(--bench);padding:1px 6px;border-radius:4px}
+.seat.is-out{opacity:.45}
+.seat.is-pick{border-color:var(--ink);border-style:dashed;cursor:pointer}
+.seat.is-pick:hover{transform:translateY(-1px)}
+.seat.is-picked{background:rgba(216,178,87,.18);border-style:solid}
+.seat-top{display:flex;justify-content:space-between;gap:6px;align-items:baseline;min-width:0}
+.sname{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.role{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;padding:2px 6px;border-radius:4px;border:1px solid currentColor}
+.r-PM{color:var(--gov);font-weight:600;border-width:2px} .r-G{color:var(--gov)} .r-O{color:var(--opp)} .r-F{color:var(--fp)}
+.seat-meta{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:12px;color:var(--muted);align-items:center}
+.handct{font-variant-numeric:tabular-nums}
+.tag{font-size:11px;padding:1px 6px;border-radius:4px;background:rgba(255,255,255,.06)}
+.tag.me{color:var(--brass)} .tag.warn{color:var(--alert)} .tag.open{color:var(--fp)}
+.bills,.openhand,.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-size:11px;line-height:1.2;padding:3px 7px 3px 9px;border-radius:4px;background:var(--paper);color:var(--paper-ink);border:0;border-left:4px solid var(--band, #888);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.chip-act{border-left-color:var(--paper-muted);background:var(--paper-2)}
+.billchip{font-weight:600}
+
+.feed{margin-top:12px;display:grid;gap:6px}
+.banner{margin:0;padding:10px 12px;border-radius:8px;background:var(--bench-2);border:1px solid var(--line)}
+.banner p{margin:0}
+.banner.mine{border-color:var(--brass);color:var(--pm)}
+.banner.aim{background:rgba(216,178,87,.14);border-color:var(--brass)}
+.banner.resp{display:grid;gap:8px}
+.chain{margin:0;padding-left:20px;font-size:13px;color:var(--muted)}
+.lastlog{margin:0;font-size:13px;color:var(--muted);font-style:italic}
+
+.tbar{position:relative;height:18px;border-radius:9px;background:var(--bench);overflow:hidden}
+.tbar i{position:absolute;inset:0;background:var(--brass);transform-origin:left;opacity:.55}
+.tbar span{position:absolute;right:8px;top:0;font-family:var(--f-mono);font-size:11px;line-height:18px}
+
+/* dock */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(to top, var(--bench) 70%, rgba(13,42,33,.94));border-top:1px solid var(--line);
+  padding:10px max(16px, env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px, env(safe-area-inset-left,0px));display:grid;gap:8px}
+.dock > *{max-width:980px;width:100%;margin:0 auto;min-width:0}
+.dock-head{display:flex;gap:10px;align-items:center;font-size:13px;min-width:0}
+.goal{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.hand-scroll{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.dock-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dock-actions .btn{padding:10px}
+.empty{padding:30px 0}
+
+/* cards */
+.card{flex:none;width:100px;height:162px;border-radius:9px;background:var(--paper);color:var(--paper-ink);border:0;padding:0;display:flex;flex-direction:column;text-align:left;overflow:hidden;scroll-snap-align:start;box-shadow:0 2px 0 rgba(0,0,0,.35);transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card.is-sel{transform:translateY(-6px);box-shadow:0 0 0 3px var(--brass),0 6px 14px rgba(0,0,0,.4)}
+.c-band{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--band);color:#fff;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.c-set{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--paper-ink);font-weight:600;letter-spacing:0}
+.c-name{font-family:var(--f-display);font-weight:700;font-size:13px;line-height:1.1;padding:3px 8px 0}
+.c-foot{margin-top:auto;padding:6px 8px;font-size:11px;color:var(--paper-muted);border-top:1px dashed rgba(0,0,0,.18);font-variant-numeric:tabular-nums}
+.card.is-ready .c-foot{color:#1d6b3a;font-weight:600}
+.card.act .c-kind{padding:6px 8px 0;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-muted)}
+.card.k-d{background:var(--paper-2)}
+.card.k-d .c-kind{color:#7a2e22}
+.c-text{padding:3px 8px 7px;font-size:10.5px;line-height:1.2;color:var(--paper-muted);overflow:hidden}
+
+/* sheets & modals */
+.sheet-wrap{position:fixed;inset:0;z-index:20;background:rgba(4,14,10,.62);display:flex;align-items:flex-end;justify-content:center}
+.sheet{position:relative;width:100%;max-width:640px;max-height:88vh;overflow:auto;background:var(--bench-2);border-radius:16px 16px 0 0;border:1px solid var(--line);
+  padding:22px max(18px, env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(18px, env(safe-area-inset-left,0px));display:grid;gap:12px;align-content:start}
+.sheet h2{font-family:var(--f-display);font-size:26px;padding-right:70px}
+.sheet h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.sheet p{margin:0}
+.sheet-x{position:absolute;top:16px;right:16px;background:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px;font-size:13px;color:var(--muted)}
+.bigcard{display:flex;justify-content:center}
+.bigcard .card{width:170px;height:290px}.bigcard .c-art svg{width:104px;height:104px}
+.bigcard .c-name{font-size:19px}.bigcard .c-text{font-size:13px}
+.flav{font-style:italic;color:var(--muted)}
+.note{padding:10px 12px;border-radius:8px;background:var(--bench);color:var(--muted)}
+.warnline{color:var(--alert);font-size:14px;margin:0}
+.rules{margin:0;padding-left:18px;display:grid;gap:6px}
+.rules.plain{list-style:none;padding:0}
+.kindtag{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass)}
+.hansard{margin:0;padding-left:20px;display:grid;gap:8px}
+.stack{display:grid;gap:8px}.billopt{display:flex;gap:10px;align-items:center;text-align:left}
+.partners{display:flex;flex-wrap:wrap;gap:6px}
+.pill{border:1px solid var(--line);background:var(--bench);border-radius:999px;padding:7px 12px;font-size:14px}
+.pill small{color:var(--muted);margin-left:4px}
+.pill.on{background:var(--brass);color:var(--brass-ink);border-color:var(--brass)}
+.pill.on small{color:var(--brass-ink)}
+.pill[class*=camp-]{border-color:color-mix(in srgb, var(--camp) 55%, transparent);color:var(--camp)}
+.pill[class*=camp-].on{background:var(--camp);color:var(--brass-ink);border-color:var(--camp)}
+.minis{display:flex;flex-wrap:wrap;gap:6px}
+.minis .card{width:88px;height:150px}.minis .c-art svg{width:46px;height:46px}
+.minis .c-text{display:none}
+.wants{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.want{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:4px;border-radius:6px;min-width:0}
+.want.on{background:rgba(216,178,87,.14)}
+.want .chip{min-width:0}
+.step{display:flex;align-items:center;gap:6px;flex:none}
+.step button{width:28px;height:28px;border-radius:6px;border:1px solid var(--line);background:var(--bench)}
+.step b{font-family:var(--f-mono);min-width:1ch;text-align:center}
+.sheet-foot{position:sticky;bottom:0;padding-top:8px;background:var(--bench-2)}
+
+.modal{position:fixed;inset:0;z-index:15;background:rgba(4,14,10,.7);display:flex;align-items:center;justify-content:center;padding:16px max(16px, env(safe-area-inset-right,0px)) 16px max(16px, env(safe-area-inset-left,0px))}
+.mbox{width:100%;max-width:440px;max-height:90vh;overflow:auto;background:var(--bench-2);border:1px solid var(--brass);border-radius:14px;padding:20px;display:grid;gap:12px}
+.mbox.wide{max-width:600px}
+.mbox h2{font-family:var(--f-display);font-size:22px;line-height:1.15}
+.mbox h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mbox p{margin:0}
+.mrow{display:flex;gap:8px;flex-wrap:wrap}.mrow .btn{flex:1;min-width:140px}
+.counters{display:grid;gap:8px}
+.btn.counter{text-align:left;display:grid;gap:2px;background:var(--paper);color:var(--paper-ink);border-color:var(--paper)}
+.btn.counter small{font-weight:400;color:var(--paper-muted)}
+.tradecols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tradecols > div{display:grid;gap:6px;align-content:start;min-width:0}
+.times{font-family:var(--f-mono);font-size:12px;margin-right:6px}
+.over .mbox{max-width:480px;text-align:center}
+.win{font-size:40px!important}
+.w-G{color:var(--gov)} .w-O{color:var(--opp)} .w-F{color:var(--fp)}
+.results{list-style:none;margin:0;padding:0;display:grid;gap:4px;text-align:left}
+.results li{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:6px 8px;border-radius:6px;background:var(--bench)}
+.results li.won{background:rgba(216,178,87,.16)}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(274px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--ink);color:var(--bench);padding:10px 14px;border-radius:8px;font-size:14px;max-width:min(92vw,420px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.home ~ .toast,.lobby ~ .toast,.waiting ~ .toast{bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+
+.pop{position:fixed;inset:0;z-index:16;display:flex;align-items:center;justify-content:center;pointer-events:none;background:rgba(4,14,10,.55);padding-inline:16px}
+.popbox{display:grid;justify-items:center;gap:12px;text-align:center;animation:popin .35s ease-out}
+.pop-who{margin:0;font-family:var(--f-display);font-size:22px;color:var(--camp)}
+.pop-on{margin:0;font-size:16px;max-width:30ch}
+.popcard{width:180px;height:300px;box-shadow:0 0 0 3px var(--camp),0 14px 40px rgba(0,0,0,.5)}
+.popcard .c-name{font-size:21px}.popcard .c-text{font-size:13.5px}
+@keyframes popin{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.card.wild{background:linear-gradient(160deg,var(--paper) 55%,#efe3bf)}
+.card.wild .c-band{background:linear-gradient(90deg,#7a5aa8,#c4583c,#2f8a88,#a07d22)}
+.card.wild .c-text{padding-top:6px}
+.chip-wild{border-left-color:transparent;border-image:linear-gradient(#7a5aa8,#c4583c,#a07d22) 1;font-weight:600}
+.billopt small{margin-left:auto}
+
+.popcard.elec{background:#ece6f8;box-shadow:0 0 0 3px var(--fp),0 14px 40px rgba(0,0,0,.5)}
+.popcard.elec .c-kind{color:#4b3a8a}
+
+.c-art{display:grid;place-items:center;padding-top:4px;flex:none}
+.c-art svg{width:58px;height:58px;display:block}
+.popcard .c-art svg{width:108px;height:108px}
+.card.bill .c-foot{margin-top:auto}
+.chip-i{width:14px;height:14px;vertical-align:-3px;margin-right:4px;display:inline-block}
+.chip{display:inline-flex;align-items:center}
+.billchip .chip-i{width:15px;height:15px}
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0" aria-hidden="true"><defs>
+<symbol id="i-larry" viewBox="0 0 100 100">
+      <path d="M80 60 C94 56 96 40 88 30" fill="none" stroke="#2a2620" stroke-width="9" stroke-linecap="round"/>
+      <path d="M80 60 C94 56 96 40 88 30" fill="none" stroke="#8a7158" stroke-width="5" stroke-linecap="round"/>
+      <path d="M90 36 l-5 -2 M93 45 l-5 0 M90 53 l-5 1" stroke="#4a3a2e" stroke-width="2.2" stroke-linecap="round"/>
+      <g stroke="#2a2620" stroke-width="3" stroke-linejoin="round">
+        <rect x="43" y="64" width="7" height="19" rx="3.5" fill="#8a7158"/><rect x="53" y="66" width="7" height="17" rx="3.5" fill="#f3efe3"/>
+        <rect x="68" y="66" width="7" height="17" rx="3.5" fill="#8a7158"/><rect x="77" y="62" width="7" height="21" rx="3.5" fill="#f3efe3"/>
+        <ellipse cx="62" cy="60" rx="22" ry="13" fill="#8a7158"/>
+        <path d="M37 40 L52 49 L51 64 L34 58 Z" fill="#8a7158"/>
+      </g>
+      <path d="M38 50 C42 60 48 64 54 63 L52 52 Z" fill="#f3efe3"/>
+      <g stroke="#4a3a2e" stroke-width="2.6" stroke-linecap="round" fill="none">
+        <path d="M60 48 C64 54 64 62 60 70"/><path d="M68 48 C72 54 72 62 68 71"/><path d="M76 50 C79 55 79 62 76 69"/>
+      </g>
+      <g stroke="#2a2620" stroke-width="3" stroke-linejoin="round">
+        <path d="M27 37 L25 22 L35 32 Z M40 32 L47 21 L48 36 Z" fill="#8a7158"/>
+        <circle cx="36" cy="45" r="13" fill="#8a7158"/>
+      </g>
+      <path d="M28 25 l3 6 M44 25 l-1 6" stroke="#e7b9a8" stroke-width="2" stroke-linecap="round"/>
+      <path d="M33 35 l1 4 M38 34 l0 4 M42 36 l-1 4" stroke="#4a3a2e" stroke-width="2" stroke-linecap="round"/>
+      <path d="M24 49 C27 56 34 58 38 55 C36 51 30 48 24 49 Z" fill="#f3efe3"/>
+      <ellipse cx="31" cy="43" rx="2.4" ry="3" fill="#7fae4a" stroke="#2a2620" stroke-width="1.2"/>
+      <circle cx="23.5" cy="48" r="1.8" fill="#c97a6a"/>
+      <g stroke="#2a2620" stroke-width="2.4" stroke-linejoin="round">
+        <rect x="4" y="46" width="15" height="21" rx="2.5" fill="#f3efe3" transform="rotate(-18 11 56)"/>
+        <rect x="10" y="49" width="15" height="21" rx="2.5" fill="#c4583c" transform="rotate(8 17 59)"/>
+      </g>
+      <path d="M7 52 h6 M7 56 h8" stroke="#2a2620" stroke-width="1.6" transform="rotate(-18 11 56)"/>
+      <path d="M21 52 C24 55 28 55 31 53" fill="none" stroke="#2a2620" stroke-width="2.4" stroke-linecap="round"/>
+    </symbol>
+<symbol id="i-jr" viewBox="0 0 100 100">
+      <g fill="none" stroke="#2a2620" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M50 16 V82"/>
+        <path d="M18 30 Q50 22 82 30"/>
+        <path d="M22 30 L10 58 M22 30 L34 58"/>
+        <path d="M78 30 L66 54 M78 30 L90 54"/>
+        <path d="M32 86 H68"/>
+      </g>
+      <path d="M8 58 Q22 74 36 58 Z" fill="#d8b257" stroke="#2a2620" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M64 54 Q78 70 92 54 Z" fill="#d8b257" stroke="#2a2620" stroke-width="4" stroke-linejoin="round"/>
+      <circle cx="50" cy="14" r="5" fill="#d8b257" stroke="#2a2620" stroke-width="3.5"/>
+      <path d="M40 86 Q50 74 60 86 Z" fill="#2a2620"/>
+    </symbol>
+<symbol id="i-Y" viewBox="0 0 100 100">
+      <path d="M34 62 L28 92 H64 L60 64 Z" fill="#6e5442" stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M28 30 C38 16 62 16 68 32 L84 38 C91 40 92 54 85 57 L66 61 C60 72 40 74 31 63 C22 54 21 39 28 30 Z" fill="#8a6a52" stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M35 25 C25 20 15 34 21 50 C29 49 33 40 38 31 Z" fill="#4a362a" stroke="#2a2620" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="56" cy="35" r="3.2" fill="#2a2620"/>
+      <circle cx="57" cy="34" r="1" fill="#f3efe3"/>
+      <circle cx="87" cy="45" r="4" fill="#2a2620"/>
+      <g fill="none" stroke="#3b3f45" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M64 33 L88 39 Q93 48 88 57 L66 61"/>
+        <path d="M64 33 Q60 47 66 61"/>
+        <path d="M72 35 Q69 48 73 60 M80 37 Q78 48 80 59"/>
+        <path d="M65 47 L91 48"/>
+      </g>
+      <path d="M30 62 Q46 74 60 64" fill="none" stroke="#c4583c" stroke-width="6" stroke-linecap="round"/>
+      <g fill="#d8d2c2" stroke="#2a2620" stroke-width="1.5" stroke-linejoin="round">
+        <path d="M34 66 l-3 7 6 -3 Z M43 70 l-1 7 5 -5 Z M52 69 l1 7 3 -6 Z"/>
+      </g>
+    </symbol>
+<!-- Lords' Rejection: a rubber stamp and its red NOT CONTENT impression -->
+<symbol id="i-lr" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <circle cx="50" cy="16" r="9" fill="#8e2433"/>
+    <rect x="44" y="23" width="12" height="15" rx="2" fill="#b0a58c"/>
+    <rect x="26" y="37" width="48" height="13" rx="3" fill="#8e2433"/>
+    <rect x="30" y="50" width="40" height="5" fill="#2a2620"/>
+  </g>
+  <g transform="rotate(-7 50 75)">
+    <rect x="12" y="62" width="76" height="26" rx="3" fill="none" stroke="#c4583c" stroke-width="4"/>
+    <rect x="16" y="66" width="68" height="18" rx="2" fill="none" stroke="#c4583c" stroke-width="1.5"/>
+    <text x="50" y="79.5" text-anchor="middle" font-family="IBM Plex Mono, Menlo, monospace" font-weight="700" font-size="9.6" fill="#c4583c" letter-spacing=".6">NOT CONTENT</text>
+  </g>
+</symbol>
+
+<!-- Coalition Agreement: two interlocking rings -->
+<symbol id="i-coal" viewBox="0 0 100 100">
+  <circle cx="38" cy="50" r="21" fill="none" stroke="#2a2620" stroke-width="13"/>
+  <circle cx="38" cy="50" r="21" fill="none" stroke="#d8b257" stroke-width="7"/>
+  <circle cx="62" cy="50" r="21" fill="none" stroke="#2a2620" stroke-width="13"/>
+  <circle cx="62" cy="50" r="21" fill="none" stroke="#c4583c" stroke-width="7"/>
+  <path d="M42.2 29.4 A21 21 0 0 1 55.7 37.3" fill="none" stroke="#2a2620" stroke-width="13"/>
+  <path d="M41.5 29.3 A21 21 0 0 1 56.2 37.9" fill="none" stroke="#d8b257" stroke-width="7"/>
+</symbol>
+
+<!-- Cross-Party Talks: round table seen from above, with chairs and papers -->
+<symbol id="i-talks" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3" stroke-linejoin="round">
+    <rect x="40" y="6" width="20" height="13" rx="4" fill="#d8b257"/>
+    <rect x="40" y="81" width="20" height="13" rx="4" fill="#c4583c"/>
+    <rect x="6" y="40" width="13" height="20" rx="4" fill="#3f7fb0"/>
+    <rect x="81" y="40" width="13" height="20" rx="4" fill="#4f8f5e"/>
+    <circle cx="50" cy="50" r="29" fill="#b8732f"/>
+    <circle cx="50" cy="50" r="23" fill="none" stroke="#8a5420" stroke-width="2"/>
+    <rect x="36" y="38" width="16" height="20" rx="1.5" fill="#f3efe3" transform="rotate(-12 44 48)"/>
+    <rect x="50" y="42" width="16" height="20" rx="1.5" fill="#f3efe3" transform="rotate(10 58 52)"/>
+  </g>
+  <path d="M40 44 h8 M40 48 h8 M40 52 h6" stroke="#2a2620" stroke-width="1.5" transform="rotate(-12 44 48)"/>
+  <path d="M54 48 h8 M54 52 h8 M54 56 h6" stroke="#2a2620" stroke-width="1.5" transform="rotate(10 58 52)"/>
+</symbol>
+
+<!-- Vote of No Confidence: ballot paper marked with a cross, and a pencil -->
+<symbol id="i-vonc" viewBox="0 0 100 100">
+  <rect x="22" y="12" width="48" height="70" rx="3" fill="#f3efe3" stroke="#2a2620" stroke-width="3.5"/>
+  <g stroke="#2a2620" stroke-width="2.4" stroke-linecap="round"><path d="M29 24 h22 M29 30 h16 M29 46 h22 M29 52 h16 M29 66 h22"/></g>
+  <rect x="55" y="20" width="10" height="12" fill="#fff" stroke="#2a2620" stroke-width="2.4"/>
+  <rect x="55" y="42" width="10" height="12" fill="#fff" stroke="#2a2620" stroke-width="2.4"/>
+  <path d="M51 36 L69 16 M51 16 L69 36" stroke="#c4583c" stroke-width="5" stroke-linecap="round"/>
+  <g transform="rotate(38 72 70)" stroke="#2a2620" stroke-width="2.8" stroke-linejoin="round">
+    <rect x="66" y="44" width="11" height="38" fill="#d8b257"/>
+    <path d="M66 82 L71.5 94 L77 82 Z" fill="#e8d9b5"/>
+    <rect x="66" y="40" width="11" height="6" fill="#c4583c"/>
+  </g>
+</symbol>
+
+<!-- Party Funding: a coin purse and stacked coins -->
+<symbol id="i-fund" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <circle cx="31" cy="22" r="6" fill="#d8b257"/>
+    <circle cx="47" cy="22" r="6" fill="#d8b257"/>
+    <path d="M18 32 H60 C70 46 72 68 62 82 H16 C6 68 8 46 18 32 Z" fill="#a54a7c"/>
+    <rect x="16" y="28" width="46" height="8" rx="3" fill="#d8b257"/>
+    <g fill="#d8b257"><ellipse cx="80" cy="84" rx="13" ry="5"/><path d="M67 84 v-7 a13 5 0 0 0 26 0 v7"/><ellipse cx="80" cy="77" rx="13" ry="5"/><path d="M67 77 v-7 a13 5 0 0 0 26 0 v7"/><ellipse cx="80" cy="70" rx="13" ry="5"/></g>
+  </g>
+  <text x="39" y="66" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="22" fill="#f3efe3">£</text>
+</symbol>
+
+<!-- Select Committee Inquiry: magnifying glass over a document -->
+<symbol id="i-inq" viewBox="0 0 100 100">
+  <rect x="14" y="10" width="50" height="66" rx="3" fill="#f3efe3" stroke="#2a2620" stroke-width="3.5"/>
+  <g stroke="#2a2620" stroke-width="2.4" stroke-linecap="round"><path d="M22 22 h34 M22 30 h28 M22 38 h34 M22 46 h20 M22 54 h30 M22 62 h24"/></g>
+  <circle cx="58" cy="54" r="18" fill="#cfe6ef" fill-opacity=".75" stroke="#2a2620" stroke-width="6"/>
+  <path d="M50 46 a10 10 0 0 1 10 -4" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M71 67 L88 85" stroke="#2a2620" stroke-width="12" stroke-linecap="round"/>
+  <path d="M73 69 L87 84" stroke="#b8732f" stroke-width="6" stroke-linecap="round"/>
+</symbol>
+
+<!-- Confidence and Supply: a handshake under a coin -->
+<symbol id="i-cs" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.2" stroke-linejoin="round">
+    <circle cx="50" cy="22" r="13" fill="#d8b257"/>
+    <rect x="4" y="50" width="22" height="24" rx="3" fill="#3f7fb0"/>
+    <rect x="22" y="50" width="6" height="24" fill="#f3efe3"/>
+    <rect x="74" y="44" width="22" height="24" rx="3" fill="#c4583c"/>
+    <rect x="72" y="44" width="6" height="24" fill="#f3efe3"/>
+    <path d="M28 52 L52 46 Q66 44 68 53 Q68 62 56 64 L28 72 Z" fill="#e9c19c"/>
+    <path d="M72 46 L50 54 Q38 58 41 66 Q45 73 57 70 L72 66 Z" fill="#c9926a"/>
+  </g>
+  <path d="M49 60 l7 -2.5 M47 65 l8 -2.5" stroke="#2a2620" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="50" y="29" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="17" fill="#2a2620">£</text>
+</symbol>
+
+<!-- Parliament Acts 1911 & 1949: an hourglass, because the Lords can only delay -->
+<symbol id="i-pa" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <rect x="22" y="8" width="56" height="10" rx="3" fill="#b8732f"/>
+    <rect x="22" y="82" width="56" height="10" rx="3" fill="#b8732f"/>
+    <path d="M30 18 H70 C70 36 54 42 54 50 C54 58 70 64 70 82 H30 C30 64 46 58 46 50 C46 42 30 36 30 18 Z" fill="#e5f1f4"/>
+  </g>
+  <path d="M36 27 H64 C62 35 54 40 51 46 H49 C46 40 38 35 36 27 Z" fill="#d8b257"/>
+  <path d="M34 80 C36 70 44 66 50 64 C56 66 64 70 66 80 Z" fill="#d8b257"/>
+  <path d="M50 47 V63" stroke="#d8b257" stroke-width="2.5"/>
+  <path d="M28 18 V82 M72 18 V82" stroke="#2a2620" stroke-width="3.5" stroke-linecap="round"/>
+</symbol>
+
+<!-- Royal Intervention: a crown above a row of new peers in red robes -->
+<symbol id="i-ri" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.2" stroke-linejoin="round">
+    <path d="M28 40 L24 16 L37 28 L50 10 L63 28 L76 16 L72 40 Z" fill="#d8b257"/>
+    <rect x="27" y="38" width="46" height="8" rx="2" fill="#c4583c"/>
+    <g fill="#e9c19c"><circle cx="16" cy="62" r="6"/><circle cx="38" cy="62" r="6"/><circle cx="62" cy="62" r="6"/><circle cx="84" cy="62" r="6"/></g>
+    <g fill="#8e2433"><path d="M7 92 Q8 72 16 70 Q24 72 25 92 Z"/><path d="M29 92 Q30 72 38 70 Q46 72 47 92 Z"/><path d="M53 92 Q54 72 62 70 Q70 72 71 92 Z"/><path d="M75 92 Q76 72 84 70 Q92 72 93 92 Z"/></g>
+    <g fill="#f3efe3"><path d="M11 74 Q16 78 21 74 L21 78 Q16 82 11 78 Z"/><path d="M33 74 Q38 78 43 74 L43 78 Q38 82 33 78 Z"/><path d="M57 74 Q62 78 67 74 L67 78 Q62 82 57 78 Z"/><path d="M79 74 Q84 78 89 74 L89 78 Q84 82 79 78 Z"/></g>
+  </g>
+  <g fill="#d8b257"><circle cx="24" cy="16" r="3"/><circle cx="50" cy="10" r="3.5"/><circle cx="76" cy="16" r="3"/></g>
+  <path d="M84 54 v-6 M81 51 h6" stroke="#2a2620" stroke-width="2.4" stroke-linecap="round"/>
+</symbol>
+
+<!-- Dissolution of Parliament: a ballot paper going into a ballot box -->
+<symbol id="i-diss" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <rect x="38" y="8" width="26" height="34" rx="2" fill="#f3efe3" transform="rotate(8 51 25)"/>
+    <path d="M14 44 H86 V88 H14 Z" fill="#56627f"/>
+    <path d="M10 38 H90 V48 H10 Z" fill="#3b4459"/>
+    <rect x="36" y="41" width="28" height="4" fill="#2a2620"/>
+    <rect x="30" y="58" width="40" height="16" rx="2" fill="#f3efe3"/>
+  </g>
+  <path d="M46 18 L56 28 M56 18 L46 28" stroke="#c4583c" stroke-width="3.5" stroke-linecap="round" transform="rotate(8 51 25)"/>
+  <text x="50" y="70" text-anchor="middle" font-family="IBM Plex Mono, Menlo, monospace" font-weight="700" font-size="9" fill="#2a2620" letter-spacing="1">BALLOT</text>
+</symbol>
+
+<!-- Prorogation of Parliament: closed doors under a clock -->
+<symbol id="i-pror" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M18 92 V44 Q18 24 50 24 Q82 24 82 44 V92 Z" fill="#c9bfa6"/>
+    <path d="M26 92 V46 Q26 32 50 32 Q74 32 74 46 V92 Z" fill="#8a5420"/>
+    <path d="M50 32 V92" fill="none"/>
+    <circle cx="50" cy="16" r="12" fill="#f3efe3"/>
+  </g>
+  <path d="M50 16 V9 M50 16 L55 19" stroke="#2a2620" stroke-width="2.6" stroke-linecap="round"/>
+  <g fill="none" stroke="#6b3d14" stroke-width="2.4"><rect x="31" y="50" width="14" height="16" rx="1.5"/><rect x="55" y="50" width="14" height="16" rx="1.5"/><rect x="31" y="72" width="14" height="14" rx="1.5"/><rect x="55" y="72" width="14" height="14" rx="1.5"/></g>
+  <circle cx="45" cy="68" r="2.5" fill="#d8b257" stroke="#2a2620" stroke-width="1.2"/>
+  <circle cx="55" cy="68" r="2.5" fill="#d8b257" stroke="#2a2620" stroke-width="1.2"/>
+  <path d="M38 62 Q50 74 62 62" fill="none" stroke="#56627f" stroke-width="3.5" stroke-dasharray="4 2"/>
+  <rect x="45" y="66" width="10" height="9" rx="2" fill="#56627f" stroke="#2a2620" stroke-width="2"/>
+</symbol>
+
+<!-- Parliamentary Sovereignty: the ceremonial mace -->
+<symbol id="i-sov" viewBox="0 0 100 100">
+  <g transform="rotate(-28 50 52)" stroke="#2a2620" stroke-width="3.2" stroke-linejoin="round">
+    <rect x="46" y="34" width="8" height="56" rx="3" fill="#d8b257"/>
+    <rect x="43" y="50" width="14" height="5" rx="2" fill="#b8902f"/>
+    <rect x="43" y="68" width="14" height="5" rx="2" fill="#b8902f"/>
+    <circle cx="50" cy="92" r="5" fill="#b8902f"/>
+    <path d="M34 36 Q50 42 66 36 L64 24 Q50 30 36 24 Z" fill="#d8b257"/>
+    <path d="M36 24 Q40 8 50 8 Q60 8 64 24 Q50 30 36 24 Z" fill="#c4583c"/>
+    <path d="M38 24 Q44 12 50 10 Q56 12 62 24" fill="none"/>
+    <circle cx="50" cy="6" r="3.5" fill="#d8b257"/>
+  </g>
+</symbol>
+
+<!-- Election Interference: a ballot paper on puppet strings -->
+<symbol id="i-elec" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.2" stroke-linejoin="round">
+    <rect x="20" y="8" width="60" height="8" rx="3" fill="#b8732f"/>
+    <rect x="46" y="2" width="8" height="22" rx="3" fill="#b8732f"/>
+  </g>
+  <g stroke="#2a2620" stroke-width="1.6"><path d="M24 14 L28 50 M76 14 L70 46 M50 24 L50 40"/></g>
+  <g transform="rotate(-8 50 66)" stroke="#2a2620" stroke-width="3.2" stroke-linejoin="round">
+    <rect x="28" y="42" width="44" height="50" rx="3" fill="#f3efe3"/>
+    <rect x="56" y="50" width="10" height="11" fill="#fff" stroke-width="2.2"/>
+    <rect x="56" y="70" width="10" height="11" fill="#fff" stroke-width="2.2"/>
+  </g>
+  <g transform="rotate(-8 50 66)" stroke-linecap="round"><path d="M34 54 h16 M34 74 h16" stroke="#2a2620" stroke-width="2.2"/><path d="M56 50 L66 61 M66 50 L56 61" stroke="#6c4f9c" stroke-width="3.6"/></g>
+  <circle cx="84" cy="34" r="9" fill="#ae9ff4" stroke="#2a2620" stroke-width="2.6"/>
+  <path d="M75 34 h18 M84 25 c-5 5 -5 13 0 18 c5 -5 5 -13 0 -18" fill="none" stroke="#2a2620" stroke-width="1.6"/>
+</symbol>
+
+<!-- Henry VIII Clause (wild): a Tudor crown with a star -->
+<symbol id="i-wild" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.2" stroke-linejoin="round">
+    <path d="M24 60 Q22 34 50 30 Q78 34 76 60 Z" fill="#8e2433"/>
+    <path d="M26 60 Q28 30 50 28 M74 60 Q72 30 50 28 M50 28 V60" fill="none" stroke="#d8b257" stroke-width="5"/>
+    <path d="M26 60 Q28 30 50 28 M74 60 Q72 30 50 28 M50 28 V60" fill="none"/>
+    <circle cx="50" cy="22" r="6" fill="#d8b257"/>
+    <path d="M50 16 V6 M45 10 H55" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="20" y="58" width="60" height="14" rx="3" fill="#d8b257"/>
+    <rect x="20" y="72" width="60" height="8" rx="3" fill="#f3efe3"/>
+  </g>
+  <g fill="#c4583c" stroke="#2a2620" stroke-width="1.5"><circle cx="32" cy="65" r="3"/><rect x="47" y="62" width="6" height="6" transform="rotate(45 50 65)"/><circle cx="68" cy="65" r="3"/></g>
+  <g fill="#2a2620"><circle cx="28" cy="76" r="1.3"/><circle cx="38" cy="76" r="1.3"/><circle cx="48" cy="76" r="1.3"/><circle cx="58" cy="76" r="1.3"/><circle cx="68" cy="76" r="1.3"/></g>
+  <path d="M84 20 L87 29 L96 32 L87 35 L84 44 L81 35 L72 32 L81 29 Z" fill="#d8b257" stroke="#2a2620" stroke-width="2"/>
+  <path d="M14 82 L16 87 L21 89 L16 91 L14 96 L12 91 L7 89 L12 87 Z" fill="#d8b257" stroke="#2a2620" stroke-width="1.6"/>
+</symbol>
+
+<!-- Environment Protection Bill: a leaf -->
+<symbol id="i-E" viewBox="0 0 100 100">
+  <path d="M18 82 C16 40 44 14 86 14 C88 54 62 84 18 82 Z" fill="#4f8f5e" stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M10 92 C30 70 50 48 74 26" fill="none" stroke="#2a2620" stroke-width="4" stroke-linecap="round"/>
+  <g fill="none" stroke="#2f6b3e" stroke-width="2.6" stroke-linecap="round"><path d="M34 66 L32 48 M46 54 L46 36 M58 42 L60 28 M40 60 L58 62 M52 48 L70 48"/></g>
+  <path d="M30 36 C38 26 50 22 60 22" fill="none" stroke="#a9d3a0" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+
+<!-- Railway Reform Bill: the front of a train on its rails -->
+<symbol id="i-R" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M26 82 L18 96 M74 82 L82 96 M22 90 H78" fill="none" stroke-linecap="round"/>
+    <rect x="22" y="10" width="56" height="72" rx="14" fill="#b8732f"/>
+    <rect x="30" y="18" width="40" height="26" rx="5" fill="#cfe6ef"/>
+    <rect x="22" y="52" width="56" height="10" fill="#f3efe3"/>
+    <circle cx="34" cy="71" r="5" fill="#f6e7a6"/>
+    <circle cx="66" cy="71" r="5" fill="#f6e7a6"/>
+  </g>
+  <path d="M42 71 h16" stroke="#2a2620" stroke-width="3" stroke-linecap="round"/>
+  <path d="M36 24 l8 0" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+
+<!-- Clean Water Bill: a tap with a falling drop -->
+<symbol id="i-W" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <rect x="8" y="22" width="16" height="22" rx="3" fill="#b0a58c"/>
+    <path d="M24 26 H56 Q70 26 70 40 V46 H58 V40 Q58 38 56 38 H24 Z" fill="#c9cdd3"/>
+    <rect x="34" y="12" width="12" height="14" rx="2" fill="#c9cdd3"/>
+    <rect x="26" y="8" width="28" height="7" rx="3" fill="#2a93bd"/>
+    <path d="M64 56 C64 56 50 72 50 82 C50 90 56 95 64 95 C72 95 78 90 78 82 C78 72 64 56 64 56 Z" fill="#2a93bd"/>
+  </g>
+  <path d="M58 80 Q58 86 63 88" fill="none" stroke="#cfeaf6" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+
+<!-- Online Safety Bill: a shield with a tick on a phone screen -->
+<symbol id="i-O" viewBox="0 0 100 100">
+  <rect x="24" y="6" width="52" height="88" rx="9" fill="#2a2620"/>
+  <rect x="29" y="14" width="42" height="68" rx="3" fill="#3f7fb0"/>
+  <circle cx="50" cy="88" r="3" fill="#56627f"/>
+  <path d="M50 26 L66 32 V46 C66 58 58 66 50 70 C42 66 34 58 34 46 V32 Z" fill="#f3efe3" stroke="#2a2620" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M42 47 L48 53 L59 40" fill="none" stroke="#4f8f5e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+
+<!-- Electoral Reform Bill: a ranked ballot, 1 2 3 -->
+<symbol id="i-L" viewBox="0 0 100 100">
+  <rect x="20" y="8" width="60" height="84" rx="3" fill="#f3efe3" stroke="#2a2620" stroke-width="3.5"/>
+  <g stroke="#2a2620" stroke-width="2.4"><rect x="58" y="18" width="14" height="16" fill="#fff"/><rect x="58" y="42" width="14" height="16" fill="#fff"/><rect x="58" y="66" width="14" height="16" fill="#fff"/></g>
+  <g stroke="#2a2620" stroke-width="2.4" stroke-linecap="round"><path d="M28 24 h22 M28 30 h14 M28 48 h22 M28 54 h14 M28 72 h22 M28 78 h14"/></g>
+  <g font-family="Georgia, serif" font-weight="700" font-size="15" fill="#a54a7c" text-anchor="middle"><text x="65" y="31">2</text><text x="65" y="55">1</text><text x="65" y="79">3</text></g>
+</symbol>
+
+<!-- Freedom of Information Bill: an open folder of papers -->
+<symbol id="i-F" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M8 30 H36 L42 38 H88 V86 H8 Z" fill="#7d7232"/>
+    <rect x="22" y="16" width="44" height="54" rx="2" fill="#f3efe3" transform="rotate(-8 44 43)"/>
+    <rect x="34" y="20" width="44" height="54" rx="2" fill="#fff" transform="rotate(6 56 47)"/>
+    <path d="M4 50 H84 L92 86 H12 Z" fill="#b2a456"/>
+  </g>
+  <g stroke="#2a2620" stroke-width="2.2" stroke-linecap="round" transform="rotate(6 56 47)"><path d="M42 30 h28 M42 37 h22"/></g>
+  <text x="50" y="76" text-anchor="middle" font-family="IBM Plex Mono, Menlo, monospace" font-weight="700" font-size="13" fill="#2a2620" letter-spacing="1">FOI</text>
+</symbol>
+
+<!-- Cannabis Bill: a seven-point leaf in a circle -->
+<symbol id="i-P" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="44" fill="#e7efd9" stroke="#2a2620" stroke-width="3.5"/>
+  <g fill="#58872a" stroke="#2a2620" stroke-width="2.4" stroke-linejoin="round">
+    <path d="M50 64 C44 46 44 26 50 12 C56 26 56 46 50 64 Z"/>
+    <path d="M50 64 C36 54 28 40 26 26 C38 34 46 48 50 64 Z"/>
+    <path d="M50 64 C64 54 72 40 74 26 C62 34 54 48 50 64 Z"/>
+    <path d="M50 64 C36 62 22 56 14 46 C28 46 42 54 50 64 Z"/>
+    <path d="M50 64 C64 62 78 56 86 46 C72 46 58 54 50 64 Z"/>
+    <path d="M50 64 C42 68 32 70 24 68 C32 62 42 62 50 64 Z"/>
+    <path d="M50 64 C58 68 68 70 76 68 C68 62 58 62 50 64 Z"/>
+  </g>
+  <path d="M50 64 V86" stroke="#2a2620" stroke-width="3.5" stroke-linecap="round"/>
+</symbol>
+
+<!-- Land Reform Bill: fields, hills and a fence -->
+<symbol id="i-M" viewBox="0 0 100 100">
+  <rect x="6" y="10" width="88" height="80" rx="8" fill="#dcebf1" stroke="#2a2620" stroke-width="3.5"/>
+  <path d="M8 56 Q30 30 52 50 Q70 34 92 48 V88 H8 Z" fill="#7fae4a" stroke="#2a2620" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M8 70 Q50 58 92 66 V88 H8 Z" fill="#946226" stroke="#2a2620" stroke-width="3" stroke-linejoin="round"/>
+  <g fill="none" stroke="#6b4318" stroke-width="2"><path d="M16 74 Q50 64 86 72 M14 80 Q50 72 88 78"/></g>
+  <g stroke="#2a2620" stroke-width="3" stroke-linejoin="round" fill="#f3efe3">
+    <rect x="16" y="56" width="5" height="20"/><rect x="38" y="54" width="5" height="20"/><rect x="60" y="54" width="5" height="20"/><rect x="82" y="56" width="5" height="20"/>
+  </g>
+  <path d="M16 62 H87 M16 70 H87" stroke="#2a2620" stroke-width="2.6"/>
+  <circle cx="74" cy="26" r="8" fill="#f6e7a6" stroke="#2a2620" stroke-width="2.6"/>
+</symbol>
+
+<!-- Bill of Rights Bill: a scroll with a red wax seal -->
+<symbol id="i-B" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M24 16 H80 V74 Q80 86 68 86 H20 Q30 86 30 74 V22 Q30 16 24 16 Z" fill="#f3e6c4"/>
+    <path d="M24 16 Q16 16 16 24 Q16 30 24 30 H30" fill="#e3d09f"/>
+    <path d="M20 86 Q8 86 8 76 Q8 68 18 68 H30" fill="#e3d09f"/>
+  </g>
+  <g stroke="#2a2620" stroke-width="2.4" stroke-linecap="round"><path d="M40 28 h30 M40 36 h30 M40 44 h24 M40 52 h30"/></g>
+  <circle cx="62" cy="70" r="10" fill="#c4583c" stroke="#2a2620" stroke-width="3"/>
+  <path d="M56 78 L52 92 L58 88 L62 94 L64 80" fill="#c4583c" stroke="#2a2620" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M58 70 l3 3 l6 -6" fill="none" stroke="#f3efe3" stroke-width="2.4" stroke-linecap="round"/>
+</symbol>
+
+<!-- Devolution Bill: a whole split into four drifting pieces -->
+<symbol id="i-D" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M46 8 A38 38 0 0 0 8 46 H46 Z" fill="#3f7fb0"/>
+    <path d="M54 8 A38 38 0 0 1 92 46 H54 Z" fill="#c4583c"/>
+    <path d="M46 92 A38 38 0 0 1 8 54 H46 Z" fill="#4f8f5e"/>
+    <path d="M54 92 A38 38 0 0 0 92 54 H54 Z" fill="#d8b257"/>
+  </g>
+  <g fill="none" stroke="#f3efe3" stroke-width="2.6" stroke-linecap="round" opacity=".8"><path d="M20 34 a24 24 0 0 1 14 -14"/><path d="M80 34 a24 24 0 0 0 -14 -14"/></g>
+</symbol>
+
+<!-- Lords Reform Bill: a red Lords bench -->
+<symbol id="i-H" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <rect x="10" y="20" width="80" height="38" rx="6" fill="#b5333d"/>
+    <rect x="6" y="56" width="88" height="14" rx="4" fill="#8e2433"/>
+    <rect x="12" y="70" width="8" height="20" fill="#6b3d14"/>
+    <rect x="80" y="70" width="8" height="20" fill="#6b3d14"/>
+    <rect x="46" y="70" width="8" height="16" fill="#6b3d14"/>
+  </g>
+  <g fill="#7a1d28"><circle cx="24" cy="32" r="2.4"/><circle cx="42" cy="32" r="2.4"/><circle cx="58" cy="32" r="2.4"/><circle cx="76" cy="32" r="2.4"/><circle cx="33" cy="46" r="2.4"/><circle cx="50" cy="46" r="2.4"/><circle cx="67" cy="46" r="2.4"/></g>
+  <path d="M10 14 H90" stroke="#d8b257" stroke-width="5" stroke-linecap="round"/>
+</symbol>
+
+<!-- Investigatory Powers Bill: a watching eye -->
+<symbol id="i-I" viewBox="0 0 100 100">
+  <path d="M6 50 Q50 6 94 50 Q50 94 6 50 Z" fill="#f3efe3" stroke="#2a2620" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="50" cy="50" r="20" fill="#56627f" stroke="#2a2620" stroke-width="3.5"/>
+  <circle cx="50" cy="50" r="9" fill="#2a2620"/>
+  <circle cx="56" cy="44" r="4" fill="#fff"/>
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linecap="round"><path d="M50 16 V6 M28 22 L22 13 M72 22 L78 13 M14 34 L6 28 M86 34 L94 28"/></g>
+</symbol>
+
+<!-- Constitutional Reform Bill: a classical column and a spanner -->
+<symbol id="i-C" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <rect x="22" y="8" width="44" height="9" rx="2" fill="#e8e2d1"/>
+    <path d="M26 17 Q44 25 62 17 V22 H26 Z" fill="#e8e2d1"/>
+    <rect x="30" y="22" width="28" height="56" fill="#f3efe3"/>
+    <rect x="24" y="78" width="40" height="7" fill="#e8e2d1"/>
+    <rect x="20" y="85" width="48" height="8" rx="2" fill="#e8e2d1"/>
+  </g>
+  <g stroke="#b0a58c" stroke-width="2.4"><path d="M37 26 V74 M44 26 V74 M51 26 V74"/></g>
+  <g transform="rotate(-40 72 60)" stroke="#2a2620" stroke-width="3" stroke-linejoin="round">
+    <rect x="67" y="46" width="10" height="44" rx="4" fill="#6c4f9c"/>
+    <path d="M60 46 Q60 30 72 28 V38 H76 V28 Q86 30 84 46 Z" fill="#9aa3b5"/>
+  </g>
+</symbol>
+
+<!-- Codified Constitution: a thick bound book with a ribbon -->
+<symbol id="i-K" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M22 82 H80 V92 H22 Q14 92 14 86 Q14 82 22 82 Z" fill="#f3efe3"/>
+    <rect x="14" y="8" width="66" height="78" rx="5" fill="#13382c"/>
+    <rect x="14" y="8" width="12" height="78" rx="4" fill="#0d2a21"/>
+    <rect x="34" y="22" width="38" height="22" rx="2" fill="none" stroke="#d8b257" stroke-width="3"/>
+  </g>
+  <path d="M40 30 h26 M40 37 h20" stroke="#d8b257" stroke-width="3" stroke-linecap="round"/>
+  <path d="M62 86 V98 L67 93 L72 98 V86" fill="#c4583c" stroke="#2a2620" stroke-width="2.6" stroke-linejoin="round"/>
+  <g fill="#d8b257"><circle cx="40" cy="62" r="2"/><circle cx="53" cy="62" r="2"/><circle cx="66" cy="62" r="2"/></g>
+</symbol>
+
+</defs></svg>
+<div id="app"></div>
+<script>
+/* ===== Order! Order! rules engine (runs on the host device) ===== */
+const BILLS = [
+  {k:'E', name:'Environment Protection Bill', short:'Environment', set:3, col:'#4f8f5e'},
+  {k:'R', name:'Railway Reform Bill', short:'Railways', set:3, col:'#b8732f'},
+  {k:'O', name:'Online Safety Bill', short:'Online Safety', set:4, col:'#3f7fb0'},
+  {k:'L', name:'Electoral Reform Bill', short:'Electoral Reform', set:4, col:'#a54a7c'},
+  {k:'F', name:'Freedom of Information Bill', short:'Freedom of Info', set:4, col:'#7d7232'},
+  {k:'B', name:'Bill of Rights Bill', short:'Bill of Rights', set:5, col:'#c4583c'},
+  {k:'D', name:'Devolution Bill', short:'Devolution', set:5, col:'#2f8a88'},
+  {k:'H', name:'Lords Reform Bill', short:'Lords Reform', set:5, col:'#8e2433'},
+  {k:'I', name:'Investigatory Powers Bill', short:'Investigatory', set:5, col:'#56627f'},
+  {k:'C', name:'Constitutional Reform Bill', short:'Const. Reform', set:5, col:'#6c4f9c'},
+  {k:'K', name:'Codified Constitution', short:'Codified Const.', set:6, col:'#a07d22'},
+  {k:'Y', name:'Dangerous Dogs Bill', short:'Dangerous Dogs', set:3, col:'#6e5442'},
+  {k:'W', name:'Clean Water Bill', short:'Clean Water', set:3, col:'#2a93bd'},
+  {k:'P', name:'Cannabis Bill', short:'Cannabis', set:4, col:'#58872a'},
+  {k:'M', name:'Land Reform Bill', short:'Land Reform', set:4, col:'#946226'},
+];
+const WILD = {name:'Henry VIII Clause', short:'Henry VIII', text:'Wild card. Fills the slot of any bill when you pass it. Every set needs at least one real bill card.', flav:'A minister amends an Act by delegated legislation.'};
+const BILL = Object.fromEntries(BILLS.map(b => [b.k, b]));
+
+/* kind: m = manoeuvre (costs a move, on your turn), d = defence (played in response) */
+const ACTS = {
+  larry:{name:'Larry the Chief Mouser', kind:'m', tgt:'none', n:8, x:1, text:'Draw 2 more cards from the deck. Cannot be stopped.', flav:'Chief Mouser to the Cabinet Office since 2011.'},
+  lr:{name:'Lords’ Rejection', kind:'m', tgt:'bill', n:8, x:1, text:'Choose a player with a bill passed by the Commons. The Lords reject it and it is knocked out.', flav:'The second chamber votes the bill down.'},
+  coal:{name:'Coalition Agreement', kind:'m', tgt:'two', n:6, x:1, text:'Choose two other players. Take one random card from each of their hands.', flav:'Two parties, one programme for government.'},
+  talks:{name:'Cross-Party Talks', kind:'m', tgt:'one', n:6, x:1, text:'Choose a player and see their hand. Swap up to 2 of your cards for 2 of theirs.', flav:'Cards on the table.'},
+  vonc:{name:'Vote of No Confidence', kind:'m', tgt:'vonc', n:5, x:1, text:'Knock out one of a player’s Commons-passed bills. If they have none, they are eliminated. Only after the first bill of the game has passed.', flav:'The Commons withdraws its confidence. Unfinished bills fall at dissolution.'},
+  fund:{name:'Party Funding', kind:'m', tgt:'none', n:4, x:1, text:'Every other player must give you one card of their choice.', flav:'Everyone chips in.'},
+  inq:{name:'Select Committee Inquiry', kind:'m', tgt:'one', n:5, x:0, text:'Choose a player. They play with their hand open until your next turn.', flav:'Evidence is taken in public.'},
+  cs:{name:'Confidence and Supply', kind:'m', tgt:'bill', n:4, x:1, text:'Take one Commons-passed bill from any player. It now counts for you.', flav:'A smaller party props up the government, at a price.'},
+  pa:{name:'Parliament Acts 1911 & 1949', kind:'d', vs:['lr'], n:6, x:1, text:'Cancel a Lords’ Rejection.', flav:'The Lords can only delay. Jackson v AG (2005) upheld the 1949 Act.'},
+  ri:{name:'Royal Intervention', kind:'d', vs:['lr'], n:2, x:0, text:'Cancel a Lords’ Rejection and turn it back on the player who used it.', flav:'1911: the threat to create new peers, on the Prime Minister’s advice, made the Lords give way.'},
+  jr:{name:'Judicial Review', kind:'d', vs:['self'], n:6, x:0, text:'Answer any action card aimed at you. Guess whether the top card of the deck is a bill or an action card. Right: the card is cancelled for you. A Henry VIII Clause means you lose; Election Interference means you win.', flav:'Only an aggrieved party with sufficient interest may bring a claim.'},
+  diss:{name:'Dissolution of Parliament', kind:'d', vs:['vonc'], n:4, x:1, text:'Block a Vote of No Confidence.', flav:'Dissolution and Calling of Parliament Act 2022.'},
+  pror:{name:'Prorogation of Parliament', kind:'d', vs:['vonc'], n:3, x:0, text:'Block a Vote of No Confidence. You must discard your whole hand.', flav:'Miller No 2 (2019): prorogation that frustrates Parliament is unlawful.'},
+  sov:{name:'Parliamentary Sovereignty', kind:'d', vs:['*'], n:6, x:1, text:'Cancel an action card against you, or shield another targeted player. Against a card that hits several players, it protects only the one shielded. It also cancels a defence card outright.', flav:'Dicey: Parliament can make or unmake any law whatever.'},
+};
+const ROLE = {
+  PM:{name:'Prime Minister', side:'G'},
+  G:{name:'Government MP', side:'G'},
+  O:{name:'Opposition MP', side:'O'},
+  F:{name:'Foreign Power', side:'F'},
+};
+const SIDE = {G:'Government', O:'Opposition', F:'Foreign Power'};
+const NEED = {G:3, O:2, F:3};
+const LAYOUT = {6:['PM','G','G','O','O','F'], 7:['PM','G','G','G','O','O','F'], 8:['PM','G','G','G','O','O','O','F']};
+const TIME = {turn:120000, resp:30000, pop:2600, talks:30000, fund:15000, trade:20000, elec:30000};
+const ELEC = {name:'Election Interference', text:'Played the moment it is drawn, and the draw is lost. It cannot be stopped. The Foreign Power looks at the top 10 cards of the deck and takes 5. The rest are shuffled back.', flav:'Foreign money and bots in the marginal seats.'};
+const BOT = {move:4000, jitter:800, react:3000, reactJ:3000, answer:3500};
+
+const _cats = {};
+function catalog(n){
+  if (_cats[n]) return _cats[n];
+  const c = [];
+  BILLS.forEach(b => { for (let i = 0; i < b.set + 2; i++) c.push({t:'b', k:b.k}); });
+  for (let i = 0; i < 10 + (n - 6); i++) c.push({t:'w', k:'wild'});
+  for (let i = 0; i < 5; i++) c.push({t:'e', k:'elec'});
+  Object.entries(ACTS).forEach(([k, a]) => { const cnt = a.n + a.x * (n - 6); for (let i = 0; i < cnt; i++) c.push({t:'a', k}); });
+  return (_cats[n] = c);
+}
+function cardType(n, id){ return catalog(n)[id].k; }
+function typeName(k){ return k === 'elec' ? ELEC.name : k === 'wild' ? WILD.name : BILL[k] ? BILL[k].name : ACTS[k].name; }
+function cardName(n, id){ return typeName(catalog(n)[id].k); }
+function canCounter(k, topA){ const d = ACTS[k]; return !!d && d.kind === 'd' && k !== 'jr' && (d.vs.includes('*') || d.vs.includes(topA)); }
+/* Judicial Review: only the aggrieved player, only while the card aimed at them is in force */
+function jrAllowed(sub, si){
+  if (!sub.base.tg.includes(si) || sub.base.src === si) return false;
+  if (sub.mt){ const ch = sub.sh[si] || []; return ch.length % 2 === 0 && (ch.length ? ch[ch.length - 1][1] : sub.base.src) !== si; }
+  const topS = sub.chain.length ? sub.chain[sub.chain.length - 1].s : sub.base.src;
+  return sub.chain.length % 2 === 0 && topS !== si;
+}
+function jrReveal(S, guess, env){
+  ensureDeck(S, env);
+  if (!S.deck.length) return {k:null, ok:false};
+  const id = S.deck.pop(); S.disc.push(id);
+  const c = catalog(S.n)[id];
+  const ok = c.t === 'e' ? true : c.t === 'w' ? false : (c.t === 'b') === (guess === 'b');
+  return {k:c.k, ok};
+}
+function sideOf(role){ return ROLE[role].side; }
+
+function shuffle(a, rand){ for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(rand() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function log(S, m){ S.log.push(m); while (S.log.length > 7) S.log.shift(); }
+function nm(S, i){ return S.seats[i].nm; }
+
+function newGame(code, humans, n, env){
+  const roles = shuffle(LAYOUT[n].slice(), env.rand);
+  const spots = shuffle([...Array(n).keys()], env.rand);
+  const seats = roles.map(r => ({nm:'', cid:null, bot:true, role:r, hand:[], bills:[], out:false, op:-1}));
+  humans.slice(0, n).forEach((h, i) => { const s = seats[spots[i]]; s.nm = h.nm; s.cid = h.cid; s.bot = false; });
+  const seen = {G:0, O:0};
+  seats.forEach(s => {
+    const k = s.role === 'G' || s.role === 'O' ? ++seen[s.role] : 0;
+    if (s.bot) s.nm = s.role === 'PM' ? 'Prime Minister' : s.role === 'F' ? 'Foreign Power' : (s.role === 'G' ? 'Govt MP ' : 'Opposition MP ') + k;
+  });
+  const S = {v:1, code, n, ph:'play', seats, deck:shuffle(catalog(n).map((_, i) => i), env.rand), disc:[],
+    cur:seats.findIndex(s => s.role === 'PM'), mv:3, fb:false, sub:null, turnDl:0, turnLeft:0, log:[], win:null,
+    ak:{}, er:{}, botAt:0, humans:humans.slice(0, n)};
+  seats.forEach(s => { for (let k = 0; k < 4; k++) drawOne(S, s, env); });
+  log(S, 'The House is in session. The Prime Minister opens.');
+  startTurn(S, S.cur, env);
+  return S;
+}
+
+function ensureDeck(S, env){
+  if (S.deck.length <= 10 && S.disc.length){
+    S.deck = shuffle(S.deck.concat(S.disc), env.rand); S.disc = [];
+    log(S, 'The discard pile was shuffled back into the deck.');
+  }
+}
+function drawOne(S, seat, env){
+  ensureDeck(S, env); if (!S.deck.length) return;
+  const id = S.deck.pop();
+  if (catalog(S.n)[id].t !== 'e'){ seat.hand.push(id); return; }
+  S.disc.push(id);
+  const fp = S.seats.find(x => x.role === 'F' && !x.out);
+  if (!fp){ log(S, `${seat.nm} draws Election Interference, but the Foreign Power has lost its seat. No effect.`); return; }
+  log(S, `${seat.nm} draws Election Interference!`);
+  S.elecQ = (S.elecQ || 0) + 1;
+}
+function openElection(S, env){
+  S.elecQ--;
+  const fi = S.seats.findIndex(x => x.role === 'F' && !x.out);
+  if (fi < 0) return;
+  ensureDeck(S, env);
+  const cards = S.deck.splice(Math.max(0, S.deck.length - 10)).filter(x => catalog(S.n)[x].t !== 'e' || (S.disc.push(x), false));
+  if (!cards.length) return;
+  pauseTurn(S, env);
+  S.sub = {k:'elec', src:fi, cards, n:Math.min(5, cards.length), dl:env.now + TIME.pop + TIME.elec, at0:env.now};
+}
+function finishElection(S, si, a, env){
+  const sub = S.sub;
+  if (!sub || sub.k !== 'elec' || sub.src !== si) return 'There is no election to interfere in.';
+  const pick = [...new Set(Array.isArray(a.pick) ? a.pick : [])].filter(id => sub.cards.includes(id));
+  if (pick.length !== sub.n) return `Choose exactly ${sub.n} cards.`;
+  closeElection(S, pick, env);
+  return null;
+}
+function closeElection(S, pick, env){
+  const sub = S.sub, fp = S.seats[sub.src];
+  fp.hand.push(...pick);
+  S.deck = shuffle(S.deck.concat(sub.cards.filter(id => !pick.includes(id))), env.rand);
+  log(S, `The Foreign Power takes ${pick.length} cards from the top of the deck.`);
+  S.sub = null; resumeTurn(S, env);
+}
+function drawN(S, seat, k, env){ for (let i = 0; i < k; i++) drawOne(S, seat, env); }
+
+function startTurn(S, i, env){
+  S.cur = i; S.mv = 3; S.sub = null;
+  S.seats.forEach(s => { if (s.op === i) s.op = -1; });
+  const s = S.seats[i];
+  drawN(S, s, s.role === 'PM' ? 3 : s.role === 'F' ? 4 : 2, env);
+  S.turnDl = env.now + TIME.turn; S.turnLeft = 0;
+  S.botAt = env.now + BOT.move;
+}
+function endTurn(S, env){
+  if (S.ph !== 'play') return;
+  let j = S.cur;
+  for (let k = 0; k < S.n; k++){ j = (j + 1) % S.n; if (!S.seats[j].out) break; }
+  startTurn(S, j, env);
+}
+function pauseTurn(S, env){ if (S.turnDl){ S.turnLeft = Math.max(0, S.turnDl - env.now); S.turnDl = 0; } }
+function resumeTurn(S, env){ if (!S.turnDl && S.ph === 'play'){ S.turnDl = env.now + Math.max(S.turnLeft, 15000); S.botAt = env.now + BOT.move; } }
+
+function checkWin(S){
+  if (S.ph !== 'play') return;
+  const cnt = {G:0, O:0, F:0};
+  S.seats.forEach(s => { cnt[sideOf(s.role)] += s.bills.length; });
+  const pm = S.seats.find(s => s.role === 'PM');
+  let w = null, why = '';
+  if (pm.out){ w = 'O'; why = 'The Prime Minister has fallen.'; }
+  else if (S.seats.filter(s => s.role === 'O').every(s => s.out)){ w = 'G'; why = 'The Opposition benches are empty.'; }
+  else if (cnt.F >= NEED.F){ w = 'F'; why = 'The Foreign Power carried 3 bills through the Commons and has captured the state.'; }
+  else if (cnt.G >= NEED.G){ w = 'G'; why = 'The Government carried 3 bills through the Commons.'; }
+  else if (cnt.O >= NEED.O){ w = 'O'; why = 'The Opposition carried 2 private members’ bills through the Commons.'; }
+  if (w){ S.ph = 'over'; S.win = w; S.whyWin = why; S.sub = null; S.turnDl = 0; log(S, why); }
+}
+function sideCounts(S){
+  const cnt = {G:0, O:0, F:0};
+  S.seats.forEach(s => { cnt[sideOf(s.role)] += s.bills.length; });
+  return cnt;
+}
+
+function eliminate(S, i){
+  const s = S.seats[i]; if (s.out) return;
+  s.out = true;
+  S.disc.push(...s.hand); s.bills.forEach(b => S.disc.push(...b.c));
+  s.hand = []; s.bills = []; s.op = -1;
+  log(S, `${s.nm} (${ROLE[s.role].name}) loses their seat.`);
+}
+function pickBill(seat, bi, bt){
+  const B = seat.bills; if (!B.length) return -1;
+  if (Number.isInteger(bi) && B[bi] && (!bt || B[bi].t === bt)) return bi;
+  if (bt){ const j = B.findIndex(b => b.t === bt); if (j >= 0) return j; }
+  return B.length - 1;
+}
+
+/* ---------- intents ---------- */
+function handle(S, si, a, env){
+  if (!a || typeof a !== 'object') return 'Unknown move.';
+  if (S.ph !== 'play') return 'The game is over.';
+  const me = S.seats[si];
+  if (!me || me.out) return 'You have lost your seat.';
+  switch (a.k){
+    case 'play': return playCard(S, si, a, env);
+    case 'pass': return passBill(S, si, a, env);
+    case 'trade': return offerTrade(S, si, a, env);
+    case 'end':
+      if (S.cur !== si) return 'It is not your turn.';
+      if (S.sub) return 'Finish the current action first.';
+      endTurn(S, env); return null;
+    case 'resp': return respond(S, si, a, env);
+    case 'rpass': {
+      const sub = S.sub;
+      if (sub && sub.k === 'resp' && a.at === sub.ver) sub.passed[si] = 1;
+      return null;
+    }
+    case 'tans': return answerTrade(S, si, a, env);
+    case 'talks': return finishTalks(S, si, a, env);
+    case 'give': return giveFund(S, si, a, env);
+    case 'elec': return finishElection(S, si, a, env);
+  }
+  return 'Unknown move.';
+}
+
+function turnGuard(S, si){
+  if (S.cur !== si) return 'It is not your turn.';
+  if (S.sub) return 'Wait for the current action to finish.';
+  if (S.mv <= 0) return 'You have used all 3 moves. End your turn.';
+  return null;
+}
+
+function playCard(S, si, a, env){
+  const g = turnGuard(S, si); if (g) return g;
+  const me = S.seats[si], ci = me.hand.indexOf(a.card);
+  if (ci < 0) return 'You no longer hold that card.';
+  const c = catalog(S.n)[a.card];
+  if (c.t !== 'a' || ACTS[c.k].kind !== 'm') return 'That card is only played in response to another card.';
+  const d = ACTS[c.k];
+  let tg = Array.isArray(a.tg) ? a.tg.map(Number) : [];
+  const ok = t => Number.isInteger(t) && t >= 0 && t < S.n && t !== si && !S.seats[t].out;
+  if (d.tgt === 'none') tg = c.k === 'fund' ? S.seats.map((x, i) => i).filter(i => i !== si && !S.seats[i].out) : [];
+  if (d.tgt === 'one' && !(tg.length === 1 && ok(tg[0]))) return 'Choose another player.';
+  if (d.tgt === 'two' && !(tg.length === 2 && tg[0] !== tg[1] && tg.every(ok))) return 'Choose two other players.';
+  if (d.tgt === 'bill'){
+    if (!(tg.length === 1 && ok(tg[0]))) return 'Choose another player.';
+    if (!S.seats[tg[0]].bills.length) return 'That player has no passed bills.';
+  }
+  if (d.tgt === 'vonc'){
+    if (!S.fb) return 'No bill has passed yet, so no Vote of No Confidence can be called.';
+    if (!(tg.length === 1 && ok(tg[0]))) return 'Choose another player.';
+  }
+  let bi = -1, bt = null;
+  if (d.tgt === 'bill' || d.tgt === 'vonc'){
+    bi = pickBill(S.seats[tg[0]], a.bi, null);
+    bt = bi >= 0 ? S.seats[tg[0]].bills[bi].t : null;
+  }
+  me.hand.splice(ci, 1); S.disc.push(a.card); S.mv--;
+  let msg = `${me.nm} plays ${d.name}`;
+  if (tg.length && c.k !== 'fund') msg += ` on ${tg.map(t => nm(S, t)).join(' and ')}`;
+  if (bt) msg += `’s ${BILL[bt].name}`;
+  log(S, msg + '.');
+  if (c.k === 'larry'){ applyBase(S, {a:'larry', src:si, tg:[]}, env, []); return null; }
+  openResp(S, {a:c.k, src:si, tg, bi, bt}, env);
+  return null;
+}
+
+function newResp(base, env){
+  return {k:'resp', base, chain:[], mt:base.tg.length > 1, sh:{}, ver:0, lastS:base.src, last:null,
+    pop:env.now, dl:env.now + TIME.pop + TIME.resp, passed:{}, bt:{}};
+}
+function openResp(S, base, env){
+  pauseTurn(S, env);
+  S.sub = newResp(base, env);
+}
+
+function respond(S, si, a, env){
+  const sub = S.sub;
+  if (!sub || sub.k !== 'resp') return 'There is nothing to respond to.';
+  if (a.at !== sub.ver) return 'Too late: someone answered first.';
+  const me = S.seats[si], ci = me.hand.indexOf(a.card);
+  if (ci < 0) return 'You no longer hold that card.';
+  const c = catalog(S.n)[a.card];
+  if (c.t !== 'a') return 'That card cannot answer this.';
+  let msg, forT = -1;
+  if (c.k === 'jr'){
+    if (!jrAllowed(sub, si)) return 'Judicial Review is only for a player the card is aimed at.';
+    const guess = a.guess === 'a' ? 'a' : 'b';
+    const r = jrReveal(S, guess, env);
+    me.hand.splice(ci, 1); S.disc.push(a.card);
+    const shown = r.k ? typeName(r.k) : 'nothing';
+    const gtxt = guess === 'b' ? 'a bill card' : 'an action card';
+    msg = `${me.nm} seeks Judicial Review and predicts ${gtxt}. The top card is ${shown}: the claim ${r.ok ? 'succeeds' : 'fails'}.`;
+    if (r.ok){
+      if (sub.mt) (sub.sh[si] || (sub.sh[si] = [])).push(['jr', si]);
+      else sub.chain.push({a:'jr', s:si});
+    }
+    sub.ver++; sub.lastS = si; sub.last = ['jr', si, si, r.ok ? 1 : 0, r.k, guess];
+    sub.pop = env.now; sub.dl = env.now + TIME.pop + TIME.resp; sub.passed = {}; sub.bt = {};
+    log(S, msg);
+    return null;
+  }
+  if (sub.mt){
+    forT = Number(a.for);
+    if (c.k !== 'sov') return 'Only Parliamentary Sovereignty can answer this.';
+    if (!sub.base.tg.includes(forT) || S.seats[forT].out) return 'Choose a targeted player to shield.';
+    const ch = sub.sh[forT] || (sub.sh[forT] = []);
+    const topS = ch.length ? ch[ch.length - 1][1] : sub.base.src;
+    if (topS === si) return 'You cannot answer your own card.';
+    ch.push([c.k, si]);
+    msg = ch.length % 2 ? `${me.nm} shields ${forT === si ? 'themselves' : nm(S, forT)} with Parliamentary Sovereignty.` : `${me.nm} cancels the shield on ${nm(S, forT)} with Parliamentary Sovereignty.`;
+  } else {
+    const top = sub.chain.length ? sub.chain[sub.chain.length - 1] : {a:sub.base.a, s:sub.base.src};
+    if (top.s === si) return 'You cannot answer your own card.';
+    if (!canCounter(c.k, top.a)) return 'That card cannot answer this.';
+    sub.chain.push({a:c.k, s:si});
+    msg = `${me.nm} answers with ${ACTS[c.k].name}.`;
+  }
+  me.hand.splice(ci, 1); S.disc.push(a.card);
+  sub.ver++; sub.lastS = si; sub.last = [c.k, si, forT];
+  sub.pop = env.now; sub.dl = env.now + TIME.pop + TIME.resp; sub.passed = {}; sub.bt = {};
+  log(S, msg);
+  if (c.k === 'pror' && me.hand.length){
+    S.disc.push(...me.hand); me.hand = [];
+    log(S, `${me.nm} discards their whole hand for the prorogation.`);
+  }
+  return null;
+}
+
+function respReady(S){
+  const sub = S.sub;
+  const top = sub.lastS;
+  return S.seats.every((s, i) => s.out || i === top || sub.passed[i]);
+}
+
+function resolveResp(S, env){
+  const sub = S.sub, ch = sub.chain, b = sub.base;
+  if (sub.mt){
+    const skip = b.tg.filter(t => (sub.sh[t] || []).length % 2 === 1);
+    S.sub = null;
+    if (skip.length) log(S, `${skip.map(t => nm(S, t)).join(' and ')} ${skip.length === 1 ? 'is' : 'are'} shielded.`);
+    applyBase(S, b, env, skip);
+    checkWin(S);
+    if (!S.sub) resumeTurn(S, env);
+    return;
+  }
+  let baseOn = true, first = null;
+  if (ch.length){
+    const act = new Array(ch.length);
+    act[ch.length - 1] = true;
+    for (let i = ch.length - 2; i >= 0; i--) act[i] = !act[i + 1];
+    baseOn = !act[0]; first = ch[0];
+  }
+  S.sub = null;
+  if (baseOn) applyBase(S, b, env, []);
+  else {
+    log(S, `${ACTS[b.a].name} is blocked.`);
+    if (first.a === 'ri'){
+      const orig = S.seats[b.src];
+      if (!orig.out && orig.bills.length){
+        const bi = orig.bills.length - 1;
+        log(S, `Royal Intervention turns the Lords’ Rejection on ${orig.nm}’s ${BILL[orig.bills[bi].t].name}.`);
+        S.sub = newResp({a:'lr', src:first.s, tg:[b.src], bi, bt:orig.bills[bi].t, defl:1}, env);
+      } else log(S, `${orig.nm} has no bills before the Lords, so the deflected rejection fizzles.`);
+    }
+  }
+  checkWin(S);
+  if (!S.sub) resumeTurn(S, env);
+}
+
+function applyBase(S, b, env, skip){
+  const src = S.seats[b.src];
+  const t0 = b.tg.length ? S.seats[b.tg[0]] : null;
+  switch (b.a){
+    case 'larry': drawN(S, src, 2, env); log(S, `${src.nm} draws 2 cards.`); break;
+    case 'coal': {
+      let got = 0;
+      b.tg.forEach(i => { const t = S.seats[i]; if (!skip.includes(i) && !t.out && t.hand.length){ const k = Math.floor(env.rand() * t.hand.length); src.hand.push(t.hand.splice(k, 1)[0]); got++; } });
+      log(S, `${src.nm} takes ${got} random card${got === 1 ? '' : 's'}.`); break;
+    }
+    case 'talks': {
+      const n = Math.min(2, src.hand.length, t0.hand.length);
+      if (!n){ log(S, 'The talks collapse: someone has no cards to swap.'); break; }
+      S.sub = {k:'talks', src:b.src, tgt:b.tg[0], n, dl:env.now + TIME.talks, at0:env.now};
+      break;
+    }
+    case 'lr': case 'vonc': {
+      if (t0.out) break;
+      if (t0.bills.length){
+        const j = pickBill(t0, b.bi, b.bt);
+        const gone = t0.bills.splice(j, 1)[0];
+        S.disc.push(...gone.c);
+        log(S, b.a === 'lr' ? `The Lords reject ${t0.nm}’s ${BILL[gone.t].name}.` : `${t0.nm}’s ${BILL[gone.t].name} falls.`);
+      } else if (b.a === 'vonc') eliminate(S, b.tg[0]);
+      break;
+    }
+    case 'fund': {
+      const wait = S.seats.map((s, i) => i).filter(i => i !== b.src && !skip.includes(i) && !S.seats[i].out && S.seats[i].hand.length);
+      if (!wait.length){ log(S, 'Nobody gives anything.'); break; }
+      S.sub = {k:'fund', src:b.src, wait, dl:env.now + TIME.fund, at0:env.now};
+      break;
+    }
+    case 'inq': if (!t0.out){ t0.op = b.src; log(S, `${t0.nm} must play with their hand open.`); } break;
+    case 'cs': {
+      if (t0.out || !t0.bills.length) break;
+      const j = pickBill(t0, b.bi, b.bt);
+      const bill = t0.bills.splice(j, 1)[0];
+      src.bills.push(bill);
+      log(S, `${src.nm} takes ${t0.nm}’s ${BILL[bill.t].name}.`);
+      break;
+    }
+  }
+}
+
+function passBill(S, si, a, env){
+  const g = turnGuard(S, si); if (g) return g;
+  const bd = BILL[a.b]; if (!bd) return 'Unknown bill.';
+  const me = S.seats[si], cat = catalog(S.n);
+  const ids = me.hand.filter(id => cat[id].t === 'b' && cat[id].k === a.b);
+  const wilds = me.hand.filter(id => cat[id].t === 'w');
+  if (!ids.length) return `A set needs at least one real ${bd.name} card.`;
+  const real = ids.slice(0, bd.set), need = bd.set - real.length;
+  if (wilds.length < need) return `You need ${bd.set} cards for the ${bd.name}, counting Henry VIII Clauses.`;
+  const take = real.concat(wilds.slice(0, need));
+  me.hand = me.hand.filter(id => !take.includes(id));
+  me.bills.push({t:a.b, c:take}); S.mv--; S.fb = true;
+  log(S, `The Commons passes ${me.nm}’s ${bd.name}${need ? ` with ${need} Henry VIII Clause${need === 1 ? '' : 's'}` : ''}.`);
+  checkWin(S);
+  return null;
+}
+
+function offerTrade(S, si, a, env){
+  const g = turnGuard(S, si); if (g) return g;
+  const tg = Number(a.tg);
+  if (!(tg === -1 || (Number.isInteger(tg) && tg >= 0 && tg < S.n && tg !== si && !S.seats[tg].out))) return 'Choose who to trade with.';
+  const me = S.seats[si];
+  const give = [...new Set(Array.isArray(a.give) ? a.give : [])].filter(id => me.hand.includes(id));
+  const want = {};
+  Object.entries(a.want || {}).forEach(([k, v]) => { v = Math.floor(Number(v)); if ((BILL[k] || ACTS[k] || k === 'wild') && v > 0) want[k] = Math.min(v, 10); });
+  if (!give.length && !Object.keys(want).length) return 'Offer at least one card or ask for one.';
+  pauseTurn(S, env);
+  S.sub = {k:'trade', src:si, tgt:tg, give, want, dl:env.now + TIME.trade, at0:env.now, dec:[]};
+  log(S, tg === -1 ? `${me.nm} offers a trade to the whole House.` : `${me.nm} offers ${nm(S, tg)} a trade.`);
+  return null;
+}
+function holdsWant(S, seat, want){
+  const cat = catalog(S.n), picked = [];
+  for (const [k, v] of Object.entries(want)){
+    const ids = seat.hand.filter(id => cat[id].k === k && !picked.includes(id));
+    if (ids.length < v) return null;
+    picked.push(...ids.slice(0, v));
+  }
+  return picked;
+}
+function answerTrade(S, si, a, env){
+  const sub = S.sub;
+  const open = sub && sub.k === 'trade' && sub.tgt === -1;
+  if (!sub || sub.k !== 'trade' || (open ? (si === sub.src || sub.dec.includes(si)) : sub.tgt !== si)) return 'There is no trade waiting for you.';
+  const src = S.seats[sub.src], tgt = S.seats[si];
+  if (open && !a.yes){
+    sub.dec.push(si);
+    const left = S.seats.some((s, i) => i !== sub.src && !s.out && !sub.dec.includes(i));
+    if (!left){ log(S, 'Nobody takes up the trade.'); S.sub = null; resumeTurn(S, env); }
+    return null;
+  }
+  if (a.yes){
+    const picked = holdsWant(S, tgt, sub.want);
+    if (!picked) return 'You do not hold the cards asked for.';
+    const give = sub.give.filter(id => src.hand.includes(id));
+    src.hand = src.hand.filter(id => !give.includes(id)); tgt.hand.push(...give);
+    tgt.hand = tgt.hand.filter(id => !picked.includes(id)); src.hand.push(...picked);
+    S.mv--;
+    log(S, `${tgt.nm} accepts the trade.`);
+  } else log(S, `${tgt.nm} turns the trade down.`);
+  S.sub = null; resumeTurn(S, env);
+  return null;
+}
+function finishTalks(S, si, a, env){
+  const sub = S.sub;
+  if (!sub || sub.k !== 'talks' || sub.src !== si) return 'There are no talks to finish.';
+  const src = S.seats[sub.src], tgt = S.seats[sub.tgt];
+  const mine = [...new Set(a.mine || [])].filter(id => src.hand.includes(id));
+  const theirs = [...new Set(a.theirs || [])].filter(id => tgt.hand.includes(id));
+  if (mine.length !== theirs.length || mine.length > sub.n) return `Pick the same number of cards on each side, up to ${sub.n}.`;
+  swapCards(S, src, tgt, mine, theirs);
+  S.sub = null; resumeTurn(S, env);
+  return null;
+}
+function swapCards(S, src, tgt, mine, theirs){
+  src.hand = src.hand.filter(id => !mine.includes(id)); tgt.hand.push(...mine);
+  tgt.hand = tgt.hand.filter(id => !theirs.includes(id)); src.hand.push(...theirs);
+  log(S, mine.length ? `${src.nm} and ${tgt.nm} swap ${mine.length} card${mine.length === 1 ? '' : 's'}.` : `${src.nm} leaves the talks without a deal.`);
+}
+function giveFund(S, si, a, env){
+  const sub = S.sub;
+  if (!sub || sub.k !== 'fund' || !sub.wait.includes(si)) return 'Nothing to give right now.';
+  const me = S.seats[si], ci = me.hand.indexOf(a.card);
+  if (ci < 0) return 'You no longer hold that card.';
+  me.hand.splice(ci, 1); S.seats[sub.src].hand.push(a.card);
+  sub.wait = sub.wait.filter(i => i !== si);
+  if (!sub.wait.length){ log(S, `${nm(S, sub.src)} collects the donations.`); S.sub = null; resumeTurn(S, env); }
+  return null;
+}
+
+/* ---------- bots ---------- */
+function cardValue(S, seat, id){
+  const c = catalog(S.n)[id];
+  if (c.t === 'w') return 7;
+  if (c.t === 'b'){
+    const have = seat.hand.filter(x => catalog(S.n)[x].k === c.k).length;
+    return 2 + have / BILL[c.k].set * 6;
+  }
+  return {sov:5, cs:5, lr:4, vonc:4, ri:4, jr:3.5, diss:3.5, pa:3.5, coal:3, talks:3, fund:3, larry:2.5, pror:2, inq:1}[c.k] || 1;
+}
+function enemies(S, si){ const s = sideOf(S.seats[si].role); return S.seats.map((x, i) => i).filter(i => i !== si && !S.seats[i].out && sideOf(S.seats[i].role) !== s); }
+function allies(S, si){ const s = sideOf(S.seats[si].role); return S.seats.map((x, i) => i).filter(i => !S.seats[i].out && sideOf(S.seats[i].role) === s); }
+function holding(S, seat, k){ return seat.hand.find(id => catalog(S.n)[id].k === k); }
+
+function botTurnMove(S, si, env){
+  const me = S.seats[si], cat = catalog(S.n);
+  if (S.mv <= 0) return {k:'end'};
+  const wilds = me.hand.filter(id => cat[id].t === 'w').length;
+  for (const b of BILLS){
+    const real = me.hand.filter(id => cat[id].k === b.k).length;
+    if (real >= 1 && real + wilds >= b.set) return {k:'pass', b:b.k};
+  }
+  const en = enemies(S, si);
+  const withBills = en.filter(i => S.seats[i].bills.length).sort((x, y) => S.seats[y].bills.length - S.seats[x].bills.length);
+  const rich = en.slice().sort((x, y) => S.seats[y].hand.length - S.seats[x].hand.length);
+  let id;
+  if (withBills.length && (id = holding(S, me, 'cs'))){
+    const t = withBills[0], B = S.seats[t].bills;
+    let bi = 0; B.forEach((b, j) => { if (BILL[b.t].set > BILL[B[bi].t].set) bi = j; });
+    return {k:'play', card:id, tg:[t], bi};
+  }
+  if (withBills.length && (id = holding(S, me, 'lr'))) return {k:'play', card:id, tg:[withBills[0]], bi:0};
+  if (S.fb && (id = holding(S, me, 'vonc'))){
+    if (withBills.length) return {k:'play', card:id, tg:[withBills[0]], bi:0};
+    const bare = en.filter(i => !S.seats[i].bills.length);
+    const pm = bare.find(i => S.seats[i].role === 'PM');
+    const t = pm !== undefined ? pm : bare[0];
+    if (t !== undefined && env.rand() < 0.85) return {k:'play', card:id, tg:[t]};
+  }
+  const others = S.seats.map((s, i) => i).filter(i => i !== si && !S.seats[i].out && S.seats[i].hand.length);
+  if ((id = holding(S, me, 'coal')) && others.length >= 2){
+    const pool = rich.filter(i => S.seats[i].hand.length).concat(others.filter(i => !rich.includes(i)));
+    const two = [...new Set(pool)].slice(0, 2);
+    if (two.length === 2) return {k:'play', card:id, tg:two};
+  }
+  if ((id = holding(S, me, 'talks')) && me.hand.length > 1 && rich.length && S.seats[rich[0]].hand.length > 1) return {k:'play', card:id, tg:[rich[0]]};
+  if ((id = holding(S, me, 'fund'))) return {k:'play', card:id};
+  if ((id = holding(S, me, 'larry'))) return {k:'play', card:id};
+  if ((id = holding(S, me, 'inq')) && rich.length && env.rand() < 0.3) return {k:'play', card:id, tg:[rich[0]]};
+  return {k:'end'};
+}
+
+function botRespondMT(S, si, env){
+  const sub = S.sub, me = S.seats[si], b = sub.base, side = sideOf(me.role);
+  const jid = holding(S, me, 'jr');
+  if (jid !== undefined && sideOf(S.seats[b.src].role) !== side && jrAllowed(sub, si) && env.rand() < 0.7) return {k:'resp', card:jid, at:sub.ver, guess:'b'};
+  const id = holding(S, me, 'sov'); if (id === undefined) return null;
+  const lastOf = t => { const ch = sub.sh[t] || []; return ch.length ? ch[ch.length - 1][1] : b.src; };
+  if (sideOf(S.seats[b.src].role) === side){
+    for (const t of b.tg){
+      const ch = sub.sh[t] || [];
+      if (ch.length % 2 === 1 && lastOf(t) !== si && sideOf(S.seats[t].role) !== side && env.rand() < 0.5) return {k:'resp', card:id, at:sub.ver, for:t};
+    }
+    return null;
+  }
+  const order = [si].concat(b.tg.filter(t => t !== si && sideOf(S.seats[t].role) === side));
+  for (const t of order){
+    if (!b.tg.includes(t) || S.seats[t].out) continue;
+    const ch = sub.sh[t] || [];
+    if (ch.length % 2 === 0 && lastOf(t) !== si && env.rand() < 0.85) return {k:'resp', card:id, at:sub.ver, for:t};
+  }
+  return null;
+}
+function botRespond(S, si, env){
+  if (S.sub.mt) return botRespondMT(S, si, env);
+  const sub = S.sub, me = S.seats[si], b = sub.base;
+  const top = sub.chain.length ? sub.chain[sub.chain.length - 1] : {a:b.a, s:b.src};
+  if (top.s === si) return null;
+  const mySide = sideOf(me.role);
+  const srcAlly = sideOf(S.seats[b.src].role) === mySide;
+  const hitsUs = b.tg.some(t => sideOf(S.seats[t].role) === mySide);
+  let wantBase;
+  if (b.src === si) wantBase = true;
+  else if (srcAlly) wantBase = !hitsUs;
+  else if (b.a === 'larry') wantBase = env.rand() < 0.8;
+  else if (b.a === 'fund') wantBase = false;
+  else wantBase = !hitsUs;
+  const baseOnNow = sub.chain.length % 2 === 0;
+  if (wantBase === baseOnNow) return null;
+  const order = top.a === 'lr' ? ['ri', 'pa', 'jr', 'sov'] : top.a === 'vonc' ? ['diss', 'jr', 'sov', 'pror'] : ['jr', 'sov'];
+  for (const k of order){
+    const id = holding(S, me, k);
+    if (id === undefined) continue;
+    if (k === 'jr'){ if (jrAllowed(sub, si) && env.rand() < 0.7) return {k:'resp', card:id, at:sub.ver, guess:'b'}; continue; }
+    if (!canCounter(k, top.a)) continue;
+    if (k === 'pror' && !(b.tg.includes(si) && top.a === 'vonc')) continue;
+    if (env.rand() < 0.85) return {k:'resp', card:id, at:sub.ver};
+    return null;
+  }
+  return null;
+}
+
+function botTrade(S, si){
+  const sub = S.sub, me = S.seats[si];
+  const picked = holdsWant(S, me, sub.want);
+  if (!picked) return {k:'tans', yes:false};
+  if (sideOf(S.seats[sub.src].role) === sideOf(me.role)) return {k:'tans', yes:true};
+  const gain = sub.give.reduce((t, id) => t + cardValue(S, me, id), 0);
+  const loss = picked.reduce((t, id) => t + cardValue(S, me, id), 0);
+  return {k:'tans', yes:gain > loss + 1};
+}
+
+/* ---------- clock ---------- */
+function tick(S, env){
+  if (S.ph !== 'play') return;
+  if (!S.sub && S.elecQ > 0){ openElection(S, env); return; }
+  const now = env.now, sub = S.sub;
+  if (sub && sub.k === 'elec'){
+    const fp = S.seats[sub.src];
+    if ((fp.bot && now >= sub.at0 + TIME.pop + BOT.answer) || now >= sub.dl){
+      const best = sub.cards.slice().sort((x, y) => cardValue(S, fp, y) - cardValue(S, fp, x)).slice(0, sub.n);
+      closeElection(S, best, env);
+    }
+    return;
+  }
+  if (sub && sub.k === 'resp'){
+    const top = sub.lastS;
+    for (let i = 0; i < S.n; i++){
+      const s = S.seats[i];
+      if (!s.bot || s.out || i === top || sub.passed[i]) continue;
+      if (sub.bt[i] == null) sub.bt[i] = sub.pop + TIME.pop + BOT.react + env.rand() * BOT.reactJ;
+      if (now >= sub.bt[i]){
+        const r = botRespond(S, i, env);
+        if (r){ handle(S, i, r, env); return; }
+        sub.passed[i] = 1;
+      }
+    }
+    if (now >= sub.dl || (now >= sub.pop + TIME.pop && respReady(S))) resolveResp(S, env);
+    return;
+  }
+  if (sub && sub.k === 'trade'){
+    if (sub.tgt === -1){
+      if (!sub.bt) sub.bt = {};
+      for (let i = 0; i < S.n; i++){
+        const s = S.seats[i];
+        if (!s.bot || s.out || i === sub.src || sub.dec.includes(i)) continue;
+        if (sub.bt[i] == null) sub.bt[i] = sub.at0 + BOT.answer + env.rand() * 3000;
+        if (now >= sub.bt[i]){ handle(S, i, botTrade(S, i), env); if (S.sub !== sub) return; }
+      }
+      if (now >= sub.dl){ log(S, 'Nobody takes up the trade.'); S.sub = null; resumeTurn(S, env); }
+      return;
+    }
+    if (S.seats[sub.tgt].bot && now >= sub.at0 + BOT.answer){ handle(S, sub.tgt, botTrade(S, sub.tgt), env); return; }
+    if (now >= sub.dl){ log(S, `${nm(S, sub.tgt)} did not answer the trade.`); S.sub = null; resumeTurn(S, env); }
+    return;
+  }
+  if (sub && sub.k === 'talks'){
+    const src = S.seats[sub.src], tgt = S.seats[sub.tgt];
+    if (src.bot && now >= sub.at0 + BOT.answer || now >= sub.dl){
+      let mine, theirs;
+      if (src.bot){
+        theirs = tgt.hand.slice().sort((x, y) => cardValue(S, src, y) - cardValue(S, src, x)).slice(0, sub.n);
+        mine = src.hand.slice().sort((x, y) => cardValue(S, src, x) - cardValue(S, src, y)).slice(0, sub.n);
+      } else {
+        theirs = shuffle(tgt.hand.slice(), env.rand).slice(0, sub.n);
+        mine = shuffle(src.hand.slice(), env.rand).slice(0, sub.n);
+      }
+      swapCards(S, src, tgt, mine, theirs); S.sub = null; resumeTurn(S, env);
+    }
+    return;
+  }
+  if (sub && sub.k === 'fund'){
+    for (const i of sub.wait.slice()){
+      const s = S.seats[i];
+      if ((s.bot && now >= sub.at0 + BOT.answer) || now >= sub.dl){
+        const pick = s.bot ? s.hand.slice().sort((x, y) => cardValue(S, s, x) - cardValue(S, s, y))[0] : s.hand[Math.floor(env.rand() * s.hand.length)];
+        if (pick === undefined){ sub.wait = sub.wait.filter(j => j !== i); continue; }
+        handle(S, i, {k:'give', card:pick}, env);
+        if (!S.sub) return;
+      }
+    }
+    if (S.sub && S.sub.k === 'fund' && !S.sub.wait.length){ S.sub = null; resumeTurn(S, env); }
+    return;
+  }
+  const cur = S.seats[S.cur];
+  if (cur.bot){
+    if (now >= S.botAt){
+      const m = botTurnMove(S, S.cur, env);
+      const err = handle(S, S.cur, m, env);
+      if (err && m.k !== 'end') handle(S, S.cur, {k:'end'}, env);
+      S.botAt = now + BOT.move - BOT.jitter + env.rand() * 2 * BOT.jitter;
+    }
+    return;
+  }
+  if (S.turnDl && now >= S.turnDl){ log(S, `${cur.nm}’s time is up.`); endTurn(S, env); }
+}
+
+/* ---------- public view sent to every phone ---------- */
+function subPub(sub){
+  if (!sub) return null;
+  if (sub.k === 'resp') return {k:'resp', base:sub.base, ch:sub.chain.map(c => [c.a, c.s]), mt:sub.mt ? 1 : 0, sh:sub.sh, ver:sub.ver, last:sub.last, pop:sub.pop, dl:sub.dl, ps:Object.keys(sub.passed).map(Number)};
+  if (sub.k === 'trade') return {k:'trade', src:sub.src, tgt:sub.tgt, give:sub.give, want:sub.want, dl:sub.dl, dec:sub.dec};
+  if (sub.k === 'talks') return {k:'talks', src:sub.src, tgt:sub.tgt, n:sub.n, dl:sub.dl};
+  if (sub.k === 'fund') return {k:'fund', src:sub.src, wait:sub.wait, dl:sub.dl};
+  if (sub.k === 'elec') return {k:'elec', src:sub.src, cards:sub.cards, n:sub.n, dl:sub.dl, pop:sub.at0};
+  return null;
+}
+function pubState(S){
+  return {c:S.code, n:S.n, ph:S.ph, cur:S.cur, mv:S.mv, fb:S.fb ? 1 : 0, dk:S.deck.length, dc:S.disc.length, win:S.win, why:S.whyWin || '',
+    s:S.seats.map(s => ({nm:s.nm, c:s.cid, b:s.bot ? 1 : 0, r:s.role, h:s.hand, bl:s.bills.map(b => b.t).join(''), o:s.out ? 1 : 0, op:s.op})),
+    sub:subPub(S.sub), tdl:S.turnDl, tl:S.turnLeft, log:S.log, ak:S.ak, er:S.er};
+}
+
+if (typeof module !== 'undefined') module.exports = {BILLS, ACTS, catalog, newGame, handle, tick, pubState, sideCounts, botTurnMove};
+/* ===== Order! Order! phone interface and room networking ===== */
+const LS = {
+  get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del(k){ try { localStorage.removeItem(k); } catch (e) {} },
+};
+function rid(n){ const a = 'abcdefghjkmnpqrstuvwxyz23456789'; let s = ''; for (let i = 0; i < n; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function cleanName(s){ return String(s || '').replace(/[^\p{L}\p{N} .'\-]/gu, '').trim().slice(0, 14); }
+const envNow = () => ({now:Date.now(), rand:Math.random});
+const ROLESHORT = {PM:'Prime Minister', G:'Government', O:'Opposition', F:'Foreign Power'};
+
+const me = {cid:LS.get('oo-cid') || rid(10), nm:LS.get('oo-name') || ''};
+LS.set('oo-cid', me.cid);
+
+let room = null, roomReady = false, nr = null, mode = null, code = null;
+let S = null, lobby = null;      // host / solo authority
+let P = null, pRecv = 0, hostSeen = false, hostLostAt = 0;
+let lastKey = '', tickTimer = null, myQ = 0, shownErr = 0, online = new Set();
+
+const ui = {elecPick:[], elecKey:null, screen:'home', sel:null, aim:null, sheet:null, billPick:null,
+  trade:{tg:null, give:[], want:{}}, talks:{mine:[], theirs:[]}, toast:'', toastAt:0, passKey:'', autoKey:'', joinCode:''};
+
+/* ---------- networking: Firebase Realtime Database ----------
+   One device (the host) runs the rules. Paths per sitting:
+   games/CODE/state       host writes the public game state (as JSON text)
+   games/CODE/online/CID  each open device, removed automatically on disconnect
+   games/CODE/intents/CID each player's latest move (as JSON text)            */
+const FB_CFG = typeof firebaseConfig === 'object' ? firebaseConfig : null;
+const FB_ON = !!(FB_CFG && FB_CFG.apiKey && !/PASTE/.test(FB_CFG.apiKey));
+let fb = null, fbTried = false, fbErr = '', subs = [], hostCid = null;
+
+async function ensureRoom(){
+  if (fbTried) return fb;
+  fbTried = true;
+  if (!FB_ON){ fbErr = 'not-configured'; return null; }
+  if (!window.firebase){ fbErr = 'library'; return null; }
+  try {
+    firebase.initializeApp(FB_CFG);
+    await firebase.auth().signInAnonymously();
+    fb = firebase.database();
+  } catch (e){ fbErr = (e && (e.code || e.message)) || 'unknown'; fb = null; }
+  return fb;
+}
+const gref = p => fb.ref('games/' + code + (p ? '/' + p : ''));
+function listen(ref, ev, fn){ ref.on(ev, fn, err => toast('Lost connection to the game server: ' + (err && err.code || 'error'))); subs.push(() => ref.off(ev, fn)); }
+function unlistenAll(){ subs.forEach(f => { try { f(); } catch (e) {} }); subs = []; }
+function goOnline(){
+  const r = gref('online/' + me.cid);
+  r.onDisconnect().remove();
+  return r.set({nm:me.nm, t:firebase.database.ServerValue.TIMESTAMP});
+}
+function noServer(){
+  toast(fbErr === 'not-configured' ? 'This copy is not connected to Firebase yet. Practice mode still works.'
+    : fbErr === 'auth/operation-not-allowed' ? 'Turn on Anonymous sign-in in Firebase Authentication.'
+    : 'Could not reach the game server (' + fbErr + '). Practice mode still works.');
+}
+
+let writing = false, queued = null;
+function pushState(hs){
+  queued = JSON.stringify(hs);
+  if (writing) return;
+  writing = true;
+  const j = queued; queued = null;
+  gref('state').set({j}).catch(() => toast('Could not save the game. Check your connection.')).finally(() => {
+    writing = false;
+    if (queued){ const next = JSON.parse(queued); pushState(next); }
+  });
+}
+
+function publish(){
+  if (!S && !lobby) return;
+  const hs = S ? pubState(S) : {c:code, ph:'lobby', pl:lobby.players, n:lobby.n};
+  hs.hc = me.cid;
+  if (S) hs.on = S.seats.map(s => (s.bot || s.cid === me.cid || online.has(s.cid)) ? 1 : 0);
+  const key = JSON.stringify(hs);
+  if (key === lastKey) return;
+  lastKey = key; hs.ts = Date.now();
+  P = hs; pRecv = hs.ts;
+  if (fb && mode === 'host') pushState(hs);
+  if (mode === 'host') LS.set('oo-host', {code, S, lobby});
+  render();
+}
+
+function hostOnline(snap){
+  const v = snap.val() || {};
+  online = new Set(Object.keys(v).filter(c => c !== me.cid));
+  if (!S && lobby){
+    const others = Object.entries(v).filter(([c]) => c !== me.cid).sort((a, b) => (a[1].t || 0) - (b[1].t || 0));
+    lobby.players = [{cid:me.cid, nm:me.nm}].concat(others.map(([c, x]) => ({cid:c, nm:cleanName(x && x.nm) || 'Member'}))).slice(0, 8);
+  }
+  publish();
+}
+function hostIntent(snap){
+  if (!S) return;
+  const cid = snap.key, v = snap.val();
+  let a; try { a = JSON.parse(v && v.j); } catch (e) { return; }
+  const si = S.seats.findIndex(s => s.cid === cid);
+  if (si < 0 || !a || typeof a.q !== 'number' || a.q <= (S.ak[cid] || 0)) return;
+  const err = handle(S, si, a, envNow());
+  S.ak[cid] = a.q;
+  if (err) S.er[cid] = {q:a.q, m:err};
+  publish();
+}
+function hostAttach(){
+  listen(gref('online'), 'value', hostOnline);
+  listen(gref('intents'), 'child_added', hostIntent);
+  listen(gref('intents'), 'child_changed', hostIntent);
+}
+
+function startTicking(){
+  clearInterval(tickTimer);
+  tickTimer = setInterval(() => {
+    if (S && S.ph === 'play'){ tick(S, envNow()); }
+    publish();
+  }, 200);
+}
+
+async function hostNew(){
+  if (!requireName()) return;
+  const db = await ensureRoom();
+  if (!db){ noServer(); return; }
+  for (let i = 0; i < 5; i++){
+    code = rid(4).toUpperCase();
+    const ex = await gref('state').get().catch(() => null);
+    if (!ex || !ex.exists()) break;
+  }
+  mode = 'host'; S = null; lobby = {players:[{cid:me.cid, nm:me.nm}], n:6};
+  await gref('intents').remove().catch(() => {});
+  await goOnline().catch(() => {});
+  hostAttach();
+  ui.screen = 'lobby'; lastKey = '';
+  startTicking(); publish();
+}
+
+async function hostResume(){
+  const saved = LS.get('oo-host'); if (!saved) return;
+  const db = await ensureRoom();
+  if (!db){ noServer(); return; }
+  code = saved.code; mode = 'host'; S = saved.S; lobby = saved.lobby;
+  if (S && S.ph === 'play'){
+    const now = Date.now();
+    if (S.turnDl) S.turnDl = now + 30000;
+    if (S.sub && S.sub.dl) S.sub.dl = now + 8000;
+    S.botAt = now + 1500;
+  }
+  await goOnline().catch(() => {});
+  hostAttach();
+  ui.screen = S ? 'game' : 'lobby'; lastKey = '';
+  startTicking(); publish();
+}
+
+function guestState(snap){
+  const v = snap.val();
+  if (!v || !v.j){ render(); return; }
+  try { P = JSON.parse(v.j); } catch (e) { return; }
+  pRecv = Date.now(); hostSeen = true; hostCid = P.hc || hostCid;
+  const e = P.er && P.er[me.cid];
+  if (e && e.q === myQ && shownErr !== e.q){ shownErr = e.q; toast(e.m); }
+  render();
+}
+function guestOnline(snap){
+  const v = snap.val() || {};
+  if (hostCid && v[hostCid]){ hostLostAt = 0; ui.lostShown = false; }
+  else if (hostSeen && !hostLostAt) hostLostAt = Date.now() + 4000;
+  render();
+}
+
+async function guestJoin(c){
+  if (!requireName()) return;
+  c = String(c || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 4);
+  if (c.length !== 4){ toast('Enter the 4-letter code shown on the host’s screen.'); return; }
+  const db = await ensureRoom();
+  if (!db){ noServer(); return; }
+  code = c; mode = 'guest'; P = null; hostSeen = false; hostLostAt = Date.now() + 6000;
+  LS.set('oo-guest', {code:c});
+  await goOnline().catch(() => toast('Could not join that sitting.'));
+  listen(gref('state'), 'value', guestState);
+  listen(gref('online'), 'value', guestOnline);
+  ui.screen = 'game';
+  render();
+}
+
+function startSolo(){
+  if (!requireName()) return;
+  mode = 'solo'; code = 'SOLO'; lobby = null;
+  S = newGame('SOLO', [{cid:me.cid, nm:me.nm}], 6, envNow());
+  ui.screen = 'game'; lastKey = '';
+  startTicking(); publish();
+}
+
+function hostStart(){
+  if (!lobby) return;
+  const n = Math.max(lobby.n, Math.min(8, Math.max(6, lobby.players.length)));
+  S = newGame(code, lobby.players, n, envNow());
+  ui.screen = 'game'; publish();
+}
+
+function backToLobby(){
+  if (mode === 'solo'){ startSolo(); return; }
+  S = null; ui.screen = 'lobby'; resetUi(); lastKey = ''; publish();
+}
+
+async function leave(){
+  clearInterval(tickTimer); tickTimer = null;
+  if (fb && code && mode !== 'solo'){
+    unlistenAll();
+    try {
+      if (mode === 'host') await gref().remove();
+      else await gref('online/' + me.cid).remove();
+    } catch (e) {}
+  }
+  if (mode === 'host') LS.del('oo-host');
+  if (mode === 'guest') LS.del('oo-guest');
+  mode = null; S = null; lobby = null; P = null; code = null; lastKey = ''; hostCid = null;
+  ui.screen = 'home'; resetUi(); render();
+}
+function resetUi(){ ui.sel = null; ui.aim = null; ui.sheet = null; ui.billPick = null; ui.trade = {tg:null, give:[], want:{}}; ui.talks = {mine:[], theirs:[]}; }
+
+function send(a){
+  if (mode === 'host' || mode === 'solo'){
+    const si = S ? S.seats.findIndex(s => s.cid === me.cid) : -1;
+    if (si < 0) return;
+    const err = handle(S, si, a, envNow());
+    if (err) toast(err);
+    publish();
+  } else if (fb && code){
+    myQ = Math.max(Date.now(), myQ + 1);
+    gref('intents/' + me.cid).set({j:JSON.stringify(Object.assign({}, a, {q:myQ}))}).catch(() => toast('Not sent. Check your connection.'));
+  }
+}
+
+function requireName(){
+  const el = document.getElementById('nm');
+  const v = cleanName(el ? el.value : me.nm);
+  if (!v){ toast('Type your name first.'); return false; }
+  me.nm = v; LS.set('oo-name', v); return true;
+}
+function toast(m){ ui.toast = m; ui.toastAt = Date.now(); render(); setTimeout(() => { if (Date.now() - ui.toastAt >= 3200){ ui.toast = ''; render(); } }, 3300); }
+
+/* ---------- view helpers ---------- */
+const local = t => pRecv + (t - (P.ts || pRecv));
+function mySeat(){ return P && P.s ? P.s.findIndex(s => s.c === me.cid) : -1; }
+function cat(){ return catalog(P.n); }
+function typeOfId(id){ return cat()[id].k; }
+function myHand(){ const i = mySeat(); return i >= 0 ? P.s[i].h : []; }
+function countType(hand, k){ return hand.filter(id => typeOfId(id) === k).length; }
+function topOf(sub){ return sub.ch.length ? {a:sub.ch[sub.ch.length - 1][0], s:sub.ch[sub.ch.length - 1][1]} : {a:sub.base.a, s:sub.base.src}; }
+function seatName(i){ return P.s[i] ? P.s[i].nm : '?'; }
+function myTurnFree(){ const i = mySeat(); return P && P.ph === 'play' && i === P.cur && !P.sub && P.mv > 0 && !P.s[i].o; }
+function wildsIn(hand){ return countType(hand, 'wild'); }
+function canPassWith(hand, k){ const r = countType(hand, k); return r >= 1 && r + wildsIn(hand) >= BILL[k].set; }
+function billTotals(){ const c = {G:0, O:0, F:0}; P.s.forEach(s => { c[ROLE[s.r].side] += s.bl.length; }); return c; }
+
+const BRIEF = {larry:'Draw 2 cards', lr:'Knock out a bill', coal:'Take 2 random cards', talks:'See a hand, swap 2', vonc:'Knock out a bill or a seat',
+  fund:'Everyone gives you a card', inq:'Open a player’s hand', cs:'Take a passed bill', pa:'Cancel a Lords’ Rejection', ri:'Cancel it, turn it back',
+  jr:'Predict bill or action', diss:'Block a no-confidence vote', pror:'Block the vote, lose your hand', sov:'Shield or cancel'};
+function art(k){ return `<span class="c-art" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#i-${k}"/></svg></span>`; }
+function cardFace(id, opts = {}){
+  const c = cat()[id], hand = myHand();
+  const sel = opts.sel ? ' is-sel' : '';
+  const act = opts.act || 'card';
+  if (c.t === 'w'){
+    return `<button type="button" class="card wild${sel}" data-act="${act}" data-id="${id}">
+      <span class="c-band"><span class="c-set">∗</span><span>Wild</span></span>
+      ${art('wild')}
+      <span class="c-name">${esc(WILD.name)}</span>
+      <span class="c-text">${opts.full ? esc(WILD.text) : 'Fills any bill slot'}</span></button>`;
+  }
+  if (c.t === 'b'){
+    const b = BILL[c.k], have = countType(hand, c.k), w = wildsIn(hand);
+    const ready = !opts.plain && canPassWith(hand, c.k) ? ' is-ready' : '';
+    const foot = opts.plain ? `Set of ${b.set}` : `${have} of ${b.set} held${w && have < b.set ? ` +${Math.min(w, b.set - have)} wild` : ''}`;
+    return `<button type="button" class="card bill${sel}${ready}" data-act="${act}" data-id="${id}" style="--band:${b.col}">
+      <span class="c-band"><span class="c-set">${b.set}</span><span>Bill</span></span>
+      ${art(c.k)}
+      <span class="c-name">${esc(b.name)}</span>
+      <span class="c-foot">${foot}</span></button>`;
+  }
+  const a = ACTS[c.k];
+  return `<button type="button" class="card act k-${a.kind}${sel}" data-act="${act}" data-id="${id}">
+    <span class="c-kind">${a.kind === 'm' ? 'Manoeuvre' : 'Defence'}</span>
+    ${art(c.k)}
+    <span class="c-name">${esc(a.name)}</span>
+    <span class="c-text">${esc(opts.full ? a.text : BRIEF[c.k] || '')}</span></button>`;
+}
+function ico(k){ return `<svg class="chip-i" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-${k}"/></svg>`; }
+function chip(k){
+  if (k === 'wild') return `<span class="chip chip-wild">${ico('wild')}${esc(WILD.short)}</span>`;
+  if (BILL[k]) return `<span class="chip" style="--band:${BILL[k].col}">${ico(k)}${esc(BILL[k].short)}</span>`;
+  return `<span class="chip chip-act">${ico(k)}${esc(ACTS[k].name)}</span>`;
+}
+function timerBar(dl, total){ return `<div class="tbar" data-dl="${local(dl)}" data-total="${total}"><i></i><span></span></div>`; }
+
+/* ---------- render ---------- */
+const app = document.getElementById('app');
+function render(){
+  const scroller = app.querySelector('.hand-scroll');
+  const sx = scroller ? scroller.scrollLeft : 0;
+  const nmEl = document.getElementById('nm'); if (nmEl) me.nm = nmEl.value;
+  const cEl = document.getElementById('code'); if (cEl) ui.joinCode = cEl.value;
+  let html = '';
+  if (ui.screen === 'home') html = homeView();
+  else if (ui.screen === 'lobby' || (P && P.ph === 'lobby')) html = lobbyView();
+  else html = gameView();
+  html += sheetView() + (ui.toast ? `<div class="toast" role="status">${esc(ui.toast)}</div>` : '');
+  app.innerHTML = html;
+  const s2 = app.querySelector('.hand-scroll'); if (s2) s2.scrollLeft = sx;
+  autoPass();
+}
+
+function homeView(){
+  const host = LS.get('oo-host'), guest = LS.get('oo-guest');
+  const resume = [];
+  if (host && host.code) resume.push(`<button type="button" class="btn ghost" data-act="resume">Resume sitting ${esc(host.code)} as host</button>`);
+  if (guest && guest.code) resume.push(`<button type="button" class="btn ghost" data-act="rejoin" data-code="${esc(guest.code)}">Rejoin sitting ${esc(guest.code)}</button>`);
+  return `<main class="home">
+    <header class="mast">
+      <p class="eyebrow">A card game of the British constitution</p>
+      <h1>Order! Order!</h1>
+      <p class="lede">Pass your bills. Strike down theirs. Survive the vote. For 6 to 8 players on their phones, about 30 minutes a sitting.</p>
+    </header>
+    <section class="panel">
+      <label class="field" for="nm"><span>Your name</span><input id="nm" maxlength="14" autocomplete="off" value="${esc(me.nm)}" placeholder="e.g. Aisyah"></label>
+      <div class="join-row">
+        <label class="field grow" for="code"><span>Sitting code</span><input id="code" maxlength="4" autocomplete="off" autocapitalize="characters" value="${esc(ui.joinCode)}" placeholder="ABCD"></label>
+        <button type="button" class="btn primary" data-act="join">Join</button>
+      </div>
+      <div class="or"><span>or</span></div>
+      <button type="button" class="btn brass" data-act="host">Open a new sitting</button>
+      <button type="button" class="btn ghost" data-act="solo">Practise against bots</button>
+      ${resume.join('')}
+      ${FB_ON ? '' : '<p class="muted small">Online play is not set up in this copy yet. Practice mode works. See the setup guide.</p>'}
+    </section>
+    <button type="button" class="linkish" data-act="rules">How to play</button>
+  </main>`;
+}
+
+function lobbyView(){
+  const isHost = mode === 'host';
+  const pl = isHost ? lobby.players : (P ? P.pl : []);
+  const n = isHost ? lobby.n : (P ? P.n : 6);
+  const seats = Math.max(n, pl.length);
+  const bots = Math.max(0, seats - pl.length);
+  const opts = [6, 7, 8].map(k => `<button type="button" class="seg${k === n ? ' on' : ''}" data-act="count" data-n="${k}" ${k < pl.length ? 'disabled' : ''}>${k}</button>`).join('');
+  return `<main class="lobby">
+    <header class="lobby-head">
+      <p class="eyebrow">Sitting code</p>
+      <p class="code">${esc(code)}</p>
+      <p class="muted">${isHost ? 'Students open this game, type their name and enter the code above.' : 'You are in. Waiting for the host to begin the sitting.'}</p>
+    </header>
+    <section class="panel">
+      <h2>Members present <span class="muted">${pl.length} of 8</span></h2>
+      <ol class="roll">${pl.map(p => `<li>${esc(p.nm)}${p.cid === me.cid ? ' <em>you</em>' : ''}</li>`).join('')}
+        ${bots ? `<li class="botline">${bots} seat${bots === 1 ? '' : 's'} filled by bots</li>` : ''}</ol>
+      ${isHost ? `<div class="countrow"><span>Seats at the table</span><div class="segs">${opts}</div></div>
+        <p class="muted small">Government always outnumbers the Opposition. One Foreign Power sits at every table.</p>
+        <button type="button" class="btn brass" data-act="start">Begin the sitting</button>` : ''}
+      <button type="button" class="btn ghost" data-act="leave">Leave</button>
+    </section>
+  </main>`;
+}
+
+function gameView(){
+  if (!P || !P.s){
+    const lost = hostLostAt && Date.now() > hostLostAt;
+    return `<main class="waiting"><p class="eyebrow">Sitting ${esc(code || '')}</p><h2>${lost ? 'No host found yet' : 'Finding the host…'}</h2>
+      <p class="muted">${lost ? 'Check the code with the host, and make sure their screen is open on the game.' : 'Hold on a moment.'}</p>
+      <button type="button" class="btn ghost" data-act="leave">Back</button></main>`;
+  }
+  const my = mySeat(), meS = P.s[my];
+  const tot = billTotals();
+  const hostGone = mode === 'guest' && hostLostAt && Date.now() > hostLostAt;
+  const timer = P.ph === 'play' ? (P.tdl ? `<span class="clock" data-tdl="${local(P.tdl)}"></span>` : `<span class="clock paused">${Math.ceil((P.tl || 0) / 1000)}s</span>`) : '';
+  const score = ['G', 'O', 'F'].map(k => `<div class="score s-${k}"><span>${SIDE[k]}</span><b>${tot[k]}<small>/${NEED[k]}</small></b></div>`).join('');
+  const seats = P.s.map((s, i) => seatView(s, i, my)).join('');
+  return `<div class="game">
+    <header class="bar">
+      <span class="bar-code">${esc(P.c)}</span>
+      <span class="bar-deck">Deck ${P.dk} · Discard ${P.dc}</span>
+      ${timer}
+      <button type="button" class="iconbtn" data-act="log" aria-label="Hansard log">Hansard</button>
+      <button type="button" class="iconbtn" data-act="rules" aria-label="Rules">Rules</button>
+    </header>
+    ${hostGone ? '<div class="alert">The host has dropped out. The game resumes when their screen is back.</div>' : ''}
+    <section class="scores">${score}</section>
+    <section class="seats">${seats}</section>
+    <section class="feed">${bannerView(my)}<p class="lastlog">${esc(P.log[P.log.length - 1] || '')}</p></section>
+    ${meS ? dockView(my, meS) : '<div class="dock"><p class="muted">You are watching this sitting.</p></div>'}
+    ${modalView(my)}
+  </div>`;
+}
+
+function seatView(s, i, my){
+  const cls = ['seat', 'camp-' + ROLE[s.r].side];
+  if (s.r === 'PM') cls.push('is-pm');
+  if (i === P.cur && P.ph === 'play') cls.push('is-cur');
+  if (s.o) cls.push('is-out');
+  if (i === my) cls.push('is-me');
+  const aim = ui.aim;
+  if (aim && validAimSeat(aim, i)) cls.push('is-pick');
+  if (aim && aim.picks.includes(i)) cls.push('is-picked');
+  const off = P.on && !P.on[i];
+  const showHand = s.op >= 0 && i !== my && s.h.length;
+  const bills = s.bl.split('').map((k, bi) => `<button type="button" class="chip billchip" data-act="bill" data-i="${i}" data-bi="${bi}" style="--band:${BILL[k].col}">${ico(k)}${esc(BILL[k].short)}</button>`).join('');
+  return `<div class="${cls.join(' ')}" data-act="seat" data-i="${i}" role="button" tabindex="0">
+    <div class="seat-top"><span class="sname">${esc(s.nm)}</span><span class="role r-${s.r}">${ROLESHORT[s.r]}</span></div>
+    <div class="seat-meta">
+      ${s.o ? '<span class="tag">Lost seat</span>' : `<span class="handct">${s.h.length} card${s.h.length === 1 ? '' : 's'}</span>`}
+      ${i === my ? '<span class="tag me">you</span>' : ''}${s.b ? '<span class="tag">bot</span>' : ''}${off ? '<span class="tag warn">offline</span>' : ''}
+      ${s.op >= 0 ? '<span class="tag open">hand open</span>' : ''}
+    </div>
+    ${bills ? `<div class="bills">${bills}</div>` : ''}
+    ${showHand ? `<div class="openhand">${s.h.map(id => chip(typeOfId(id))).join('')}</div>` : ''}
+  </div>`;
+}
+
+function bannerView(my){
+  if (P.ph === 'over') return `<p class="banner">The sitting is over.</p>`;
+  if (ui.aim){
+    const need = ui.aim.kind === 'two' ? `Choose two players (${ui.aim.picks.length} of 2)` : (ui.aim.kind === 'bill' ? 'Tap a Commons-passed bill on another player’s seat' : ui.aim.kind === 'vonc' ? 'Choose a player. With no bills, they are eliminated' : 'Choose a player');
+    return `<p class="banner aim"><b>${esc(ACTS[ui.aim.k].name)}:</b> ${need}. <button type="button" class="linkish" data-act="cancelaim">Cancel</button></p>`;
+  }
+  const sub = P.sub;
+  if (sub){
+    if (sub.k === 'resp'){
+      const b = sub.base;
+      let line = `${esc(seatName(b.src))} plays <b>${esc(ACTS[b.a].name)}</b>`;
+      if (b.tg && b.tg.length) line += ` on ${b.tg.map(t => esc(seatName(t))).join(' and ')}`;
+      if (b.bt) line += `’s ${esc(BILL[b.bt].name)}`;
+      if (b.a === 'fund') line = `${esc(seatName(b.src))} plays <b>${esc(ACTS[b.a].name)}</b> on everyone`;
+      const chain = sub.mt ? '' : sub.ch.map(([a, s]) => `<li>${esc(seatName(s))}: ${esc(ACTS[a].name)}</li>`).join('');
+      return `<div class="banner resp"><p>${line}.</p>${chain ? `<ol class="chain">${chain}</ol>` : ''}${shieldList(sub)}${timerBar(sub.dl, TIME.resp)}</div>`;
+    }
+    if (sub.k === 'trade') return `<div class="banner"><p>${esc(seatName(sub.src))} offers ${sub.tgt === -1 ? 'the whole House' : esc(seatName(sub.tgt))} a trade${sub.tgt === -1 ? '. First to accept takes it' : ''}.</p>${timerBar(sub.dl, TIME.trade)}</div>`;
+    if (sub.k === 'talks') return `<div class="banner"><p>${esc(seatName(sub.src))} is in cross-party talks with ${esc(seatName(sub.tgt))}.</p>${timerBar(sub.dl, TIME.talks)}</div>`;
+    if (sub.k === 'elec') return `<div class="banner aim"><p><b>Election Interference.</b> The Foreign Power is choosing ${sub.n} of the top ${sub.cards.length} cards of the deck.</p>${timerBar(sub.dl, TIME.pop + TIME.elec)}</div>`;
+    if (sub.k === 'fund') return `<div class="banner"><p>Party Funding for ${esc(seatName(sub.src))}: waiting on ${sub.wait.length} donor${sub.wait.length === 1 ? '' : 's'}.</p>${timerBar(sub.dl, TIME.fund)}</div>`;
+  }
+  if (P.cur === my) return `<p class="banner mine">Your turn. <b>${P.mv}</b> move${P.mv === 1 ? '' : 's'} left.</p>`;
+  return `<p class="banner">${esc(seatName(P.cur))} has the floor.</p>`;
+}
+
+function dockView(my, meS){
+  const hand = meS.h.slice().sort((x, y) => {
+    const a = cat()[x], b = cat()[y], r = {b:0, w:1, a:2};
+    if (a.t !== b.t) return r[a.t] - r[b.t];
+    return a.k < b.k ? -1 : a.k > b.k ? 1 : 0;
+  });
+  const side = ROLE[meS.r].side;
+  const canAct = myTurnFree();
+  const cards = hand.length ? hand.map(id => cardFace(id, {sel:ui.sel === id})).join('') : '<p class="muted empty">No cards in hand.</p>';
+  return `<div class="dock">
+    <div class="dock-head">
+      <span class="role r-${meS.r}">${ROLE[meS.r].name}</span>
+      <span class="goal">${meS.o ? 'You have lost your seat.' : side === 'F' ? 'Carry 3 bills through the Commons before the Government does.' : side === 'G' ? 'Government needs 3 bills through the Commons. Keep the PM in office.' : 'Opposition needs 2 bills through the Commons, or bring down the PM.'}</span>
+    </div>
+    <div class="hand-scroll" aria-label="Your hand">${cards}</div>
+    <div class="dock-actions">
+      <button type="button" class="btn ghost" data-act="tradeopen" ${canAct ? '' : 'disabled'}>Offer a trade</button>
+      <button type="button" class="btn brass" data-act="end" ${P.cur === my && !P.sub && P.ph === 'play' ? '' : 'disabled'}>End turn</button>
+    </div>
+  </div>`;
+}
+
+function validAimSeat(aim, i){
+  const s = P.s[i];
+  if (!s || s.o || i === mySeat()) return false;
+  if (aim.kind === 'bill') return s.bl.length > 0;
+  return true;
+}
+
+function respKey(sub){ return `${sub.base.src}|${sub.base.a}|${sub.base.tg.join(',')}|${sub.ver}|${sub.dl}`; }
+function myCounters(sub){
+  const my = mySeat(); if (my < 0 || P.s[my].o) return [];
+  if (sub.mt){
+    const sov = P.s[my].h.find(id => typeOfId(id) === 'sov');
+    const out = [];
+    for (const t of (sov === undefined ? [] : sub.base.tg)){
+      if (P.s[t].o) continue;
+      const ch = (sub.sh && sub.sh[t]) || [];
+      const lastS = ch.length ? ch[ch.length - 1][1] : sub.base.src;
+      if (lastS === my) continue;
+      const who = t === my ? 'yourself' : esc(seatName(t));
+      const label = ch.length % 2 ? `Cancel the shield on ${who}` : (t === my ? 'Shield yourself' : `Shield ${who}`);
+      out.push({id:sov, for:t, label, sub:ch.length % 2 ? 'Parliamentary Sovereignty removes their protection.' : 'Parliamentary Sovereignty protects this player from the card.'});
+    }
+    return out.concat(jrOptions(sub, my));
+  }
+  const top = topOf(sub); if (top.s === my) return [];
+  const seen = new Set(), out = [];
+  for (const id of P.s[my].h){ const k = typeOfId(id); if (!seen.has(k) && canCounter(k, top.a)){ seen.add(k); out.push({id, for:-1, label:esc(ACTS[k].name), sub:esc(ACTS[k].text)}); } }
+  return out.concat(jrOptions(sub, my));
+}
+function jrOptions(sub, my){
+  const id = P.s[my].h.find(x => typeOfId(x) === 'jr');
+  if (id === undefined || !sub.base.tg.includes(my) || sub.base.src === my) return [];
+  if (sub.mt){
+    const ch = (sub.sh && sub.sh[my]) || [];
+    if (ch.length % 2 === 1 || (ch.length && ch[ch.length - 1][1] === my)) return [];
+  } else {
+    const topS = sub.ch.length ? sub.ch[sub.ch.length - 1][1] : sub.base.src;
+    if (sub.ch.length % 2 === 1 || topS === my) return [];
+  }
+  const note = 'The top card of the deck is revealed. A Henry VIII Clause loses; Election Interference wins.';
+  return [{id, for:my, guess:'b', label:'Judicial Review: predict a bill card', sub:note},
+          {id, for:my, guess:'a', label:'Judicial Review: predict an action card', sub:note}];
+}
+function shieldList(sub){
+  if (!sub.mt) return '';
+  const rows = sub.base.tg.filter(t => sub.sh && sub.sh[t] && sub.sh[t].length).map(t => {
+    const ch = sub.sh[t], on = ch.length % 2 === 1, by = seatName(ch[ch.length - 1][1]);
+    return `<li>${esc(seatName(t))}: ${on ? `shielded by ${esc(by)}` : `shield cancelled by ${esc(by)}`}</li>`;
+  }).join('');
+  return rows ? `<ol class="chain">${rows}</ol>` : '';
+}
+function autoPass(){
+  if (!P || !P.sub || P.sub.k !== 'resp' || P.ph !== 'play') return;
+  const sub = P.sub, my = mySeat();
+  if (my < 0 || P.s[my].o) return;
+  const key = respKey(sub);
+  if ((sub.last ? sub.last[1] : sub.base.src) === my || (sub.ps || []).includes(my) || ui.passKey === key || ui.autoKey === key) return;
+  if (!myCounters(sub).length){
+    ui.autoKey = key;
+    const at = sub.ver;
+    const wait = Math.max(0, local(sub.pop || 0) + TIME.pop - Date.now());
+    setTimeout(() => { if (P && P.sub && respKey(P.sub) === key){ ui.passKey = key; send({k:'rpass', at}); } }, wait + 1500 + Math.random() * 2000);
+  }
+}
+
+function modalView(my){
+  if (!P) return '';
+  if (P.ph === 'over'){
+    const w = P.win;
+    const rows = P.s.map(s => `<li class="${ROLE[s.r].side === w ? 'won' : ''}"><span>${esc(s.nm)}</span><span class="role r-${s.r}">${ROLE[s.r].name}</span><span class="muted">${s.bl.length} bill${s.bl.length === 1 ? '' : 's'}</span></li>`).join('');
+    const mine = my >= 0 && ROLE[P.s[my].r].side === w;
+    return `<div class="modal over"><div class="mbox">
+      <p class="eyebrow">${mine ? 'Your side carries the House' : 'The House has divided'}</p>
+      <h2 class="win w-${w}">${SIDE[w]} wins</h2>
+      <p>${esc(P.why || '')}</p>
+      <ul class="results">${rows}</ul>
+      <div class="mrow">
+        ${mode === 'host' ? '<button type="button" class="btn brass" data-act="again">New sitting, same players</button>' : ''}
+        ${mode === 'solo' ? '<button type="button" class="btn brass" data-act="again">Play again</button>' : ''}
+        <button type="button" class="btn ghost" data-act="leave">Leave</button>
+      </div></div></div>`;
+  }
+  const sub = P.sub;
+  if (sub && sub.k === 'elec' && inPop(sub)) return elecPopView(sub);
+  if (sub && sub.k === 'resp' && inPop(sub)) return popView(sub);
+  if (!sub || my < 0 || P.s[my].o) return '';
+  if (sub.k === 'resp'){
+    const key = respKey(sub), cs = myCounters(sub);
+    if (!cs.length || ui.passKey === key || (sub.ps || []).includes(my)) return '';
+    const top = topOf(sub);
+    const what = sub.mt ? bannerLine(sub.base) : sub.ch.length ? `${esc(seatName(top.s))} answers with ${esc(ACTS[top.a].name)}.` : bannerLine(sub.base);
+    return `<div class="modal"><div class="mbox respbox">
+      <p class="eyebrow">Point of order</p>
+      <h2>${what}</h2>
+      <p class="muted">${sub.mt ? 'Parliamentary Sovereignty shields one targeted player. Anyone may play it, for themselves or for someone else.' : 'You can answer this. Anyone at the table may.'}</p>
+      ${shieldList(sub)}
+      ${timerBar(sub.dl, TIME.resp)}
+      <div class="counters">${cs.map(o => `<button type="button" class="btn counter" data-act="counter" data-id="${o.id}" data-for="${o.for}" data-guess="${o.guess || ''}"><b>${o.label}</b><small>${o.sub}</small></button>`).join('')}</div>
+      <button type="button" class="btn ghost" data-act="letpass">Let it pass</button>
+    </div></div>`;
+  }
+  if (sub.k === 'trade' && (sub.tgt === my || (sub.tgt === -1 && sub.src !== my && !(sub.dec || []).includes(my)))){
+    const want = Object.entries(sub.want);
+    const can = want.every(([k, v]) => countType(P.s[my].h, k) >= v);
+    return `<div class="modal"><div class="mbox">
+      <p class="eyebrow">${sub.tgt === -1 ? 'Open trade offer' : 'Trade offer'}</p><h2>${esc(seatName(sub.src))} proposes a deal${sub.tgt === -1 ? ' to everyone' : ''}</h2>
+      ${sub.tgt === -1 ? '<p class="muted">The first player to accept gets it.</p>' : ''}
+      ${timerBar(sub.dl, TIME.trade)}
+      <div class="tradecols">
+        <div><h3>You receive</h3>${sub.give.length ? `<div class="chips">${sub.give.map(id => chip(typeOfId(id))).join('')}</div>` : '<p class="muted">Nothing</p>'}</div>
+        <div><h3>You give</h3>${want.length ? `<div class="chips">${want.map(([k, v]) => `${chip(k)}<span class="times">×${v}</span>`).join('')}</div>` : '<p class="muted">Nothing</p>'}</div>
+      </div>
+      ${can ? '' : '<p class="warnline">You do not hold the cards asked for.</p>'}
+      <div class="mrow"><button type="button" class="btn brass" data-act="taccept" ${can ? '' : 'disabled'}>Accept</button><button type="button" class="btn ghost" data-act="treject">Decline</button></div>
+    </div></div>`;
+  }
+  if (sub.k === 'talks' && sub.src === my){
+    const tgt = P.s[sub.tgt], t = ui.talks;
+    const even = t.mine.length === t.theirs.length;
+    return `<div class="modal"><div class="mbox wide">
+      <p class="eyebrow">Cross-Party Talks</p><h2>${esc(tgt.nm)}’s hand</h2>
+      <p class="muted">Pick up to ${sub.n} of theirs and the same number of yours to swap.</p>
+      ${timerBar(sub.dl, TIME.talks)}
+      <h3>Theirs (${t.theirs.length}/${sub.n})</h3>
+      <div class="minis">${tgt.h.map(id => cardFace(id, {act:'tktheirs', sel:t.theirs.includes(id), plain:true})).join('')}</div>
+      <h3>Yours (${t.mine.length}/${sub.n})</h3>
+      <div class="minis">${P.s[my].h.map(id => cardFace(id, {act:'tkmine', sel:t.mine.includes(id)})).join('')}</div>
+      <div class="mrow"><button type="button" class="btn brass" data-act="tkdone" ${even ? '' : 'disabled'}>${t.mine.length ? `Swap ${t.mine.length}` : 'No deal'}</button></div>
+    </div></div>`;
+  }
+  if (sub.k === 'elec' && sub.src === my){
+    if (ui.elecKey !== sub.pop){ ui.elecKey = sub.pop; ui.elecPick = []; }
+    const n = ui.elecPick.length;
+    return `<div class="modal"><div class="mbox wide">
+      <p class="eyebrow">Election Interference</p><h2>Take ${sub.n} of the top ${sub.cards.length} cards</h2>
+      <p class="muted">The rest are shuffled back into the deck. If time runs out, the best-looking cards are picked for you.</p>
+      ${timerBar(sub.dl, TIME.pop + TIME.elec)}
+      <div class="minis">${sub.cards.map(id => cardFace(id, {act:'elpick', sel:ui.elecPick.includes(id)})).join('')}</div>
+      <div class="mrow"><button type="button" class="btn brass" data-act="eldone" ${n === sub.n ? '' : 'disabled'}>Take ${n} of ${sub.n}</button></div>
+    </div></div>`;
+  }
+  if (sub.k === 'fund' && sub.wait.includes(my)){
+    return `<div class="modal"><div class="mbox wide">
+      <p class="eyebrow">Party Funding</p><h2>Give ${esc(seatName(sub.src))} one card</h2>
+      <p class="muted">If you do not choose in time, a random card goes.</p>
+      ${timerBar(sub.dl, TIME.fund)}
+      <div class="minis">${P.s[my].h.map(id => cardFace(id, {act:'donate'})).join('')}</div>
+    </div></div>`;
+  }
+  return '';
+}
+function elecPopView(sub){
+  return `<div class="pop" aria-live="polite"><div class="popbox camp-F">
+    <p class="pop-who">Election Interference!</p>
+    <div class="card act popcard elec"><span class="c-kind">Drawn and played at once</span>${art('elec')}<span class="c-name">${esc(ELEC.name)}</span><span class="c-text">The Foreign Power takes 5 of the top 10 cards.</span></div>
+    <p class="pop-on">${esc(seatName(sub.src))} looks at the top ${sub.cards.length} cards.</p>
+  </div></div>`;
+}
+function inPop(sub){ return sub.pop != null && Date.now() < local(sub.pop) + TIME.pop; }
+function popView(sub){
+  const b = sub.base;
+  const top = sub.mt && sub.last ? {a:sub.last[0], s:sub.last[1]} : topOf(sub), d = ACTS[top.a];
+  let line = (sub.mt ? sub.last : sub.ch.length) ? `${esc(seatName(top.s))} answers with` : `${esc(seatName(top.s))} plays`;
+  if (sub.mt && sub.last){
+    const t = sub.last[2], ch = sub.sh[t] || [];
+    line = ch.length % 2 ? `${esc(seatName(top.s))} shields ${t === top.s ? 'themselves' : esc(seatName(t))}` : `${esc(seatName(top.s))} cancels the shield on ${esc(seatName(t))}`;
+  }
+  if (!(sub.mt ? sub.last : sub.ch.length) && b.defl) line = 'Royal Intervention turns the rejection back';
+  if (sub.last && sub.last[0] === 'jr'){
+    const r = sub.last;
+    return `<div class="pop" aria-live="polite"><div class="popbox camp-${P.s[r[1]] ? ROLE[P.s[r[1]].r].side : 'G'}">
+      <p class="pop-who">${esc(seatName(r[1]))} seeks Judicial Review</p>
+      <div class="card act k-d popcard"><span class="c-kind">Defence</span>${art('jr')}<span class="c-name">Judicial Review</span><span class="c-text">Predicted ${r[5] === 'a' ? 'an action card' : 'a bill card'}.</span></div>
+      <p class="pop-on">The top card is ${esc(r[4] ? typeName(r[4]) : 'nothing')}. <b>${r[3] ? 'The claim succeeds.' : 'The claim fails.'}</b></p>
+    </div></div>`;
+  }
+  let on = '';
+  if (!(sub.mt ? sub.last : sub.ch.length) && b.a === 'fund') on = 'Every other player must give a card.';
+  else if (!(sub.mt ? sub.last : sub.ch.length) && b.tg && b.tg.length) on = `on ${b.tg.map(t => esc(seatName(t))).join(' and ')}${b.bt ? `’s ${esc(BILL[b.bt].name)}` : ''}`;
+  const camp = P.s[top.s] ? ROLE[P.s[top.s].r].side : 'G';
+  return `<div class="pop" aria-live="polite"><div class="popbox camp-${camp}">
+    <p class="pop-who">${line}</p>
+    <div class="card act k-${d.kind} popcard"><span class="c-kind">${d.kind === 'm' ? 'Manoeuvre' : 'Defence'}</span>${art(top.a)}<span class="c-name">${esc(d.name)}</span><span class="c-text">${esc(BRIEF[top.a] || '')}</span></div>
+    ${on ? `<p class="pop-on">${on}</p>` : ''}
+  </div></div>`;
+}
+function bannerLine(b){
+  if (b.a === 'fund') return `${esc(seatName(b.src))} plays Party Funding on everyone.`;
+  let line = `${esc(seatName(b.src))} plays ${esc(ACTS[b.a].name)}`;
+  if (b.tg && b.tg.length) line += ` on ${b.tg.map(t => esc(seatName(t))).join(' and ')}`;
+  if (b.bt) line += `’s ${esc(BILL[b.bt].name)}`;
+  return line + '.';
+}
+
+function sheetView(){
+  if (!ui.sheet) return '';
+  let body = '';
+  if (ui.sheet === 'rules') body = rulesBody();
+  else if (ui.sheet === 'log') body = `<h2>Hansard</h2><ol class="hansard">${(P && P.log || []).slice().reverse().map(l => `<li>${esc(l)}</li>`).join('')}</ol>`;
+  else if (ui.sheet === 'card' && P && ui.sel != null && myHand().includes(ui.sel)) body = cardSheet(ui.sel);
+  else if (ui.sheet === 'trade' && P) body = tradeSheet();
+  else if (ui.sheet === 'billpick' && P && ui.billPick != null){
+    const s = P.s[ui.billPick];
+    body = `<h2>Which of ${esc(s.nm)}’s bills?</h2><div class="stack">${s.bl.split('').map((k, bi) => `<button type="button" class="btn ghost billopt" data-act="bill" data-i="${ui.billPick}" data-bi="${bi}">${chip(k)} ${esc(BILL[k].name)}</button>`).join('')}</div>`;
+  } else { ui.sheet = null; return ''; }
+  return `<div class="sheet-wrap" data-act="closesheet"><section class="sheet" data-stop="1" role="dialog" aria-modal="true">
+    <button type="button" class="sheet-x" data-act="closesheet" aria-label="Close">Close</button>${body}</section></div>`;
+}
+
+function cardSheet(id){
+  const c = cat()[id], hand = myHand();
+  if (c.t === 'w'){
+    const opts = BILLS.filter(b => canPassWith(hand, b.k));
+    const free = myTurnFree();
+    return `<div class="bigcard">${cardFace(id, {act:'noop'})}</div>
+      <h2>${esc(WILD.name)}</h2><p>${esc(WILD.text)}</p><p class="flav">${esc(WILD.flav)}</p>
+      ${opts.length ? `<h3>Bills you can pass now</h3><div class="stack">${opts.map(b => { const r = Math.min(countType(hand, b.k), b.set); return `<button type="button" class="btn ghost billopt" data-act="passbill" data-k="${b.k}" ${free ? '' : 'disabled'}>${chip(b.k)} ${esc(b.name)} <small class="muted">${r} real + ${b.set - r} wild</small></button>`; }).join('')}</div>${free ? '' : '<p class="muted small">You can pass bills on your turn.</p>'}`
+        : '<p class="note">Hold at least one real card of a bill, and enough Henry VIII Clauses to make up the rest of its set.</p>'}`;
+  }
+  if (c.t === 'b'){
+    const b = BILL[c.k], have = countType(hand, c.k), w = wildsIn(hand);
+    const ok = canPassWith(hand, c.k), can = myTurnFree() && ok;
+    const useW = Math.max(0, b.set - Math.min(have, b.set));
+    const label = ok ? (useW ? `Pass in the Commons (${useW} wild)` : 'Pass in the Commons') : `You hold ${have} of ${b.set}${w ? ` +${w} wild` : ''}`;
+    return `<div class="bigcard">${cardFace(id, {act:'noop'})}</div>
+      <h2>${esc(b.name)}</h2>
+      <p>Collect ${b.set} cards of this bill, then pass it as one move. Henry VIII Clauses can fill missing slots. Passed bills sit on your seat and count for your side. The same bill can be passed twice.</p>
+      <button type="button" class="btn brass" data-act="passbill" data-k="${c.k}" ${can ? '' : 'disabled'}>${label}</button>`;
+  }
+  const a = ACTS[c.k];
+  let btn = '';
+  if (a.kind === 'm'){
+    let why = '';
+    if (!myTurnFree()) why = 'Wait for your turn';
+    else if (c.k === 'vonc' && !P.fb) why = 'Not until the first bill has passed';
+    else if (a.tgt === 'bill' && !P.s.some((s, i) => i !== mySeat() && !s.o && s.bl.length)) why = 'Nobody else has a Commons-passed bill';
+    btn = `<button type="button" class="btn brass" data-act="playcard" data-id="${id}" ${why ? 'disabled' : ''}>${why || 'Play this card'}</button>`;
+  } else {
+    const vs = a.vs.includes('*') ? 'any action card' : a.vs.map(k => ACTS[k].name).join(' or ');
+    btn = `<p class="note">Keep this card. When someone plays ${esc(vs)}, you get the chance to answer, even on another player’s turn. Answering does not use a move.</p>`;
+  }
+  return `<div class="bigcard">${cardFace(id, {act:'noop'})}</div>
+    <h2>${esc(a.name)}</h2><p>${esc(a.text)}</p><p class="flav">${esc(a.flav)}</p>${btn}`;
+}
+
+function tradeSheet(){
+  const my = mySeat(), t = ui.trade;
+  const partners = P.s.map((s, i) => ({s, i})).filter(x => x.i !== my && !x.s.o);
+  const types = BILLS.map(b => b.k).concat(['wild'], Object.keys(ACTS));
+  const ok = t.tg != null && (t.give.length || Object.values(t.want).some(v => v > 0));
+  return `<h2>Offer a trade</h2>
+    <p class="muted small">A trade uses a move only if it is accepted. They can accept or decline, not counter.</p>
+    <h3>With</h3>
+    <div class="partners"><button type="button" class="pill${t.tg === -1 ? ' on' : ''}" data-act="tpartner" data-i="-1">Everyone <small>first to accept</small></button>${partners.map(x => `<button type="button" class="pill camp-${ROLE[x.s.r].side}${t.tg === x.i ? ' on' : ''}" data-act="tpartner" data-i="${x.i}">${esc(x.s.nm)} <small>${ROLESHORT[x.s.r]}</small></button>`).join('')}</div>
+    <h3>You give <span class="muted">${t.give.length} card${t.give.length === 1 ? '' : 's'}</span></h3>
+    <div class="minis">${P.s[my].h.map(id => cardFace(id, {act:'tgive', sel:t.give.includes(id)})).join('') || '<p class="muted">No cards.</p>'}</div>
+    <h3>You ask for</h3>
+    <div class="wants">${types.map(k => { const v = t.want[k] || 0; return `<div class="want${v ? ' on' : ''}">${chip(k)}<span class="step"><button type="button" data-act="wminus" data-k="${k}" aria-label="Fewer">−</button><b>${v}</b><button type="button" data-act="wplus" data-k="${k}" aria-label="More">+</button></span></div>`; }).join('')}</div>
+    <div class="sheet-foot"><button type="button" class="btn brass" data-act="tsend" ${ok ? '' : 'disabled'}>Send offer</button></div>`;
+}
+
+function rulesBody(){
+  const acts = Object.values(ACTS).map(a => `<li><b>${esc(a.name)}</b> <span class="kindtag">${a.kind === 'm' ? 'Manoeuvre' : 'Defence'}</span><br>${esc(a.text)}</li>`).join('');
+  const bills = BILLS.map(b => `<li>${chip(b.k)} ${esc(b.name)} <span class="muted">set of ${b.set}, ${b.set + 2} in the deck</span></li>`).join('');
+  return `<h2>How to play</h2>
+  <h3>Sides</h3>
+  <ul class="rules">
+    <li><b>Government</b> (the Prime Minister and Government MPs) wins by passing 3 bills between them.</li>
+    <li><b>Opposition</b> wins by passing 2 bills, or by bringing down the Prime Minister.</li>
+    <li><b>Foreign Power</b> plays alone and wins by passing 3 bills before the Government does.</li>
+    <li>If every Opposition MP loses their seat, the Government wins. All roles are public.</li>
+  </ul>
+  <h3>Your turn</h3>
+  <ul class="rules">
+    <li>Draw 2 cards. The Prime Minister draws 3 and the Foreign Power draws 4.</li>
+    <li>Make up to 3 moves: play a manoeuvre card, pass a bill, or make a trade that is accepted. You have 2 minutes.</li>
+    <li>Trades go to one player or to the whole House. On an open offer, the first player to accept gets the deal.</li>
+    <li>Defence cards are played in answer to someone else’s card, by anyone, on any turn. Everyone has 30 seconds to answer. Answering is not a move. Answers can be answered in turn.</li>
+    <li>No hand limit. When the deck is down to 10 cards, the discard pile is shuffled back in.</li>
+  </ul>
+  <h3>Bills</h3><ul class="rules plain">${bills}<li>${chip('wild')} <b>${esc(WILD.name)}</b> <span class="muted">wild, 10 in the deck (plus 1 per extra player)</span><br>${esc(WILD.text)}</li></ul>
+  <p class="muted small">Bills on the table have passed the Commons but still await the Lords and Royal Assent, so they can be knocked out. The same bill can be passed twice. A knocked-out bill sends all its cards, wilds included, to the discard pile. A bill taken by Confidence and Supply keeps its wilds.</p>
+  <h3>Action cards</h3><ul class="rules plain">${acts}<li><b>${esc(ELEC.name)}</b> <span class="kindtag">Triggered on draw, 5 in the deck</span><br>${esc(ELEC.text)} If the Foreign Power has lost its seat, it has no effect.</li></ul>
+  <p class="muted small">Larry the Chief Mouser and Election Interference cannot be stopped. Against Coalition Agreement or Party Funding, Parliamentary Sovereignty shields one player: the card still hits everyone else. A shield can itself be cancelled by another Parliamentary Sovereignty. Judicial Review is only for the player a card is aimed at: predict bill or action, and the top card of the deck is revealed and discarded. Prorogation costs your whole hand as soon as you play it. A Lords’ Rejection turned back by Royal Intervention knocks out the most recent bill of the player who used it.</p>`;
+}
+
+/* ---------- events ---------- */
+app.addEventListener('click', ev => {
+  const el = ev.target.closest('[data-act]');
+  if (!el) return;
+  if (el.dataset.act === 'closesheet' && ev.target.closest('[data-stop]') && !ev.target.closest('.sheet-x')) return;
+  if (el.disabled) return;
+  const act = el.dataset.act, id = el.dataset.id != null ? Number(el.dataset.id) : null;
+  const i = el.dataset.i != null ? Number(el.dataset.i) : null;
+  switch (act){
+    case 'host': hostNew(); break;
+    case 'join': { const c = document.getElementById('code'); guestJoin(c ? c.value : ''); break; }
+    case 'rejoin': guestJoin(el.dataset.code); break;
+    case 'resume': hostResume(); break;
+    case 'solo': startSolo(); break;
+    case 'rules': ui.sheet = 'rules'; render(); break;
+    case 'log': ui.sheet = 'log'; render(); break;
+    case 'closesheet': ui.sheet = null; ui.billPick = null; render(); break;
+    case 'count': if (lobby){ lobby.n = Number(el.dataset.n); publish(); } break;
+    case 'start': hostStart(); break;
+    case 'leave': leave(); break;
+    case 'again': backToLobby(); break;
+    case 'card':
+      if (ui.aim) return;
+      ui.sel = id; ui.sheet = 'card'; render(); break;
+    case 'passbill': ui.sheet = null; ui.sel = null; send({k:'pass', b:el.dataset.k}); break;
+    case 'playcard': {
+      const k = typeOfId(id), tgt = ACTS[k].tgt;
+      ui.sheet = null; ui.sel = null;
+      if (tgt === 'none') send({k:'play', card:id});
+      else { ui.aim = {card:id, k, kind:tgt, picks:[]}; render(); }
+      break;
+    }
+    case 'cancelaim': ui.aim = null; render(); break;
+    case 'seat': onSeat(i); break;
+    case 'bill': {
+      ev.stopPropagation();
+      const bi = Number(el.dataset.bi);
+      if (ui.aim && (ui.aim.kind === 'bill' || ui.aim.kind === 'vonc') && validAimSeat(ui.aim, i)){
+        const a = ui.aim; ui.aim = null; ui.sheet = null; ui.billPick = null;
+        send({k:'play', card:a.card, tg:[i], bi});
+      } else if (!ui.aim){ const k = P.s[i].bl[bi]; toast(`${BILL[k].name}, passed by the Commons for ${P.s[i].nm}. Awaiting the Lords.`); }
+      else onSeat(i);
+      break;
+    }
+    case 'end': ui.aim = null; send({k:'end'}); break;
+    case 'tradeopen': ui.trade = {tg:null, give:[], want:{}}; ui.sheet = 'trade'; render(); break;
+    case 'tpartner': ui.trade.tg = i; render(); break;
+    case 'tgive': toggle(ui.trade.give, id); render(); break;
+    case 'wplus': ui.trade.want[el.dataset.k] = Math.min(10, (ui.trade.want[el.dataset.k] || 0) + 1); render(); break;
+    case 'wminus': ui.trade.want[el.dataset.k] = Math.max(0, (ui.trade.want[el.dataset.k] || 0) - 1); render(); break;
+    case 'tsend': {
+      const w = {}; Object.entries(ui.trade.want).forEach(([k, v]) => { if (v > 0) w[k] = v; });
+      ui.sheet = null; send({k:'trade', tg:ui.trade.tg, give:ui.trade.give.slice(), want:w}); break;
+    }
+    case 'counter': if (P && P.sub && P.sub.k === 'resp'){ ui.passKey = respKey(P.sub); send({k:'resp', card:id, at:P.sub.ver, for:Number(el.dataset.for), guess:el.dataset.guess || undefined}); } break;
+    case 'letpass': if (P && P.sub && P.sub.k === 'resp'){ ui.passKey = respKey(P.sub); send({k:'rpass', at:P.sub.ver}); render(); } break;
+    case 'taccept': send({k:'tans', yes:true}); break;
+    case 'treject': send({k:'tans', yes:false}); break;
+    case 'tktheirs': { const n = P.sub ? P.sub.n : 2; toggleMax(ui.talks.theirs, id, n); render(); break; }
+    case 'tkmine': { const n = P.sub ? P.sub.n : 2; toggleMax(ui.talks.mine, id, n); render(); break; }
+    case 'tkdone': send({k:'talks', mine:ui.talks.mine.slice(), theirs:ui.talks.theirs.slice()}); ui.talks = {mine:[], theirs:[]}; break;
+    case 'donate': send({k:'give', card:id}); break;
+    case 'elpick': { const n = P.sub ? P.sub.n : 5; toggleMax(ui.elecPick, id, n); render(); break; }
+    case 'eldone': send({k:'elec', pick:ui.elecPick.slice()}); break;
+  }
+});
+app.addEventListener('keydown', ev => {
+  if (ev.key === 'Enter' && ev.target.id === 'code'){ guestJoin(ev.target.value); }
+  else if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.matches('.seat')){ ev.preventDefault(); onSeat(Number(ev.target.dataset.i)); }
+  else if (ev.key === 'Escape' && ui.sheet){ ui.sheet = null; render(); }
+});
+app.addEventListener('input', ev => {
+  if (ev.target.id === 'nm') me.nm = ev.target.value;
+  if (ev.target.id === 'code'){ ev.target.value = ev.target.value.toUpperCase(); ui.joinCode = ev.target.value; }
+});
+function toggle(arr, v){ const j = arr.indexOf(v); if (j >= 0) arr.splice(j, 1); else arr.push(v); }
+function toggleMax(arr, v, n){ const j = arr.indexOf(v); if (j >= 0) arr.splice(j, 1); else if (arr.length < n) arr.push(v); }
+
+function onSeat(i){
+  const aim = ui.aim; if (!aim || !P) return;
+  if (!validAimSeat(aim, i)){ toast(aim.kind === 'bill' ? 'That player has no Commons-passed bills.' : 'Choose another player still in the House.'); return; }
+  const s = P.s[i];
+  if (aim.kind === 'two'){
+    toggle(aim.picks, i);
+    if (aim.picks.length === 2){ ui.aim = null; send({k:'play', card:aim.card, tg:aim.picks.slice()}); }
+    else render();
+    return;
+  }
+  if ((aim.kind === 'bill' || aim.kind === 'vonc') && s.bl.length > 1){ ui.billPick = i; ui.sheet = 'billpick'; render(); return; }
+  ui.aim = null;
+  send({k:'play', card:aim.card, tg:[i], bi:0});
+}
+
+/* ---------- clocks ---------- */
+function frame(){
+  const now = Date.now();
+  app.querySelectorAll('[data-dl]').forEach(el => {
+    const dl = Number(el.dataset.dl), tot = Number(el.dataset.total);
+    const left = Math.max(0, dl - now);
+    const bar = el.querySelector('i'), txt = el.querySelector('span');
+    if (bar) bar.style.transform = `scaleX(${Math.min(1, left / tot)})`;
+    if (txt) txt.textContent = Math.ceil(left / 1000) + 's';
+  });
+  app.querySelectorAll('[data-tdl]').forEach(el => {
+    const left = Math.max(0, Number(el.dataset.tdl) - now), sec = Math.ceil(left / 1000);
+    el.textContent = `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
+    el.classList.toggle('low', sec <= 10);
+  });
+  if (mode === 'guest' && hostLostAt && now > hostLostAt && !ui.lostShown){ ui.lostShown = true; render(); }
+  const popNow = !!(P && P.sub && (P.sub.k === 'resp' || P.sub.k === 'elec') && inPop(P.sub));
+  if (popNow !== ui.popOn){ ui.popOn = popNow; render(); }
+  requestAnimationFrame(frame);
+}
+
+ensureRoom();
+render();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
