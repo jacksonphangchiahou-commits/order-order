@@ -308,6 +308,49 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .seat .sname{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 .seats.c4 .sname{font-size:11.5px}
 .hand-scroll .c-foot{font-size:10.5px;padding:5px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* bot level picker */
+.lvlwrap{display:grid;gap:6px}
+.lvl-label{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.lvlpick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.lvl{display:grid;gap:2px;align-content:center;text-align:center;padding:8px 6px;border:1px solid var(--line);border-radius:8px;background:var(--bench)}
+.lvl b{font-size:13px;line-height:1.15;font-weight:600}
+.lvl small{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lvl.on{background:var(--brass);border-color:var(--brass);color:var(--brass-ink)}
+.lvl.on small{color:var(--brass-ink)}
+/* quick guide */
+.brief{position:fixed;inset:0;z-index:17;overflow-y:auto;background:var(--bench);-webkit-overflow-scrolling:touch}
+.brief-in{max-width:560px;margin:0 auto;padding:0 max(16px, env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) max(16px, env(safe-area-inset-left,0px));display:grid;gap:14px}
+.brief-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 0 10px;background:var(--bench);border-bottom:1px solid var(--line)}
+.brief-clock{flex:1;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.brief-skip{width:auto;padding:6px 16px}
+.g-pic{width:56px;height:56px;display:block;flex:none}
+.g-you{display:flex;gap:14px;align-items:center;padding:14px;border-radius:12px;border:2px solid var(--camp);background:color-mix(in srgb, var(--camp) 14%, var(--bench-2))}
+.g-you .g-pic{width:72px;height:72px;background:var(--paper);border-radius:10px;padding:4px}
+.g-you h2{font-family:var(--f-display);font-size:24px;line-height:1.1;margin:2px 0 6px;color:var(--camp)}
+.g-you p{margin:0}
+.g-sec{display:grid;gap:10px;padding-top:4px}
+.g-sec h3{font-family:var(--f-display);font-size:20px;color:var(--ink)}
+.g-sec p{margin:0}
+.g-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.g-three > div{display:grid;justify-items:center;align-content:start;gap:4px;text-align:center;padding:10px 6px;border-radius:10px;background:var(--bench-2);border:1px solid var(--line);min-width:0}
+.g-three > div[class*=camp-]{border-color:color-mix(in srgb, var(--camp) 55%, transparent);background:color-mix(in srgb, var(--camp) 10%, var(--bench-2))}
+.g-three .g-pic{background:var(--paper);border-radius:8px;padding:3px}
+.g-three b{font-size:13.5px;line-height:1.15}
+.g-three [class*=camp-] b{color:var(--camp)}
+.g-three span{font-size:12px;color:var(--muted);line-height:1.25}
+.g-win span{font-size:14px;color:var(--ink);font-weight:600}
+.g-win em{font-size:12px;font-style:normal;color:var(--muted);line-height:1.25}
+.g-strip{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:10px;border-radius:10px;background:var(--bench-2);border:1px solid var(--line)}
+.g-step{display:grid;justify-items:center;gap:4px;text-align:center;min-width:0}
+.g-step b{font-size:12.5px}
+.g-step .g-pic{background:var(--paper);border-radius:8px;padding:3px}
+.g-arrow{color:var(--brass);font-size:22px;flex:none}
+.g-moves{display:flex;gap:4px;height:56px;align-items:center}
+.g-moves i{display:grid;place-items:center;width:28px;height:38px;border-radius:5px;background:var(--paper);color:var(--paper-ink);font:700 16px var(--f-display);font-style:normal;box-shadow:0 2px 0 rgba(0,0,0,.3)}
+.g-end{display:grid;place-items:center;height:56px;padding:0 12px;border-radius:8px;border:2px solid var(--brass);color:var(--brass);font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.g-foot{display:grid;gap:8px;padding-top:6px;text-align:center}
+.sheet .g-sec h3{font-size:18px;letter-spacing:normal;text-transform:none;margin-top:0}
 </style>
 </head>
 <body>
@@ -734,6 +777,74 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   <g fill="#d8b257"><circle cx="40" cy="62" r="2"/><circle cx="53" cy="62" r="2"/><circle cx="66" cy="62" r="2"/></g>
 </symbol>
 
+
+<!-- Government: the door of Number 10 -->
+<symbol id="i-gov" viewBox="0 0 100 100">
+  <rect x="8" y="6" width="84" height="90" rx="4" fill="#8a5a3c" stroke="#2a2620" stroke-width="3.5"/>
+  <g stroke="#6b432b" stroke-width="2"><path d="M8 22 H92 M8 38 H92 M8 54 H92 M8 70 H92 M8 86 H92 M20 6 V22 M50 6 V22 M80 6 V22 M35 22 V38 M65 22 V38 M20 38 V54 M80 38 V54 M20 54 V70 M80 54 V70 M20 70 V86 M80 70 V86"/></g>
+  <path d="M26 96 V44 A24 24 0 0 1 74 44 V96 Z" fill="#f3efe3" stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M31 44 A19 19 0 0 1 69 44 Z" fill="#cfe6ef" stroke="#2a2620" stroke-width="2.5"/>
+  <path d="M50 44 V26 M50 44 L37 31 M50 44 L63 31" stroke="#2a2620" stroke-width="2"/>
+  <rect x="31" y="46" width="38" height="50" fill="#1d221e" stroke="#2a2620" stroke-width="2.5"/>
+  <g fill="none" stroke="#3b4038" stroke-width="2"><rect x="35" y="50" width="12" height="18"/><rect x="53" y="50" width="12" height="18"/><rect x="35" y="74" width="12" height="18"/><rect x="53" y="74" width="12" height="18"/></g>
+  <text x="50" y="68" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="11" fill="#f3efe3">10</text>
+  <circle cx="50" cy="74" r="3.5" fill="#d8b257" stroke="#2a2620" stroke-width="1.4"/>
+</symbol>
+
+<!-- Opposition: the dispatch box on the Commons table -->
+<symbol id="i-opp" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M4 66 H96 L90 80 H10 Z" fill="#2f6b3e"/>
+    <rect x="14" y="80" width="8" height="14" fill="#6b3d14"/>
+    <rect x="78" y="80" width="8" height="14" fill="#6b3d14"/>
+    <rect x="22" y="30" width="56" height="36" rx="3" fill="#8a5420"/>
+    <rect x="22" y="30" width="56" height="10" rx="3" fill="#a5672b"/>
+    <rect x="36" y="18" width="30" height="16" rx="1" fill="#f3efe3" transform="rotate(-6 51 26)"/>
+  </g>
+  <path d="M40 23 h20 M40 28 h14" stroke="#2a2620" stroke-width="2" transform="rotate(-6 51 26)"/>
+  <g fill="#d8b257" stroke="#2a2620" stroke-width="1.6"><circle cx="27" cy="35" r="3"/><circle cx="73" cy="35" r="3"/><circle cx="27" cy="61" r="3"/><circle cx="73" cy="61" r="3"/><rect x="44" y="48" width="12" height="7" rx="1.5"/></g>
+</symbol>
+
+<!-- Foreign Power: a globe on puppet strings -->
+<symbol id="i-fp" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.2" stroke-linejoin="round">
+    <rect x="16" y="6" width="68" height="8" rx="3" fill="#6c4f9c"/>
+    <rect x="46" y="2" width="8" height="18" rx="3" fill="#6c4f9c"/>
+  </g>
+  <g stroke="#2a2620" stroke-width="1.6"><path d="M20 12 L30 48 M80 12 L70 48 M50 20 L50 34"/></g>
+  <circle cx="50" cy="62" r="30" fill="#ae9ff4" stroke="#2a2620" stroke-width="3.5"/>
+  <g fill="#7fae4a" stroke="#2a2620" stroke-width="2" stroke-linejoin="round">
+    <path d="M30 50 C38 44 46 48 44 56 C42 64 34 62 30 68 C26 62 24 54 30 50 Z"/>
+    <path d="M56 40 C66 38 74 46 72 54 C66 52 60 58 54 54 C52 48 52 44 56 40 Z"/>
+    <path d="M56 72 C62 68 70 70 70 76 C64 84 56 84 52 80 C52 76 54 74 56 72 Z"/>
+  </g>
+  <path d="M20 62 H80 M50 32 C38 46 38 78 50 92 M50 32 C62 46 62 78 50 92" fill="none" stroke="#2a2620" stroke-width="1.4" opacity=".55"/>
+</symbol>
+
+<!-- The draw deck -->
+<symbol id="i-deck" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.2" stroke-linejoin="round">
+    <rect x="30" y="22" width="42" height="60" rx="5" fill="#13382c" transform="rotate(8 51 52)"/>
+    <rect x="26" y="20" width="42" height="60" rx="5" fill="#13382c" transform="rotate(-4 47 50)"/>
+    <rect x="22" y="18" width="42" height="60" rx="5" fill="#1b4738"/>
+    <rect x="28" y="24" width="30" height="48" rx="3" fill="none" stroke="#d8b257" stroke-width="2.4"/>
+  </g>
+  <text x="43" y="54" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="14" fill="#d8b257">O!</text>
+  <path d="M74 30 C90 34 92 56 80 66" fill="none" stroke="#c4583c" stroke-width="5" stroke-linecap="round"/>
+  <path d="M70 62 L82 70 L84 56 Z" fill="#c4583c" stroke="#2a2620" stroke-width="2" stroke-linejoin="round"/>
+</symbol>
+
+<!-- A hand of cards -->
+<symbol id="i-hand" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3" stroke-linejoin="round">
+    <rect x="26" y="18" width="34" height="50" rx="4" fill="#e8e2d1" transform="rotate(-18 43 80)"/>
+    <rect x="33" y="14" width="34" height="50" rx="4" fill="#f3efe3"/>
+    <rect x="40" y="18" width="34" height="50" rx="4" fill="#f3efe3" transform="rotate(18 57 80)"/>
+  </g>
+  <g transform="rotate(18 57 80)"><rect x="46" y="24" width="22" height="6" rx="1" fill="#c4583c"/><path d="M46 38 h20 M46 44 h16 M46 50 h20" stroke="#2a2620" stroke-width="2"/></g>
+  <path d="M30 84 C40 70 62 70 72 84 L66 94 H36 Z" fill="#e9c19c" stroke="#2a2620" stroke-width="3" stroke-linejoin="round"/>
+</symbol>
+
 </defs></svg>
 <div id="app"></div>
 <script>
@@ -786,7 +897,7 @@ const NEED = {G:3, O:2, F:3};
 const LAYOUT = {6:['PM','G','G','O','O','F'], 7:['PM','G','G','G','O','O','F'], 8:['PM','G','G','G','O','O','O','F']};
 const TIME = {turn:120000, resp:30000, pop:2600, talks:30000, fund:15000, trade:20000, elec:30000};
 const ELEC = {name:'Election Interference', text:'Played the moment it is drawn, and the draw is lost. It cannot be stopped. The Foreign Power looks at the top 10 cards of the deck and takes 5. The rest are shuffled back.', flav:'Foreign money and bots in the marginal seats.'};
-const PAUSE_LOCK = 30000;
+const PAUSE_LOCK = 30000, BRIEF_MS = 90000;
 const BOT = {move:4000, jitter:800, react:3000, reactJ:3000, answer:3500};
 
 const _cats = {};
@@ -824,7 +935,7 @@ function shuffle(a, rand){ for (let i = a.length - 1; i > 0; i--){ const j = Mat
 function log(S, m){ S.log.push(m); while (S.log.length > 7) S.log.shift(); }
 function nm(S, i){ return S.seats[i].nm; }
 
-function newGame(code, humans, n, env){
+function newGame(code, humans, n, env, lvl){
   const roles = shuffle(LAYOUT[n].slice(), env.rand);
   const spots = shuffle([...Array(n).keys()], env.rand);
   const seats = roles.map(r => ({nm:'', cid:null, bot:true, role:r, hand:[], bills:[], out:false, op:-1}));
@@ -838,8 +949,11 @@ function newGame(code, humans, n, env){
     cur:seats.findIndex(s => s.role === 'PM'), mv:3, fb:false, sub:null, turnDl:0, turnLeft:0, log:[], win:null,
     ak:{}, er:{}, botAt:0, humans:humans.slice(0, n)};
   seats.forEach(s => { for (let k = 0; k < 4; k++) drawOne(S, s, env); });
-  log(S, 'The House is in session. The Prime Minister opens.');
+  S.lvl = lvl === 0 || lvl === 2 ? lvl : 1;
+  const bots = seats.filter(s => s.bot).length;
+  log(S, `The House is in session. The Prime Minister opens.${bots ? ` Bots play as ${LEVELS[S.lvl]} (${LEVEL_TAG[S.lvl].toLowerCase()}).` : ''}`);
   startTurn(S, S.cur, env);
+  S.brief = {t0:env.now, until:env.now + BRIEF_MS, ready:{}};
   return S;
 }
 
@@ -887,7 +1001,7 @@ function closeElection(S, pick, env){
 function drawN(S, seat, k, env){ for (let i = 0; i < k; i++) drawOne(S, seat, env); }
 
 function startTurn(S, i, env){
-  S.cur = i; S.mv = 3; S.sub = null;
+  S.cur = i; S.mv = 3; S.sub = null; S.turnNo = (S.turnNo || 0) + 1;
   S.seats.forEach(s => { if (s.op === i) s.op = -1; });
   const s = S.seats[i];
   drawN(S, s, s.role === 'PM' ? 3 : s.role === 'F' ? 4 : 2, env);
@@ -942,6 +1056,13 @@ function handle(S, si, a, env){
   if (S.ph !== 'play') return 'The game is over.';
   const me = S.seats[si];
   if (!me || me.out) return 'You have lost your seat.';
+  if (S.brief){
+    if (a.k !== 'ready') return 'The sitting begins once everyone has read the quick guide.';
+    S.brief.ready[si] = 1;
+    if (briefDone(S)) endBrief(S, env);
+    return null;
+  }
+  if (a.k === 'ready') return null;
   if (a.k === 'pause') return pauseGame(S, si, env);
   if (a.k === 'resume') return resumeGame(S, si, env);
   if (S.pause) return 'The game is paused.';
@@ -1247,6 +1368,9 @@ function giveFund(S, si, a, env){
 }
 
 /* ---------- bots ---------- */
+const LEVELS = ['First-Time Voter', 'Rising Politician', 'Elderly Statesman'];
+const LEVEL_TAG = ['Easy', 'Medium', 'Hard'];
+function lv(S, si){ return S.lvlOf && si != null && S.lvlOf[si] != null ? S.lvlOf[si] : (S.lvl == null ? 1 : S.lvl); }
 function cardValue(S, seat, id){
   const c = catalog(S.n)[id];
   if (c.t === 'w') return 7;
@@ -1259,31 +1383,72 @@ function cardValue(S, seat, id){
 function enemies(S, si){ const s = sideOf(S.seats[si].role); return S.seats.map((x, i) => i).filter(i => i !== si && !S.seats[i].out && sideOf(S.seats[i].role) !== s); }
 function allies(S, si){ const s = sideOf(S.seats[si].role); return S.seats.map((x, i) => i).filter(i => !S.seats[i].out && sideOf(S.seats[i].role) === s); }
 function holding(S, seat, k){ return seat.hand.find(id => catalog(S.n)[id].k === k); }
+function countK(S, seat, k){ return seat.hand.filter(id => catalog(S.n)[id].k === k).length; }
+/* Elderly Statesman: enemy seats ordered so the side closest to winning comes first */
+function threatOrder(S, list){
+  const cnt = sideCounts(S);
+  const prog = i => { const sd = sideOf(S.seats[i].role); return cnt[sd] / NEED[sd]; };
+  return list.slice().sort((x, y) => prog(y) - prog(x) || S.seats[y].bills.length - S.seats[x].bills.length || S.seats[y].hand.length - S.seats[x].hand.length);
+}
+/* Judicial Review prediction: random (easy), always "bill" (medium), from cards already seen (hard) */
+function jrGuess(S, si, env){
+  const L = lv(S, si);
+  if (L === 0) return env.rand() < 0.5 ? 'b' : 'a';
+  if (L === 1) return 'b';
+  const cat = catalog(S.n), seen = new Set(S.seats[si].hand.concat(S.disc));
+  S.seats.forEach((s, i) => { s.bills.forEach(b => b.c.forEach(id => seen.add(id))); if (s.op >= 0 && i !== si) s.hand.forEach(id => seen.add(id)); });
+  let bills = 0, acts = 0;
+  cat.forEach((c, id) => { if (seen.has(id)) return; if (c.t === 'b') bills++; else if (c.t === 'a') acts++; });
+  return bills >= acts ? 'b' : 'a';
+}
 
 function botTurnMove(S, si, env){
-  const me = S.seats[si], cat = catalog(S.n);
+  const me = S.seats[si], cat = catalog(S.n), L = lv(S, si), side = sideOf(me.role);
   if (S.mv <= 0) return {k:'end'};
+  if (L === 0 && env.rand() < 0.3) return {k:'end'};
   const wilds = me.hand.filter(id => cat[id].t === 'w').length;
   for (const b of BILLS){
     const real = me.hand.filter(id => cat[id].k === b.k).length;
     if (real >= 1 && real + wilds >= b.set) return {k:'pass', b:b.k};
   }
   const en = enemies(S, si);
-  const withBills = en.filter(i => S.seats[i].bills.length).sort((x, y) => S.seats[y].bills.length - S.seats[x].bills.length);
-  const rich = en.slice().sort((x, y) => S.seats[y].hand.length - S.seats[x].hand.length);
+  let withBills = en.filter(i => S.seats[i].bills.length);
+  let rich = en.slice();
+  if (L === 0){ shuffle(withBills, env.rand); shuffle(rich, env.rand); }
+  else if (L === 1){ withBills.sort((x, y) => S.seats[y].bills.length - S.seats[x].bills.length); rich.sort((x, y) => S.seats[y].hand.length - S.seats[x].hand.length); }
+  else { withBills = threatOrder(S, withBills); rich = threatOrder(S, rich); }
   let id;
   if (withBills.length && (id = holding(S, me, 'cs'))){
     const t = withBills[0], B = S.seats[t].bills;
-    let bi = 0; B.forEach((b, j) => { if (BILL[b.t].set > BILL[B[bi].t].set) bi = j; });
+    let bi = 0; if (L > 0) B.forEach((b, j) => { if (BILL[b.t].set > BILL[B[bi].t].set) bi = j; });
     return {k:'play', card:id, tg:[t], bi};
   }
-  if (withBills.length && (id = holding(S, me, 'lr'))) return {k:'play', card:id, tg:[withBills[0]], bi:0};
+  if (withBills.length && (id = holding(S, me, 'lr'))){
+    const t = withBills[0], B = S.seats[t].bills;
+    let bi = 0; if (L === 2) B.forEach((b, j) => { if (BILL[b.t].set > BILL[B[bi].t].set) bi = j; });
+    return {k:'play', card:id, tg:[t], bi};
+  }
   if (S.fb && (id = holding(S, me, 'vonc'))){
     if (withBills.length) return {k:'play', card:id, tg:[withBills[0]], bi:0};
-    const bare = en.filter(i => !S.seats[i].bills.length);
+    let bare = en.filter(i => !S.seats[i].bills.length);
+    if (L === 2){
+      /* the Foreign Power gains nothing from the PM falling (the Opposition would win) */
+      if (side === 'F') bare = bare.filter(i => S.seats[i].role !== 'PM');
+      if (side === 'G') bare.sort((x, y) => (S.seats[y].role === 'O') - (S.seats[x].role === 'O'));
+    }
     const pm = bare.find(i => S.seats[i].role === 'PM');
-    const t = pm !== undefined ? pm : bare[0];
+    const t = L === 0 ? bare[Math.floor(env.rand() * bare.length)] : (pm !== undefined && !(L === 2 && side === 'G') ? pm : bare[0]);
     if (t !== undefined && env.rand() < 0.85) return {k:'play', card:id, tg:[t]};
+  }
+  /* Elderly Statesman: ask a teammate for the one card that completes a set (once a turn) */
+  if (L === 2 && S.tradeTry !== S.turnNo){
+    const mates = allies(S, si).filter(i => i !== si && S.seats[i].hand.length);
+    const near = BILLS.find(b => { const r = countK(S, me, b.k); return r >= 1 && b.set - r - wilds === 1; });
+    const spare = me.hand.filter(x => cat[x].t === 'a' || (cat[x].t === 'b' && (!near || cat[x].k !== near.k))).sort((x, y) => cardValue(S, me, x) - cardValue(S, me, y))[0];
+    if (near && mates.length && spare !== undefined){
+      S.tradeTry = S.turnNo;
+      return {k:'trade', tg:mates[Math.floor(env.rand() * mates.length)], give:[spare], want:{[near.k]:1}};
+    }
   }
   const others = S.seats.map((s, i) => i).filter(i => i !== si && !S.seats[i].out && S.seats[i].hand.length);
   if ((id = holding(S, me, 'coal')) && others.length >= 2){
@@ -1294,36 +1459,41 @@ function botTurnMove(S, si, env){
   if ((id = holding(S, me, 'talks')) && me.hand.length > 1 && rich.length && S.seats[rich[0]].hand.length > 1) return {k:'play', card:id, tg:[rich[0]]};
   if ((id = holding(S, me, 'fund'))) return {k:'play', card:id};
   if ((id = holding(S, me, 'larry'))) return {k:'play', card:id};
-  if ((id = holding(S, me, 'inq')) && rich.length && env.rand() < 0.3) return {k:'play', card:id, tg:[rich[0]]};
+  if ((id = holding(S, me, 'inq')) && rich.length && env.rand() < [0.3, 0.3, 0][L]) return {k:'play', card:id, tg:[rich[0]]};
   return {k:'end'};
 }
 
+const ANSWER = [0.45, 0.85, 1], JR_USE = [0.4, 0.7, 0.9];
+const BIG = ['lr', 'vonc', 'cs'];
 function botRespondMT(S, si, env){
-  const sub = S.sub, me = S.seats[si], b = sub.base, side = sideOf(me.role);
+  const sub = S.sub, me = S.seats[si], b = sub.base, side = sideOf(me.role), L = lv(S, si);
   const jid = holding(S, me, 'jr');
-  if (jid !== undefined && sideOf(S.seats[b.src].role) !== side && jrAllowed(sub, si) && env.rand() < 0.7) return {k:'resp', card:jid, at:sub.ver, guess:'b'};
+  if (jid !== undefined && sideOf(S.seats[b.src].role) !== side && jrAllowed(sub, si) && env.rand() < JR_USE[L]) return {k:'resp', card:jid, at:sub.ver, guess:jrGuess(S, si, env)};
   const id = holding(S, me, 'sov'); if (id === undefined) return null;
+  if (L === 2 && countK(S, me, 'sov') < 2) return null;
   const lastOf = t => { const ch = sub.sh[t] || []; return ch.length ? ch[ch.length - 1][1] : b.src; };
   if (sideOf(S.seats[b.src].role) === side){
+    if (L === 0) return null;
     for (const t of b.tg){
       const ch = sub.sh[t] || [];
-      if (ch.length % 2 === 1 && lastOf(t) !== si && sideOf(S.seats[t].role) !== side && env.rand() < 0.5) return {k:'resp', card:id, at:sub.ver, for:t};
+      if (ch.length % 2 === 1 && lastOf(t) !== si && sideOf(S.seats[t].role) !== side && env.rand() < (L === 2 ? 0.8 : 0.5)) return {k:'resp', card:id, at:sub.ver, for:t};
     }
     return null;
   }
-  const order = [si].concat(b.tg.filter(t => t !== si && sideOf(S.seats[t].role) === side));
+  const order = L === 0 ? [si] : [si].concat(b.tg.filter(t => t !== si && sideOf(S.seats[t].role) === side));
   for (const t of order){
     if (!b.tg.includes(t) || S.seats[t].out) continue;
     const ch = sub.sh[t] || [];
-    if (ch.length % 2 === 0 && lastOf(t) !== si && env.rand() < 0.85) return {k:'resp', card:id, at:sub.ver, for:t};
+    if (ch.length % 2 === 0 && lastOf(t) !== si && env.rand() < ANSWER[L]) return {k:'resp', card:id, at:sub.ver, for:t};
   }
   return null;
 }
 function botRespond(S, si, env){
   if (S.sub.mt) return botRespondMT(S, si, env);
-  const sub = S.sub, me = S.seats[si], b = sub.base;
+  const sub = S.sub, me = S.seats[si], b = sub.base, L = lv(S, si);
   const top = sub.chain.length ? sub.chain[sub.chain.length - 1] : {a:b.a, s:b.src};
   if (top.s === si) return null;
+  if (L === 0 && b.src !== si && !b.tg.includes(si)) return null;
   const mySide = sideOf(me.role);
   const srcAlly = sideOf(S.seats[b.src].role) === mySide;
   const hitsUs = b.tg.some(t => sideOf(S.seats[t].role) === mySide);
@@ -1339,27 +1509,45 @@ function botRespond(S, si, env){
   for (const k of order){
     const id = holding(S, me, k);
     if (id === undefined) continue;
-    if (k === 'jr'){ if (jrAllowed(sub, si) && env.rand() < 0.7) return {k:'resp', card:id, at:sub.ver, guess:'b'}; continue; }
+    if (k === 'jr'){ if (jrAllowed(sub, si) && env.rand() < JR_USE[L]) return {k:'resp', card:id, at:sub.ver, guess:jrGuess(S, si, env)}; continue; }
     if (!canCounter(k, top.a)) continue;
     if (k === 'pror' && !(b.tg.includes(si) && top.a === 'vonc')) continue;
-    if (env.rand() < 0.85) return {k:'resp', card:id, at:sub.ver};
+    /* Elderly Statesman keeps Parliamentary Sovereignty for bills and seats unless it holds two */
+    if (k === 'sov' && L === 2 && !BIG.includes(b.a) && countK(S, me, 'sov') < 2) continue;
+    if (env.rand() < ANSWER[L]) return {k:'resp', card:id, at:sub.ver};
     return null;
   }
   return null;
 }
 
-function botTrade(S, si){
-  const sub = S.sub, me = S.seats[si];
+function botTrade(S, si, env){
+  const sub = S.sub, me = S.seats[si], L = lv(S, si);
   const picked = holdsWant(S, me, sub.want);
   if (!picked) return {k:'tans', yes:false};
   if (sideOf(S.seats[sub.src].role) === sideOf(me.role)) return {k:'tans', yes:true};
   const gain = sub.give.reduce((t, id) => t + cardValue(S, me, id), 0);
   const loss = picked.reduce((t, id) => t + cardValue(S, me, id), 0);
-  return {k:'tans', yes:gain > loss + 1};
+  if (L === 0) return {k:'tans', yes:gain > loss - 1 || env.rand() < 0.3};
+  return {k:'tans', yes:gain > loss + (L === 2 ? 2 : 1)};
 }
 
 /* ---------- clock ---------- */
-/* ---------- pause ---------- */
+/* ---------- pause and briefing ---------- */
+function shiftClocks(S, d){
+  if (S.turnDl) S.turnDl += d;
+  if (S.botAt) S.botAt += d;
+  const sub = S.sub;
+  if (sub){
+    ['dl', 'pop', 'at0'].forEach(k => { if (typeof sub[k] === 'number' && sub[k]) sub[k] += d; });
+    if (sub.bt) Object.keys(sub.bt).forEach(k => { sub.bt[k] += d; });
+  }
+}
+function briefDone(S){ return S.seats.every((s, i) => s.bot || s.out || S.brief.ready[i]); }
+function endBrief(S, env){
+  shiftClocks(S, Math.max(0, env.now - S.brief.t0));
+  S.brief = null;
+  log(S, 'Order! The sitting begins.');
+}
 function pauseGame(S, si, env){
   if (S.pause) return 'The game is already paused.';
   S.pause = {by:si, at:env.now, t0:env.now};
@@ -1370,27 +1558,22 @@ function resumeGame(S, si, env){
   const p = S.pause;
   if (!p) return 'The game is not paused.';
   if (si !== p.by && env.now < p.at + PAUSE_LOCK) return `Only ${S.seats[p.by].nm} can resume for now. Everyone else can in ${Math.ceil((p.at + PAUSE_LOCK - env.now) / 1000)} seconds.`;
-  const d = Math.max(0, env.now - p.t0);
-  if (S.turnDl) S.turnDl += d;
-  if (S.botAt) S.botAt += d;
-  const sub = S.sub;
-  if (sub){
-    ['dl', 'pop', 'at0'].forEach(k => { if (typeof sub[k] === 'number' && sub[k]) sub[k] += d; });
-    if (sub.bt) Object.keys(sub.bt).forEach(k => { sub.bt[k] += d; });
-  }
+  shiftClocks(S, Math.max(0, env.now - p.t0));
   S.pause = null;
   log(S, `${S.seats[si].nm} resumes the game.`);
   return null;
 }
 
 function tick(S, env){
-  if (S.ph !== 'play' || S.pause) return;
+  if (S.ph !== 'play') return;
+  if (S.brief){ if (env.now >= S.brief.until || briefDone(S)) endBrief(S, env); return; }
+  if (S.pause) return;
   if (!S.sub && S.elecQ > 0){ openElection(S, env); return; }
   const now = env.now, sub = S.sub;
   if (sub && sub.k === 'elec'){
     const fp = S.seats[sub.src];
     if ((fp.bot && now >= sub.at0 + TIME.pop + BOT.answer) || now >= sub.dl){
-      const best = sub.cards.slice().sort((x, y) => cardValue(S, fp, y) - cardValue(S, fp, x)).slice(0, sub.n);
+      const best = (lv(S, sub.src) === 0 && fp.bot ? shuffle(sub.cards.slice(), env.rand) : sub.cards.slice().sort((x, y) => cardValue(S, fp, y) - cardValue(S, fp, x))).slice(0, sub.n);
       closeElection(S, best, env);
     }
     return;
@@ -1417,12 +1600,12 @@ function tick(S, env){
         const s = S.seats[i];
         if (!s.bot || s.out || i === sub.src || sub.dec.includes(i)) continue;
         if (sub.bt[i] == null) sub.bt[i] = sub.at0 + BOT.answer + env.rand() * 3000;
-        if (now >= sub.bt[i]){ handle(S, i, botTrade(S, i), env); if (S.sub !== sub) return; }
+        if (now >= sub.bt[i]){ handle(S, i, botTrade(S, i, env), env); if (S.sub !== sub) return; }
       }
       if (now >= sub.dl){ log(S, 'Nobody takes up the trade.'); S.sub = null; resumeTurn(S, env); }
       return;
     }
-    if (S.seats[sub.tgt].bot && now >= sub.at0 + BOT.answer){ handle(S, sub.tgt, botTrade(S, sub.tgt), env); return; }
+    if (S.seats[sub.tgt].bot && now >= sub.at0 + BOT.answer){ handle(S, sub.tgt, botTrade(S, sub.tgt, env), env); return; }
     if (now >= sub.dl){ log(S, `${nm(S, sub.tgt)} did not answer the trade.`); S.sub = null; resumeTurn(S, env); }
     return;
   }
@@ -1430,7 +1613,7 @@ function tick(S, env){
     const src = S.seats[sub.src], tgt = S.seats[sub.tgt];
     if (src.bot && now >= sub.at0 + BOT.answer || now >= sub.dl){
       let mine, theirs;
-      if (src.bot){
+      if (src.bot && lv(S, sub.src) > 0){
         theirs = tgt.hand.slice().sort((x, y) => cardValue(S, src, y) - cardValue(S, src, x)).slice(0, sub.n);
         mine = src.hand.slice().sort((x, y) => cardValue(S, src, x) - cardValue(S, src, y)).slice(0, sub.n);
       } else {
@@ -1445,7 +1628,7 @@ function tick(S, env){
     for (const i of sub.wait.slice()){
       const s = S.seats[i];
       if ((s.bot && now >= sub.at0 + BOT.answer) || now >= sub.dl){
-        const pick = s.bot ? s.hand.slice().sort((x, y) => cardValue(S, s, x) - cardValue(S, s, y))[0] : s.hand[Math.floor(env.rand() * s.hand.length)];
+        const pick = s.bot && lv(S, i) > 0 ? s.hand.slice().sort((x, y) => cardValue(S, s, x) - cardValue(S, s, y))[0] : s.hand[Math.floor(env.rand() * s.hand.length)];
         if (pick === undefined){ sub.wait = sub.wait.filter(j => j !== i); continue; }
         handle(S, i, {k:'give', card:pick}, env);
         if (!S.sub) return;
@@ -1480,10 +1663,10 @@ function subPub(sub){
 function pubState(S){
   return {c:S.code, n:S.n, ph:S.ph, cur:S.cur, mv:S.mv, fb:S.fb ? 1 : 0, dk:S.deck.length, dc:S.disc.length, win:S.win, why:S.whyWin || '',
     s:S.seats.map(s => ({nm:s.nm, c:s.cid, b:s.bot ? 1 : 0, r:s.role, h:s.hand, bl:s.bills.map(b => b.t).join(''), o:s.out ? 1 : 0, op:s.op})),
-    pz:S.pause ? {by:S.pause.by, at:S.pause.at} : null, sub:subPub(S.sub), tdl:S.turnDl, tl:S.turnLeft, log:S.log, ak:S.ak, er:S.er};
+    pz:S.pause ? {by:S.pause.by, at:S.pause.at} : null, br:S.brief ? {until:S.brief.until, rd:Object.keys(S.brief.ready).map(Number)} : null, lv:lv(S), sub:subPub(S.sub), tdl:S.turnDl, tl:S.turnLeft, log:S.log, ak:S.ak, er:S.er};
 }
 
-if (typeof module !== 'undefined') module.exports = {BILLS, ACTS, catalog, newGame, handle, tick, pubState, sideCounts, botTurnMove};
+if (typeof module !== 'undefined') module.exports = {BILLS, ACTS, catalog, newGame, handle, tick, pubState, sideCounts, botTurnMove, LEVELS};
 /* ===== Order! Order! phone interface and room networking ===== */
 const LS = {
   get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
@@ -1504,7 +1687,7 @@ let S = null, lobby = null;      // host / solo authority
 let P = null, pRecv = 0, hostSeen = false, hostLostAt = 0;
 let lastKey = '', tickTimer = null, myQ = 0, shownErr = 0, online = new Set();
 
-const ui = {elecPick:[], elecKey:null, screen:'home', sel:null, aim:null, sheet:null, billPick:null,
+const ui = {soloLvl:(() => { const v = LS.get('oo-lvl'); return v === 0 || v === 2 ? v : 1; })(), briefKey:'', elecPick:[], elecKey:null, screen:'home', sel:null, aim:null, sheet:null, billPick:null,
   trade:{tg:null, give:[], want:{}}, talks:{mine:[], theirs:[]}, toast:'', toastAt:0, passKey:'', autoKey:'', joinCode:''};
 
 /* ---------- networking: Firebase Realtime Database ----------
@@ -1556,7 +1739,7 @@ function pushState(hs){
 
 function publish(){
   if (!S && !lobby) return;
-  const hs = S ? pubState(S) : {c:code, ph:'lobby', pl:lobby.players, n:lobby.n};
+  const hs = S ? pubState(S) : {c:code, ph:'lobby', pl:lobby.players, n:lobby.n, lv:lobby.lvl == null ? 1 : lobby.lvl};
   hs.hc = me.cid;
   if (S) hs.on = S.seats.map(s => (s.bot || s.cid === me.cid || online.has(s.cid)) ? 1 : 0);
   const key = JSON.stringify(hs);
@@ -1611,7 +1794,7 @@ async function hostNew(){
     const ex = await gref('state').get().catch(() => null);
     if (!ex || !ex.exists()) break;
   }
-  mode = 'host'; S = null; lobby = {players:[{cid:me.cid, nm:me.nm}], n:6};
+  mode = 'host'; S = null; lobby = {players:[{cid:me.cid, nm:me.nm}], n:6, lvl:1};
   await gref('intents').remove().catch(() => {});
   await goOnline().catch(() => {});
   hostAttach();
@@ -1630,6 +1813,7 @@ async function hostResume(){
     if (S.sub && S.sub.dl) S.sub.dl = now + 8000;
     S.botAt = now + 1500;
     if (S.pause) S.pause.t0 = now;
+    if (S.brief){ S.brief.t0 = now; S.brief.until = Math.max(S.brief.until, now + 20000); }
   }
   await goOnline().catch(() => {});
   hostAttach();
@@ -1671,7 +1855,7 @@ async function guestJoin(c){
 function startSolo(){
   if (!requireName()) return;
   mode = 'solo'; code = 'SOLO'; lobby = null;
-  S = newGame('SOLO', [{cid:me.cid, nm:me.nm}], 6, envNow());
+  S = newGame('SOLO', [{cid:me.cid, nm:me.nm}], 6, envNow(), ui.soloLvl);
   ui.screen = 'game'; lastKey = '';
   startTicking(); publish();
 }
@@ -1679,7 +1863,7 @@ function startSolo(){
 function hostStart(){
   if (!lobby) return;
   const n = Math.max(lobby.n, Math.min(8, Math.max(6, lobby.players.length)));
-  S = newGame(code, lobby.players, n, envNow());
+  S = newGame(code, lobby.players, n, envNow(), lobby.lvl == null ? 1 : lobby.lvl);
   ui.screen = 'game'; publish();
 }
 
@@ -1784,6 +1968,8 @@ const app = document.getElementById('app');
 function render(){
   const scroller = app.querySelector('.hand-scroll');
   const sx = scroller ? scroller.scrollLeft : 0;
+  const bOld = app.querySelector('.brief'), bY = bOld ? bOld.scrollTop : 0;
+  const shOld = app.querySelector('.sheet'), shY = shOld ? shOld.scrollTop : 0, shKind = ui.sheet;
   const nmEl = document.getElementById('nm'); if (nmEl) me.nm = nmEl.value;
   const cEl = document.getElementById('code'); if (cEl) ui.joinCode = cEl.value;
   let html = '';
@@ -1793,6 +1979,8 @@ function render(){
   html += sheetView() + (ui.toast ? `<div class="toast" role="status">${esc(ui.toast)}</div>` : '');
   app.innerHTML = html;
   const s2 = app.querySelector('.hand-scroll'); if (s2) s2.scrollLeft = sx;
+  const bNew = app.querySelector('.brief'); if (bNew && bY) bNew.scrollTop = bY;
+  const shNew = app.querySelector('.sheet'); if (shNew && shY && ui.sheet === shKind) shNew.scrollTop = shY;
   const dk = app.querySelector('.dock');
   if (dk){ const h = dk.offsetHeight; if (h && h !== ui.dockH){ ui.dockH = h; document.documentElement.style.setProperty('--dock', h + 'px'); } }
   autoPass();
@@ -1817,6 +2005,7 @@ function homeView(){
       </div>
       <div class="or"><span>or</span></div>
       <button type="button" class="btn brass" data-act="host">Open a new sitting</button>
+      <div class="lvlwrap"><span class="lvl-label">Bots for practice</span>${lvlPicker(ui.soloLvl, 'sololvl')}</div>
       <button type="button" class="btn ghost" data-act="solo">Practise against bots</button>
       ${resume.join('')}
       ${FB_ON ? '' : '<p class="muted small">Online play is not set up in this copy yet. Practice mode works. See the setup guide.</p>'}
@@ -1825,6 +2014,53 @@ function homeView(){
   </main>`;
 }
 
+function lvlPicker(sel, act){
+  return `<div class="lvlpick" role="radiogroup" aria-label="Bot level">${LEVELS.map((nm, i) => `<button type="button" class="lvl${i === sel ? ' on' : ''}" data-act="${act}" data-n="${i}" role="radio" aria-checked="${i === sel}"><b>${nm}</b><small>${LEVEL_TAG[i]}</small></button>`).join('')}</div>`;
+}
+const EMB = {G:'gov', O:'opp', F:'fp'};
+function guideBody(start){
+  const my = mySeat(), meS = P && P.s && my >= 0 ? P.s[my] : null;
+  const side = meS ? ROLE[meS.r].side : null;
+  const who = meS ? {PM:'the Prime Minister', G:'a Government MP', O:'an Opposition MP', F:'the Foreign Power'}[meS.r] : '';
+  const goal = {G:'Carry 3 bills through the Commons between your side. Keep the Prime Minister in office.', O:'Carry 2 bills through the Commons between your side, or bring down the Prime Minister.', F:'Carry 3 bills through the Commons before the Government does.'};
+  const pic = k => `<svg class="g-pic" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-${k}"/></svg>`;
+  const you = meS ? `<section class="g-you camp-${side}">${pic(EMB[side])}<div><p class="eyebrow">Your role</p><h2>You are ${who}</h2><p>${goal[side]}</p></div></section>` : '';
+  return `${you}
+  <section class="g-sec"><h3>Three sides</h3>
+    <div class="g-three">
+      <div class="camp-G">${pic('gov')}<b>Government</b><span>Prime Minister and Government MPs</span></div>
+      <div class="camp-O">${pic('opp')}<b>Opposition</b><span>Opposition MPs</span></div>
+      <div class="camp-F">${pic('fp')}<b>Foreign Power</b><span>Plays alone</span></div>
+    </div>
+    <p>Every player belongs to a side. Each side pushes its own agenda by getting its bills passed, and tries to stop the others.</p></section>
+  <section class="g-sec"><h3>Your turn</h3>
+    <div class="g-strip">
+      <div class="g-step">${pic('deck')}<b>Draw</b></div><span class="g-arrow" aria-hidden="true">→</span>
+      <div class="g-step"><span class="g-moves"><i>1</i><i>2</i><i>3</i></span><b>Up to 3 moves</b></div><span class="g-arrow" aria-hidden="true">→</span>
+      <div class="g-step"><span class="g-end">End</span><b>Next player</b></div>
+    </div>
+    <p>Start by drawing from the deck: the Prime Minister draws 3, the Foreign Power 4, everyone else 2. You have 2 minutes.</p></section>
+  <section class="g-sec"><h3>A move is one of</h3>
+    <div class="g-three">
+      <div>${pic('hand')}<b>Play an action card</b></div>
+      <div>${pic('B')}<b>Pass a bill</b><span>a full set of one bill</span></div>
+      <div>${pic('cs')}<b>Trade cards</b><span>with any player</span></div>
+    </div>
+    <p class="muted">Defence cards answer other players’ cards at any time, and do not use a move.</p></section>
+  <section class="g-sec"><h3>How to win</h3>
+    <div class="g-three g-win">
+      <div class="camp-G"><b>Government</b><span>3 bills between you</span><em>or every Opposition MP loses their seat</em></div>
+      <div class="camp-O"><b>Opposition</b><span>2 bills between you</span><em>or the Prime Minister falls</em></div>
+      <div class="camp-F"><b>Foreign Power</b><span>3 bills</span><em>before the Government</em></div>
+    </div></section>
+  ${start ? `<div class="g-foot"><button type="button" class="btn brass" data-act="briefready">I’m ready</button><p class="muted small">The sitting starts when everyone is ready, or in <span data-tdl="${local(P.br.until)}"></span>.</p></div>` : ''}`;
+}
+function briefView(){
+  return `<div class="brief" role="dialog" aria-modal="true" aria-label="Quick guide"><div class="brief-in">
+    <div class="brief-top"><span class="eyebrow">Quick guide</span><span class="brief-clock">Starts in <span data-tdl="${local(P.br.until)}"></span></span><button type="button" class="btn ghost brief-skip" data-act="briefready">Skip</button></div>
+    ${guideBody(true)}
+  </div></div>`;
+}
 function lobbyView(){
   const isHost = mode === 'host';
   const pl = isHost ? lobby.players : (P ? P.pl : []);
@@ -1843,8 +2079,9 @@ function lobbyView(){
       <ol class="roll">${pl.map(p => `<li>${esc(p.nm)}${p.cid === me.cid ? ' <em>you</em>' : ''}</li>`).join('')}
         ${bots ? `<li class="botline">${bots} seat${bots === 1 ? '' : 's'} filled by bots</li>` : ''}</ol>
       ${isHost ? `<div class="countrow"><span>Seats at the table</span><div class="segs">${opts}</div></div>
+        <div class="lvlwrap"><span class="lvl-label">Bot level</span>${lvlPicker(lobby.lvl == null ? 1 : lobby.lvl, 'lobbylvl')}</div>
         <p class="muted small">Government always outnumbers the Opposition. One Foreign Power sits at every table.</p>
-        <button type="button" class="btn brass" data-act="start">Begin the sitting</button>` : ''}
+        <button type="button" class="btn brass" data-act="start">Begin the sitting</button>` : `<p class="muted small">Bots play as ${esc(LEVELS[P && P.lv != null ? P.lv : 1])} (${LEVEL_TAG[P && P.lv != null ? P.lv : 1].toLowerCase()}).</p>`}
       <button type="button" class="btn ghost" data-act="leave">Leave</button>
     </section>
   </main>`;
@@ -1860,7 +2097,7 @@ function gameView(){
   const my = mySeat(), meS = P.s[my];
   const tot = billTotals();
   const hostGone = mode === 'guest' && hostLostAt && Date.now() > hostLostAt;
-  const timer = P.ph === 'play' ? (P.tdl ? `<span class="clock" data-tdl="${local(P.tdl)}"></span>` : `<span class="clock paused">${Math.ceil((P.tl || 0) / 1000)}s</span>`) : '';
+  const timer = P.ph === 'play' ? (P.br ? `<span class="clock paused">${TIME.turn / 60000}:00</span>` : P.tdl ? `<span class="clock" data-tdl="${local(P.tdl)}"></span>` : `<span class="clock paused">${Math.ceil((P.tl || 0) / 1000)}s</span>`) : '';
   const score = ['G', 'O', 'F'].map(k => `<span class="score s-${k}">${SIDE[k]} <b>${tot[k]}</b><small>/${NEED[k]}</small></span>`).join('');
   const seats = P.s.map((s, i) => seatView(s, i, my)).join('');
   return `<div class="game">
@@ -1868,7 +2105,7 @@ function gameView(){
       <span class="bar-code">${esc(P.c)}</span>
       <span class="bar-deck">Deck ${P.dk} · Discard ${P.dc}</span>
       ${timer}
-      ${P.ph === 'play' && !P.pz && meS && !meS.o ? '<button type="button" class="iconbtn pausebtn" data-act="pause" aria-label="Pause the game">Pause</button>' : ''}
+      ${P.ph === 'play' && !P.pz && !P.br && meS && !meS.o ? '<button type="button" class="iconbtn pausebtn" data-act="pause" aria-label="Pause the game">Pause</button>' : ''}
       <button type="button" class="iconbtn" data-act="log" aria-label="Hansard log">Hansard</button>
       <button type="button" class="iconbtn" data-act="rules" aria-label="Rules">Rules</button>
     </header>
@@ -1919,6 +2156,10 @@ function seatSheet(i){
 
 function bannerView(my){
   if (P.ph === 'over') return `<p class="banner">The sitting is over.</p>`;
+  if (P.br){
+    const humans = P.s.filter(s => !s.b).length, rd = (P.br.rd || []).length;
+    return `<p class="banner">Waiting for everyone to finish the quick guide: <b>${rd} of ${humans}</b> ready. Starts in <span data-tdl="${local(P.br.until)}"></span>.</p>`;
+  }
   if (ui.aim){
     const need = ui.aim.kind === 'two' ? `Choose two players (${ui.aim.picks.length} of 2)` : (ui.aim.kind === 'bill' ? 'Tap a player with a Commons-passed bill' : ui.aim.kind === 'vonc' ? 'Choose a player. With no bills, they are eliminated' : 'Choose a player');
     return `<p class="banner aim"><b>${esc(ACTS[ui.aim.k].name)}:</b> ${need}. <button type="button" class="linkish" data-act="cancelaim">Cancel</button></p>`;
@@ -2046,6 +2287,7 @@ function pauseView(my){
 }
 function modalView(my){
   if (!P) return '';
+  if (P.br && P.ph === 'play' && my >= 0 && !(P.br.rd || []).includes(my) && ui.briefKey !== P.c + ':' + P.br.until) return briefView();
   if (P.pz && P.ph === 'play') return pauseView(my);
   if (P.ph === 'over'){
     const w = P.win;
@@ -2182,6 +2424,7 @@ function sheetView(){
   else if (ui.sheet === 'card' && P && ui.sel != null && myHand().includes(ui.sel)) body = cardSheet(ui.sel);
   else if (ui.sheet === 'trade' && P) body = tradeSheet();
   else if (ui.sheet === 'seat' && P && P.s) body = seatSheet(ui.seatI);
+  else if (ui.sheet === 'guide') body = `<h2>Quick guide</h2>${guideBody(false)}`;
   else if (ui.sheet === 'billpick' && P && ui.billPick != null){
     const s = P.s[ui.billPick];
     body = `<h2>Which of ${esc(s.nm)}’s bills?</h2><div class="stack">${s.bl.split('').map((k, bi) => `<button type="button" class="btn ghost billopt" data-act="bill" data-i="${ui.billPick}" data-bi="${bi}">${chip(k)} ${esc(BILL[k].name)}</button>`).join('')}</div>`;
@@ -2246,12 +2489,19 @@ function rulesBody(){
   const acts = Object.values(ACTS).map(a => `<li><b>${esc(a.name)}</b> <span class="kindtag">${a.kind === 'm' ? 'Manoeuvre' : 'Defence'}</span><br>${esc(a.text)}</li>`).join('');
   const bills = BILLS.map(b => `<li>${chip(b.k)} ${esc(b.name)} <span class="muted">set of ${b.set}, ${b.set + 2} in the deck</span></li>`).join('');
   return `<h2>How to play</h2>
+  ${P && P.s ? '<button type="button" class="btn ghost" data-act="guide">Open the quick guide</button>' : ''}
   <h3>Sides</h3>
   <ul class="rules">
     <li><b>Government</b> (the Prime Minister and Government MPs) wins by passing 3 bills between them.</li>
     <li><b>Opposition</b> wins by passing 2 bills, or by bringing down the Prime Minister.</li>
     <li><b>Foreign Power</b> plays alone and wins by passing 3 bills before the Government does.</li>
     <li>If every Opposition MP loses their seat, the Government wins. All roles are public.</li>
+  </ul>
+  <h3>Each side’s advantages</h3>
+  <ul class="rules">
+    <li><b>Government:</b> the most seats at the table, and the Prime Minister draws 3 cards a turn.</li>
+    <li><b>Opposition:</b> needs only 2 bills to win.</li>
+    <li><b>Foreign Power:</b> draws 4 cards a turn, and Election Interference hands it 5 of the top 10 cards.</li>
   </ul>
   <h3>Your turn</h3>
   <ul class="rules">
@@ -2330,6 +2580,10 @@ app.addEventListener('click', ev => {
     case 'tkmine': { const n = P.sub ? P.sub.n : 2; toggleMax(ui.talks.mine, id, n); render(); break; }
     case 'tkdone': send({k:'talks', mine:ui.talks.mine.slice(), theirs:ui.talks.theirs.slice()}); ui.talks = {mine:[], theirs:[]}; break;
     case 'donate': send({k:'give', card:id}); break;
+    case 'sololvl': ui.soloLvl = Number(el.dataset.n); LS.set('oo-lvl', ui.soloLvl); render(); break;
+    case 'lobbylvl': if (lobby){ lobby.lvl = Number(el.dataset.n); publish(); } break;
+    case 'guide': ui.sheet = 'guide'; render(); break;
+    case 'briefready': if (P && P.br){ ui.briefKey = P.c + ':' + P.br.until; send({k:'ready'}); render(); } break;
     case 'pause': ui.aim = null; ui.sheet = null; send({k:'pause'}); break;
     case 'unpause': send({k:'resume'}); break;
     case 'elpick': { const n = P.sub ? P.sub.n : 5; toggleMax(ui.elecPick, id, n); render(); break; }
