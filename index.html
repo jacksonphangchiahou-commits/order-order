@@ -351,6 +351,82 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .g-end{display:grid;place-items:center;height:56px;padding:0 12px;border-radius:8px;border:2px solid var(--brass);color:var(--brass);font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
 .g-foot{display:grid;gap:8px;padding-top:6px;text-align:center}
 .sheet .g-sec h3{font-size:18px;letter-spacing:normal;text-transform:none;margin-top:0}
+
+.g-three.g-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.seats.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.segs .seg{padding:8px 12px}
+
+/* A V Dicey: rainbow */
+.card.dicey{background:linear-gradient(160deg,#fff8e6 0%,#f3efe3 55%,#f6e9ff 100%);box-shadow:0 0 0 2px transparent,0 2px 0 rgba(0,0,0,.35);border:2px solid transparent;background-clip:padding-box;position:relative}
+.card.dicey::before{content:"";position:absolute;inset:-2px;border-radius:10px;padding:2px;background:linear-gradient(135deg,#e5484d,#f5a524,#f2d33b,#46a758,#3e8bd8,#8e4ec6);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.card.dicey .c-kind{background:linear-gradient(90deg,#e5484d,#f5a524,#46a758,#3e8bd8,#8e4ec6);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+.chip-dicey{border-left-color:transparent;border-image:linear-gradient(#e5484d,#f5a524,#46a758,#3e8bd8,#8e4ec6) 1;font-weight:600}
+.aslist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.asopt{display:flex;align-items:center;gap:6px;text-align:left;font-size:13px;padding:8px}
+.asopt .chip-i{width:20px;height:20px;background:var(--paper);border-radius:4px;padding:1px;margin:0}
+.galloc{display:grid;gap:8px}
+.grow-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grow-row select{font:inherit;font-size:14px;color:var(--ink);background:var(--bench);border:1px solid var(--line);border-radius:6px;padding:6px 8px;max-width:60%}
+.g-codified{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;border:1px dashed var(--brass);font-size:13px}
+.g-codified .g-pic{width:40px;height:40px;background:var(--paper);border-radius:6px;padding:2px}
+
+.card.dicey{border:0;background:linear-gradient(170deg,#fffaf0 0%,#f3efe3 60%,#f3eaff 100%);box-shadow:0 0 0 3px #f5a524,0 0 0 5px #8e4ec6,0 2px 0 rgba(0,0,0,.35)}
+.card.dicey::before{display:none}
+.card.dicey .c-kind{margin:0;padding:5px 8px;background:linear-gradient(90deg,#e5484d,#f5a524,#f2d33b,#46a758,#3e8bd8,#8e4ec6);-webkit-background-clip:border-box;background-clip:border-box;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.35);font-weight:600}
+.card.dicey.is-sel{box-shadow:0 0 0 3px var(--brass),0 6px 14px rgba(0,0,0,.4)}
+.popcard.dicey{box-shadow:0 0 0 4px #f5a524,0 0 0 8px #8e4ec6,0 14px 40px rgba(0,0,0,.5)}
+.mbox > *{min-width:0}
+.grow-row{min-width:0}
+.grow-row .chip{flex:none;max-width:45%}
+.grow-row select{flex:1 1 auto;min-width:0;max-width:none}
+
+/* lobby: roles, switch, practice */
+.switch{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--bench);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.sw-track{flex:none;width:44px;height:26px;border-radius:13px;background:var(--bench-3);border:1px solid var(--line);position:relative;transition:background .15s}
+.sw-track i{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--muted);transition:transform .15s,background .15s}
+.switch.on .sw-track{background:color-mix(in srgb, var(--fp) 45%, var(--bench-3))}
+.switch.on .sw-track i{transform:translateX(18px);background:var(--fp)}
+.sw-text{display:grid;gap:2px;min-width:0}
+.sw-text b{font-size:14px;color:var(--ink)} .switch.on .sw-text b{color:var(--fp)}
+.sw-text small{font-size:12px;color:var(--muted)}
+.teams{margin:0;font-size:13px;color:var(--pm)}
+.lobby-h3{font-family:var(--f-display);font-size:18px;margin-top:4px}
+.rolegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rolegrp{display:grid;gap:2px;text-align:left;padding:10px;border-radius:10px;border:1px solid color-mix(in srgb, var(--camp) 50%, transparent);background:color-mix(in srgb, var(--camp) 10%, var(--bench));min-width:0}
+.rolegrp b{color:var(--camp);font-size:14px}
+.rolegrp small{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.rolegrp span{font-size:12px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rolegrp.on{background:var(--camp);border-color:var(--camp)} .rolegrp.on b,.rolegrp.on span,.rolegrp.on small{color:var(--brass-ink)}
+.rtag{font-family:var(--f-mono);font-size:10px;letter-spacing:.04em;padding:1px 6px;border-radius:4px;border:1px solid currentColor;margin-left:auto}
+.rtag.r-PM{color:var(--pm)} .rtag.r-G{color:var(--gov)} .rtag.r-O{color:var(--opp)} .rtag.r-F{color:var(--fp)}
+.roll li{align-items:center}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pills .pill[class*=camp-]{color:var(--camp)} .pills .pill.on[class*=camp-]{background:var(--camp);color:var(--brass-ink)}
+details.practice{display:grid;gap:10px;border:1px solid var(--line);border-radius:10px;padding:0 12px;background:rgba(255,255,255,.02)}
+details.practice[open]{padding-bottom:12px}
+details.practice > summary{cursor:pointer;list-style:none;padding:12px 0;font-weight:600;text-align:center}
+details.practice > summary::-webkit-details-marker{display:none}
+details.practice > summary::after{content:" \25BE";color:var(--muted)}
+details.practice > *:not(summary){margin-top:10px}
+/* expansion on the table */
+.s-ei{display:inline-flex;align-items:center;gap:3px;color:var(--fp);font-family:var(--f-mono)}
+.s-ei .chip-i{width:16px;height:16px;background:var(--paper);border-radius:3px;margin:0}
+.popcard.event{background:#ece6f8;box-shadow:0 0 0 3px var(--fp),0 14px 40px rgba(0,0,0,.5)}
+.popcard.event .c-kind{color:#4b3a8a}
+.results li.minor{background:rgba(238,148,121,.14)}
+.seattab{width:100%;border-collapse:collapse;font-size:13px}
+.seattab th,.seattab td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;font-variant-numeric:tabular-nums}
+.seattab th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+.exp-h{color:var(--fp)!important;border-top:1px solid var(--line);padding-top:12px}
+.evlist .chip-i{width:18px;height:18px;background:var(--paper);border-radius:3px;margin-right:4px;vertical-align:-4px}
+.countrow{flex-wrap:wrap;row-gap:6px}
+.segs .seg{padding:8px 11px}
+details.practice > *:not(summary){margin-top:0}
+details.practice[open] > summary{padding-bottom:4px}
+details.practice[open]{display:block}
+details.practice[open] > *:not(summary){margin-bottom:10px}
+.pop-who,.pop-on{background:rgba(9,30,23,.88);padding:4px 12px;border-radius:8px;text-shadow:none}
 </style>
 </head>
 <body>
@@ -845,6 +921,130 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   <path d="M30 84 C40 70 62 70 72 84 L66 94 H36 Z" fill="#e9c19c" stroke="#2a2620" stroke-width="3" stroke-linejoin="round"/>
 </symbol>
 
+
+<!-- GCHQ Strike: the "doughnut" building with a picket sign -->
+<symbol id="i-gchq" viewBox="0 0 100 100">
+  <ellipse cx="46" cy="58" rx="40" ry="22" fill="#9aa3b5" stroke="#2a2620" stroke-width="3.5"/>
+  <ellipse cx="46" cy="54" rx="40" ry="22" fill="#c9cdd3" stroke="#2a2620" stroke-width="3.5"/>
+  <ellipse cx="46" cy="54" rx="17" ry="9" fill="#4f8f5e" stroke="#2a2620" stroke-width="3"/>
+  <g stroke="#9aa3b5" stroke-width="2"><path d="M14 50 L22 52 M24 40 L30 44 M40 34 L42 39 M58 34 L56 39 M72 40 L66 44 M80 50 L72 52 M78 62 L70 60 M18 62 L24 60"/></g>
+  <g stroke="#2a2620" stroke-width="3" stroke-linejoin="round">
+    <rect x="80" y="40" width="5" height="52" fill="#8a5420"/>
+    <rect x="62" y="12" width="36" height="30" rx="2" fill="#c4583c"/>
+  </g>
+  <text x="80" y="25" text-anchor="middle" font-family="IBM Plex Mono, Menlo, monospace" font-weight="700" font-size="8" fill="#f3efe3">ON</text>
+  <text x="80" y="35" text-anchor="middle" font-family="IBM Plex Mono, Menlo, monospace" font-weight="700" font-size="8" fill="#f3efe3">STRIKE</text>
+</symbol>
+
+<!-- A V Dicey: a cute bearded old professor with spectacles -->
+<symbol id="i-dicey" viewBox="0 0 100 100">
+  <path d="M14 98 C14 78 30 70 50 70 C70 70 86 78 86 98 Z" fill="#1d221e" stroke="#2a2620" stroke-width="3"/>
+  <path d="M42 70 L50 84 L58 70 Z" fill="#f3efe3" stroke="#2a2620" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M46 76 L50 80 L54 76 L50 92 Z" fill="#8e4ec6" stroke="#2a2620" stroke-width="2"/>
+  <circle cx="50" cy="42" r="26" fill="#f0cfae" stroke="#2a2620" stroke-width="3.2"/>
+  <path d="M24 38 C22 22 34 14 44 18 C40 22 34 26 30 34 Z M76 38 C78 22 66 14 56 18 C60 22 66 26 70 34 Z" fill="#e8e6e0" stroke="#2a2620" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M27 46 C26 64 36 80 50 80 C64 80 74 64 73 46 C68 52 62 54 58 52 C54 56 46 56 42 52 C38 54 32 52 27 46 Z" fill="#f3f1ea" stroke="#2a2620" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M38 64 C44 62 46 66 50 66 C54 66 56 62 62 64 M44 72 C47 74 53 74 56 72" fill="none" stroke="#c9c5b8" stroke-width="2" stroke-linecap="round"/>
+  <path d="M38 50 C42 46 46 46 50 49 C54 46 58 46 62 50 C58 52 54 53 50 51 C46 53 42 52 38 50 Z" fill="#f3f1ea" stroke="#2a2620" stroke-width="2.2" stroke-linejoin="round"/>
+  <circle cx="40" cy="39" r="7" fill="#e5f1f4" stroke="#2a2620" stroke-width="2.6"/>
+  <circle cx="60" cy="39" r="7" fill="#e5f1f4" stroke="#2a2620" stroke-width="2.6"/>
+  <path d="M47 39 H53" stroke="#2a2620" stroke-width="2.6"/>
+  <circle cx="40" cy="40" r="2.2" fill="#2a2620"/><circle cx="60" cy="40" r="2.2" fill="#2a2620"/>
+  <path d="M34 30 C37 28 42 28 45 30 M55 30 C58 28 63 28 66 30" fill="none" stroke="#e8e6e0" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="50" cy="47" rx="4" ry="3.5" fill="#e6a98f" stroke="#2a2620" stroke-width="1.8"/>
+  <circle cx="33" cy="49" r="3" fill="#f2a7a0" opacity=".7"/><circle cx="67" cy="49" r="3" fill="#f2a7a0" opacity=".7"/>
+  <path d="M84 10 L86 16 L92 18 L86 20 L84 26 L82 20 L76 18 L82 16 Z" fill="#f2d33b" stroke="#2a2620" stroke-width="1.6"/>
+  <path d="M12 16 L13.5 20 L18 21.5 L13.5 23 L12 27 L10.5 23 L6 21.5 L10.5 20 Z" fill="#46a758" stroke="#2a2620" stroke-width="1.4"/>
+</symbol>
+
+<!-- Fox Hunting: a fox -->
+<symbol id="i-fox" viewBox="0 0 100 100">
+  <path d="M68 70 C92 66 98 44 86 34 C90 48 82 58 66 60 Z" fill="#d9772f" stroke="#2a2620" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M86 34 C92 40 92 48 88 52 C86 46 84 40 86 34 Z" fill="#f3efe3" stroke="#2a2620" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M34 92 C30 74 36 58 50 56 C64 58 72 70 70 92 Z" fill="#d9772f" stroke="#2a2620" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M42 92 C40 80 44 70 50 68 C56 70 60 80 58 92 Z" fill="#f3efe3"/>
+  <path d="M16 16 L30 30 L22 40 Z M84 16 L70 30 L78 40 Z" fill="#d9772f" stroke="#2a2620" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M20 22 L27 30 L23 35 Z M80 22 L73 30 L77 35 Z" fill="#2a2620"/>
+  <path d="M18 36 C24 22 76 22 82 36 C84 50 64 58 50 70 C36 58 16 50 18 36 Z" fill="#e8873a" stroke="#2a2620" stroke-width="3.2" stroke-linejoin="round"/>
+  <path d="M26 44 C34 46 42 52 50 70 C58 52 66 46 74 44 C70 56 60 62 50 70 C40 62 30 56 26 44 Z" fill="#f3efe3" stroke="#2a2620" stroke-width="2.4" stroke-linejoin="round"/>
+  <ellipse cx="38" cy="40" rx="3.4" ry="4" fill="#2a2620"/><ellipse cx="62" cy="40" rx="3.4" ry="4" fill="#2a2620"/>
+  <circle cx="39" cy="38.6" r="1.1" fill="#fff"/><circle cx="63" cy="38.6" r="1.1" fill="#fff"/>
+  <ellipse cx="50" cy="66" rx="4.5" ry="3.5" fill="#2a2620"/>
+</symbol>
+
+<!-- Partygate: a party hat, a glass and a cake -->
+<symbol id="i-pgate" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3" stroke-linejoin="round">
+    <rect x="10" y="62" width="44" height="28" rx="3" fill="#f3e6c4"/>
+    <path d="M10 70 C16 76 22 64 28 72 C34 78 40 64 46 72 C50 76 54 70 54 70 V62 H10 Z" fill="#a54a7c"/>
+    <rect x="22" y="46" width="5" height="16" fill="#3f7fb0"/><rect x="37" y="46" width="5" height="16" fill="#d8b257"/>
+    <path d="M58 20 L72 54 L44 54 Z" fill="#c4583c"/>
+    <path d="M70 60 H88 L84 76 C82 80 76 80 74 76 Z" fill="#cfe6ef"/>
+    <path d="M79 79 V92 M72 92 H86" fill="none"/>
+  </g>
+  <path d="M24 40 C22 44 27 44 24.5 46 M39 40 C37 44 42 44 39.5 46" fill="#f5a524" stroke="#f5a524" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M50 46 L66 46 M53 38 L63 38 M55 30 L61 30" stroke="#f2d33b" stroke-width="3"/>
+  <circle cx="58" cy="18" r="4" fill="#f2d33b" stroke="#2a2620" stroke-width="2"/>
+  <path d="M72 66 H86 L84 74 C82 77 76 77 75 74 Z" fill="#e5484d" opacity=".75"/>
+  <g fill="#46a758"><circle cx="16" cy="18" r="2.5"/><rect x="30" y="12" width="4" height="4" transform="rotate(30 32 14)" fill="#8e4ec6"/><circle cx="88" cy="30" r="2.5" fill="#3e8bd8"/><rect x="80" y="10" width="4" height="4" transform="rotate(20 82 12)" fill="#f5a524"/></g>
+</symbol>
+
+
+<!-- Election Integrity: a sealed ballot box with a shield and tick -->
+<symbol id="i-eint" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M12 46 H74 V90 H12 Z" fill="#56627f"/>
+    <path d="M8 40 H78 V50 H8 Z" fill="#3b4459"/>
+    <rect x="30" y="43" width="26" height="4" fill="#2a2620"/>
+    <path d="M70 18 L92 26 V46 C92 62 82 72 70 78 C58 72 48 62 48 46 V26 Z" fill="#4f8f5e"/>
+  </g>
+  <path d="M60 46 L68 54 L82 36" fill="none" stroke="#f3efe3" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="24" y="62" width="34" height="14" rx="2" fill="#f3efe3" stroke="#2a2620" stroke-width="2.6"/>
+  <path d="M30 69 h22" stroke="#2a2620" stroke-width="2.4" stroke-linecap="round"/>
+</symbol>
+
+<!-- James Bond: a top secret dossier marked 007 -->
+<symbol id="i-bond" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M10 22 H40 L46 30 H90 V88 H10 Z" fill="#b8902f"/>
+    <path d="M10 34 H90 V88 H10 Z" fill="#d8b257"/>
+  </g>
+  <g transform="rotate(-10 50 54)">
+    <rect x="16" y="44" width="68" height="16" rx="2" fill="none" stroke="#c4583c" stroke-width="3"/>
+    <text x="50" y="56" text-anchor="middle" font-family="IBM Plex Mono, Menlo, monospace" font-weight="700" font-size="8.6" fill="#c4583c" letter-spacing=".4">TOP SECRET</text>
+  </g>
+  <text x="50" y="82" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="20" fill="#2a2620">007</text>
+</symbol>
+
+<!-- Assisted Coup: the Foreign Power's puppet bar lifting the dispatch box -->
+<symbol id="i-coup" viewBox="0 0 100 100">
+  <g stroke="#2a2620" stroke-width="3.2" stroke-linejoin="round">
+    <rect x="16" y="6" width="68" height="8" rx="3" fill="#6c4f9c"/>
+    <rect x="46" y="2" width="8" height="18" rx="3" fill="#6c4f9c"/>
+  </g>
+  <g stroke="#2a2620" stroke-width="1.8"><path d="M22 12 L30 50 M78 12 L70 50"/></g>
+  <g stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round">
+    <rect x="24" y="48" width="52" height="32" rx="3" fill="#8a5420"/>
+    <rect x="24" y="48" width="52" height="9" rx="3" fill="#a5672b"/>
+  </g>
+  <g fill="#d8b257" stroke="#2a2620" stroke-width="1.6"><circle cx="29" cy="53" r="3"/><circle cx="71" cy="53" r="3"/><rect x="44" y="64" width="12" height="7" rx="1.5"/></g>
+  <path d="M10 92 C30 84 70 84 90 92" fill="none" stroke="#ee9479" stroke-width="5" stroke-linecap="round"/>
+  <path d="M84 30 L92 22 M88 40 L97 38 M12 30 L4 22" stroke="#c4583c" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+
+<!-- National Security: a shield over the globe -->
+<symbol id="i-nsec" viewBox="0 0 100 100">
+  <circle cx="50" cy="52" r="42" fill="#ae9ff4" stroke="#2a2620" stroke-width="3.2"/>
+  <g fill="#7fae4a" stroke="#2a2620" stroke-width="2" stroke-linejoin="round">
+    <path d="M14 46 C20 34 30 34 30 44 C30 54 20 56 16 62 C12 56 12 50 14 46 Z"/>
+    <path d="M72 22 C84 26 92 38 90 48 C82 46 76 40 70 36 C68 30 68 26 72 22 Z"/>
+    <path d="M70 80 C76 74 86 74 86 78 C80 88 72 90 66 88 C66 84 68 82 70 80 Z"/>
+  </g>
+  <path d="M50 22 L72 31 V50 C72 66 62 76 50 82 C38 76 28 66 28 50 V31 Z" fill="#d8b257" stroke="#2a2620" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M50 29 L66 36 V50 C66 62 59 70 50 75 C41 70 34 62 34 50 V36 Z" fill="#13382c" stroke="#2a2620" stroke-width="2"/>
+  <path d="M41 52 L48 59 L60 44" fill="none" stroke="#d8b257" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+
 </defs></svg>
 <div id="app"></div>
 <script>
@@ -860,7 +1060,7 @@ const BILLS = [
   {k:'H', name:'Lords Reform Bill', short:'Lords Reform', set:5, col:'#8e2433'},
   {k:'I', name:'Investigatory Powers Bill', short:'Investigatory', set:5, col:'#56627f'},
   {k:'C', name:'Constitutional Reform Bill', short:'Const. Reform', set:5, col:'#6c4f9c'},
-  {k:'K', name:'Codified Constitution', short:'Codified Const.', set:6, col:'#a07d22'},
+  {k:'K', name:'Codified Constitution', short:'Codified Const.', set:6, copies:6, nowild:1, col:'#a07d22'},
   {k:'Y', name:'Dangerous Dogs Bill', short:'Dangerous Dogs', set:3, col:'#6e5442'},
   {k:'W', name:'Clean Water Bill', short:'Clean Water', set:3, col:'#2a93bd'},
   {k:'P', name:'Cannabis Bill', short:'Cannabis', set:4, col:'#58872a'},
@@ -884,6 +1084,10 @@ const ACTS = {
   jr:{name:'Judicial Review', kind:'d', vs:['self'], n:6, x:0, text:'Answer any action card aimed at you. Guess whether the top card of the deck is a bill or an action card. Right: the card is cancelled for you. A Henry VIII Clause means you lose; Election Interference means you win.', flav:'Only an aggrieved party with sufficient interest may bring a claim.'},
   diss:{name:'Dissolution of Parliament', kind:'d', vs:['vonc'], n:4, x:1, text:'Block a Vote of No Confidence.', flav:'Dissolution and Calling of Parliament Act 2022.'},
   pror:{name:'Prorogation of Parliament', kind:'d', vs:['vonc'], n:3, x:0, text:'Block a Vote of No Confidence. You must discard your whole hand.', flav:'Miller No 2 (2019): prorogation that frustrates Parliament is unlawful.'},
+  gchq:{name:'GCHQ Strike', kind:'m', tgt:'bill', n:3, x:0, text:'Choose a player with a Commons-passed bill. The bill is broken up: they take one real card of it back into their hand, and you hand the other cards to other players or discard them.', flav:'CCSU (1985): the ban on trade unions at GCHQ, and the case that opened the prerogative to review.'},
+  fox:{name:'Fox Hunting', kind:'m', tgt:'pair', n:3, x:0, text:'Choose any two players (you may be one of them). They swap their whole hands.', flav:'Jackson v AG (2005): the Hunting Act 2004 was passed under the Parliament Acts.'},
+  pgate:{name:'Partygate', kind:'m', tgt:'none', n:5, x:0, text:'Discard up to 5 cards from your hand, then draw the same number from the deck.', flav:'Lockdown gatherings in Downing Street, investigated by the Privileges Committee.'},
+  dicey:{name:'A V Dicey', kind:'x', n:5, x:0, text:'The ultimate trump card. Play it as any other action card, on your turn or in answer to another card. It cannot be answered or cancelled.', flav:'Introduction to the Study of the Law of the Constitution (1885).'},
   sov:{name:'Parliamentary Sovereignty', kind:'d', vs:['*'], n:6, x:1, text:'Cancel an action card against you, or shield another targeted player. Against a card that hits several players, it protects only the one shielded. It also cancels a defence card outright.', flav:'Dicey: Parliament can make or unmake any law whatever.'},
 };
 const ROLE = {
@@ -894,24 +1098,34 @@ const ROLE = {
 };
 const SIDE = {G:'Government', O:'Opposition', F:'Foreign Power'};
 const NEED = {G:3, O:2, F:3};
-const LAYOUT = {6:['PM','G','G','O','O','F'], 7:['PM','G','G','G','O','O','F'], 8:['PM','G','G','G','O','O','O','F']};
-const TIME = {turn:120000, resp:30000, pop:2600, talks:30000, fund:15000, trade:20000, elec:30000};
+const LAYOUT = {3:['PM','G','O'], 4:['PM','G','G','O'], 5:['PM','G','G','O','O'], 6:['PM','G','G','O','O','F'], 7:['PM','G','G','G','O','O','F'], 8:['PM','G','G','G','O','O','O','F']};
+const TIME = {turn:120000, resp:30000, pop:2600, talks:30000, fund:15000, trade:20000, elec:30000, gchq:30000, pgate:30000};
+/* Foreign Interference expansion: cards triggered the moment they are drawn */
+const EVENTS = {
+  elec:{n:5, name:'Election Interference', short:'Takes 5 of the top 10', text:'Played the moment it is drawn, and the draw is lost. It cannot be stopped. The Foreign Power looks at the top 10 cards of the deck and takes 5. The rest are shuffled back.', flav:'Foreign money and bots in the marginal seats.'},
+  eint:{n:4, name:'Election Integrity', short:'Stops the next Election Interference', text:'Played the moment it is drawn, and the draw is lost. It stays open on the table and cancels the next Election Interference, then is discarded. Several can wait on the table at once.', flav:'The Electoral Commission keeps watch.'},
+  bond:{n:4, name:'James Bond', short:'The Foreign Power hands its hand to the PM', text:'Played the moment it is drawn, and the draw is lost. The Foreign Power must surrender its whole hand to the Prime Minister.', flav:'On His Majesty\u2019s Secret Service.'},
+  coup:{n:1, name:'Assisted Coup', short:'The Foreign Power joins the Opposition', text:'Played the moment it is drawn, and the draw is lost. The Foreign Power joins forces with the Opposition for the rest of the game. If they win, it counts as a Foreign Power victory, with the Opposition as minor victors.', flav:'Power seized with help from abroad.'},
+  nsec:{n:1, name:'National Security', short:'The Government absorbs the Foreign Power', text:'Played the moment it is drawn, and the draw is lost. The Government neutralises the foreign threat: the Foreign Power joins the Government for the rest of the game, and a win counts as a Government victory.', flav:'The state closes ranks.'},
+};
 const ELEC = {name:'Election Interference', text:'Played the moment it is drawn, and the draw is lost. It cannot be stopped. The Foreign Power looks at the top 10 cards of the deck and takes 5. The rest are shuffled back.', flav:'Foreign money and bots in the marginal seats.'};
 const PAUSE_LOCK = 30000, BRIEF_MS = 90000;
 const BOT = {move:4000, jitter:800, react:3000, reactJ:3000, answer:3500};
 
 const _cats = {};
-function catalog(n){
-  if (_cats[n]) return _cats[n];
+/* two decks: 'b' = base game, 'x' = with the Foreign Interference expansion */
+function catalog(key){
+  if (_cats[key]) return _cats[key];
+  const exp = key === 'x';
   const c = [];
-  BILLS.forEach(b => { for (let i = 0; i < b.set + 2; i++) c.push({t:'b', k:b.k}); });
-  for (let i = 0; i < 10 + (n - 6); i++) c.push({t:'w', k:'wild'});
-  for (let i = 0; i < 5; i++) c.push({t:'e', k:'elec'});
-  Object.entries(ACTS).forEach(([k, a]) => { const cnt = a.n + a.x * (n - 6); for (let i = 0; i < cnt; i++) c.push({t:'a', k}); });
-  return (_cats[n] = c);
+  BILLS.forEach(b => { for (let i = 0; i < (b.copies || b.set + 2); i++) c.push({t:'b', k:b.k}); });
+  for (let i = 0; i < 12; i++) c.push({t:'w', k:'wild'});
+  if (exp) Object.entries(EVENTS).forEach(([k, e]) => { for (let i = 0; i < e.n; i++) c.push({t:'e', k}); });
+  Object.entries(ACTS).forEach(([k, a]) => { for (let i = 0; i < a.n + 2 * (a.x || 0); i++) c.push({t:'a', k}); });
+  return (_cats[key] = c);
 }
 function cardType(n, id){ return catalog(n)[id].k; }
-function typeName(k){ return k === 'elec' ? ELEC.name : k === 'wild' ? WILD.name : BILL[k] ? BILL[k].name : ACTS[k].name; }
+function typeName(k){ return EVENTS[k] ? EVENTS[k].name : k === 'wild' ? WILD.name : BILL[k] ? BILL[k].name : ACTS[k].name; }
 function cardName(n, id){ return typeName(catalog(n)[id].k); }
 function canCounter(k, topA){ const d = ACTS[k]; return !!d && d.kind === 'd' && k !== 'jr' && (d.vs.includes('*') || d.vs.includes(topA)); }
 /* Judicial Review: only the aggrieved player, only while the card aimed at them is in force */
@@ -925,33 +1139,48 @@ function jrReveal(S, guess, env){
   ensureDeck(S, env);
   if (!S.deck.length) return {k:null, ok:false};
   const id = S.deck.pop(); S.disc.push(id);
-  const c = catalog(S.n)[id];
+  const c = catalog(S.ck)[id];
   const ok = c.t === 'e' ? true : c.t === 'w' ? false : (c.t === 'b') === (guess === 'b');
   return {k:c.k, ok};
 }
-function sideOf(role){ return ROLE[role].side; }
+/* after Assisted Coup or National Security the Foreign Power plays for its new side */
+let CUR = null;
+function sideOf(role){ return role === 'F' && CUR && CUR.ally ? CUR.ally : ROLE[role].side; }
+/* even tables split equally; odd tables give the Government one more seat (the Foreign Power is not counted) */
+function layoutFor(n, exp){
+  const m = exp ? n - 1 : n, g = Math.ceil(m / 2), o = Math.floor(m / 2);
+  return ['PM'].concat(Array(g - 1).fill('G'), Array(o).fill('O'), exp ? ['F'] : []);
+}
 
 function shuffle(a, rand){ for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(rand() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function log(S, m){ S.log.push(m); while (S.log.length > 7) S.log.shift(); }
 function nm(S, i){ return S.seats[i].nm; }
 
-function newGame(code, humans, n, env, lvl){
-  const roles = shuffle(LAYOUT[n].slice(), env.rand);
-  const spots = shuffle([...Array(n).keys()], env.rand);
+function newGame(code, humans, n, env, lvl, opts){
+  opts = opts || {};
+  const exp = !!opts.exp && n >= 4, picks = opts.picks || {};
+  const roles = shuffle(layoutFor(n, exp), env.rand);
   const seats = roles.map(r => ({nm:'', cid:null, bot:true, role:r, hand:[], bills:[], out:false, op:-1}));
-  humans.slice(0, n).forEach((h, i) => { const s = seats[spots[i]]; s.nm = h.nm; s.cid = h.cid; s.bot = false; });
+  const sit = (s, h) => { s.nm = h.nm; s.cid = h.cid; s.bot = false; };
+  const hs = humans.slice(0, n);
+  /* players who chose a role take a seat of that role, first come first served */
+  hs.forEach(h => { const want = picks[h.cid]; if (!want) return; const s = shuffle(seats.filter(x => x.bot && x.role === want), env.rand)[0]; if (s) sit(s, h); });
+  const rest = shuffle(seats.filter(x => x.bot), env.rand);
+  hs.filter(h => !seats.some(x => x.cid === h.cid)).forEach(h => sit(rest.shift(), h));
   const seen = {G:0, O:0};
   seats.forEach(s => {
     const k = s.role === 'G' || s.role === 'O' ? ++seen[s.role] : 0;
     if (s.bot) s.nm = s.role === 'PM' ? 'Prime Minister' : s.role === 'F' ? 'Foreign Power' : (s.role === 'G' ? 'Govt MP ' : 'Opposition MP ') + k;
   });
-  const S = {v:1, code, n, ph:'play', seats, deck:shuffle(catalog(n).map((_, i) => i), env.rand), disc:[],
+  const ck = exp ? 'x' : 'b';
+  const S = {v:1, code, n, ck, exp, ally:null, eint:[], ph:'play', seats, deck:shuffle(catalog(ck).map((_, i) => i), env.rand), disc:[],
     cur:seats.findIndex(s => s.role === 'PM'), mv:3, fb:false, sub:null, turnDl:0, turnLeft:0, log:[], win:null,
     ak:{}, er:{}, botAt:0, humans:humans.slice(0, n)};
+  CUR = S;
   seats.forEach(s => { for (let k = 0; k < 4; k++) drawOne(S, s, env); });
   S.lvl = lvl === 0 || lvl === 2 ? lvl : 1;
   const bots = seats.filter(s => s.bot).length;
-  log(S, `The House is in session. The Prime Minister opens.${bots ? ` Bots play as ${LEVELS[S.lvl]} (${LEVEL_TAG[S.lvl].toLowerCase()}).` : ''}`);
+  log(S, `The House is in session${exp ? ' with Foreign Interference' : ''}. The Prime Minister opens.${bots ? ` Bots play as ${LEVELS[S.lvl]} (${LEVEL_TAG[S.lvl].toLowerCase()}).` : ''}`);
   startTurn(S, S.cur, env);
   S.brief = {t0:env.now, until:env.now + BRIEF_MS, ready:{}};
   return S;
@@ -966,19 +1195,55 @@ function ensureDeck(S, env){
 function drawOne(S, seat, env){
   ensureDeck(S, env); if (!S.deck.length) return;
   const id = S.deck.pop();
-  if (catalog(S.n)[id].t !== 'e'){ seat.hand.push(id); return; }
+  const c = catalog(S.ck)[id];
+  if (c.t !== 'e'){ seat.hand.push(id); return; }
+  triggerEvent(S, seat, id, c.k, env);
+}
+function triggerEvent(S, seat, id, k, env){
+  const fp = S.seats.find(x => x.role === 'F' && !x.out), pm = S.seats.find(x => x.role === 'PM' && !x.out);
+  const nm = EVENTS[k].name, flash = note => { S.flash = {a:'ev', ev:k, src:S.seats.indexOf(seat), note, at:env.now}; };
+  if (k === 'eint'){
+    S.eint.push(id);
+    log(S, `${seat.nm} draws Election Integrity. It stays on the table (${S.eint.length} waiting).`);
+    flash('It stays on the table and will cancel the next Election Interference.');
+    return;
+  }
   S.disc.push(id);
-  const fp = S.seats.find(x => x.role === 'F' && !x.out);
-  if (!fp){ log(S, `${seat.nm} draws Election Interference, but the Foreign Power has lost its seat. No effect.`); return; }
-  log(S, `${seat.nm} draws Election Interference!`);
-  S.elecQ = (S.elecQ || 0) + 1;
+  if (!fp){ log(S, `${seat.nm} draws ${nm}, but the Foreign Power has lost its seat. No effect.`); flash('The Foreign Power has lost its seat. No effect.'); return; }
+  if (k === 'elec'){
+    if (S.eint.length){
+      S.disc.push(S.eint.shift());
+      log(S, `${seat.nm} draws Election Interference, but Election Integrity stops it.`);
+      flash('Election Integrity stops it. Both cards are discarded.');
+      return;
+    }
+    log(S, `${seat.nm} draws Election Interference!`);
+    S.elecQ = (S.elecQ || 0) + 1;
+    return;
+  }
+  if (k === 'bond'){
+    const n = fp.hand.length;
+    if (pm && n){ pm.hand.push(...fp.hand); fp.hand = []; }
+    log(S, `${seat.nm} draws James Bond: the Foreign Power surrenders ${n} card${n === 1 ? '' : 's'} to the Prime Minister.`);
+    flash(n ? `The Foreign Power surrenders ${n} card${n === 1 ? '' : 's'} to the Prime Minister.` : 'The Foreign Power has no cards to surrender.');
+    return;
+  }
+  if (S.ally){
+    log(S, `${seat.nm} draws ${nm}, but the Foreign Power has already chosen its side. No effect.`);
+    flash('The Foreign Power has already chosen its side. No effect.');
+    return;
+  }
+  S.ally = k === 'coup' ? 'O' : 'G';
+  log(S, k === 'coup' ? `${seat.nm} draws Assisted Coup: the Foreign Power joins forces with the Opposition.` : `${seat.nm} draws National Security: the Government absorbs the Foreign Power.`);
+  flash(k === 'coup' ? 'The Foreign Power joins forces with the Opposition.' : 'The Foreign Power is absorbed into the Government.');
+  checkWin(S);
 }
 function openElection(S, env){
   S.elecQ--;
   const fi = S.seats.findIndex(x => x.role === 'F' && !x.out);
   if (fi < 0) return;
   ensureDeck(S, env);
-  const cards = S.deck.splice(Math.max(0, S.deck.length - 10)).filter(x => catalog(S.n)[x].t !== 'e' || (S.disc.push(x), false));
+  const cards = S.deck.splice(Math.max(0, S.deck.length - 10)).filter(x => catalog(S.ck)[x].t !== 'e' || (S.disc.push(x), false));
   if (!cards.length) return;
   pauseTurn(S, env);
   S.sub = {k:'elec', src:fi, cards, n:Math.min(5, cards.length), dl:env.now + TIME.pop + TIME.elec, at0:env.now};
@@ -1000,11 +1265,19 @@ function closeElection(S, pick, env){
 }
 function drawN(S, seat, k, env){ for (let i = 0; i < k; i++) drawOne(S, seat, env); }
 
+/* a lone Opposition MP draws 2 cards for every Government player still in the House */
+function loneOpp(S){ return S.seats.filter(x => x.role === 'O' && !x.out).length === 1; }
+function drawCount(S, s){
+  if (s.role === 'PM') return 3;
+  if (s.role === 'F') return 4;
+  if (s.role === 'O' && loneOpp(S)) return 2 * S.seats.filter(x => (x.role === 'PM' || x.role === 'G') && !x.out).length;
+  return 2;
+}
 function startTurn(S, i, env){
   S.cur = i; S.mv = 3; S.sub = null; S.turnNo = (S.turnNo || 0) + 1;
   S.seats.forEach(s => { if (s.op === i) s.op = -1; });
   const s = S.seats[i];
-  drawN(S, s, s.role === 'PM' ? 3 : s.role === 'F' ? 4 : 2, env);
+  drawN(S, s, drawCount(S, s), env);
   S.turnDl = env.now + TIME.turn; S.turnLeft = 0;
   S.botAt = env.now + BOT.move;
 }
@@ -1018,17 +1291,25 @@ function pauseTurn(S, env){ if (S.turnDl){ S.turnLeft = Math.max(0, S.turnDl - e
 function resumeTurn(S, env){ if (!S.turnDl && S.ph === 'play'){ S.turnDl = env.now + Math.max(S.turnLeft, 15000); S.botAt = env.now + BOT.move; } }
 
 function checkWin(S){
+  CUR = S;
   if (S.ph !== 'play') return;
   const cnt = {G:0, O:0, F:0};
   S.seats.forEach(s => { cnt[sideOf(s.role)] += s.bills.length; });
   const pm = S.seats.find(s => s.role === 'PM');
   let w = null, why = '';
+  const fpIn = S.seats.some(s => s.role === 'F' && !s.out);
   if (pm.out){ w = 'O'; why = 'The Prime Minister has fallen.'; }
-  else if (S.seats.filter(s => s.role === 'O').every(s => s.out)){ w = 'G'; why = 'The Opposition benches are empty.'; }
-  else if (cnt.F >= NEED.F){ w = 'F'; why = 'The Foreign Power carried 3 bills through the Commons and has captured the state.'; }
-  else if (cnt.G >= NEED.G){ w = 'G'; why = 'The Government carried 3 bills through the Commons.'; }
-  else if (cnt.O >= NEED.O){ w = 'O'; why = 'The Opposition carried 2 private members’ bills through the Commons.'; }
-  if (w){ S.ph = 'over'; S.win = w; S.whyWin = why; S.sub = null; S.turnDl = 0; log(S, why); }
+  else if (S.seats.filter(s => s.role === 'O').every(s => s.out) && !(S.ally === 'O' && fpIn)){ w = 'G'; why = 'The Opposition benches are empty.'; }
+  else if (!S.ally && cnt.F >= NEED.F){ w = 'F'; why = 'The Foreign Power carried 3 bills through the Commons and has captured the state.'; }
+  else if (cnt.G >= NEED.G){ w = 'G'; why = `The Government${S.ally === 'G' ? ', with the absorbed Foreign Power,' : ''} carried 3 bills through the Commons.`; }
+  else if (cnt.O >= NEED.O){ w = 'O'; why = `The Opposition${S.ally === 'O' ? ' and the Foreign Power' : ''} carried 2 bills through the Commons.`; }
+  if (w) finishWin(S, w, why);
+}
+/* Opposition + Foreign Power counts as a Foreign Power victory (the Opposition are minor victors); Government + Foreign Power counts as a Government victory */
+function finishWin(S, side, why){
+  S.minor = null;
+  if (side === 'O' && S.ally === 'O'){ side = 'F'; S.minor = 'O'; why += ' It was an assisted coup: the Foreign Power takes power, with the Opposition as minor victors.'; }
+  S.ph = 'over'; S.win = side; S.whyWin = why; S.sub = null; S.turnDl = 0; log(S, why);
 }
 function sideCounts(S){
   const cnt = {G:0, O:0, F:0};
@@ -1052,6 +1333,7 @@ function pickBill(seat, bi, bt){
 
 /* ---------- intents ---------- */
 function handle(S, si, a, env){
+  CUR = S;
   if (!a || typeof a !== 'object') return 'Unknown move.';
   if (S.ph !== 'play') return 'The game is over.';
   const me = S.seats[si];
@@ -1084,6 +1366,8 @@ function handle(S, si, a, env){
     case 'talks': return finishTalks(S, si, a, env);
     case 'give': return giveFund(S, si, a, env);
     case 'elec': return finishElection(S, si, a, env);
+    case 'gchq': return finishGchq(S, si, a, env);
+    case 'pgate': return finishPgate(S, si, a, env);
   }
   return 'Unknown move.';
 }
@@ -1099,12 +1383,15 @@ function playCard(S, si, a, env){
   const g = turnGuard(S, si); if (g) return g;
   const me = S.seats[si], ci = me.hand.indexOf(a.card);
   if (ci < 0) return 'You no longer hold that card.';
-  const c = catalog(S.n)[a.card];
-  if (c.t !== 'a' || ACTS[c.k].kind !== 'm') return 'That card is only played in response to another card.';
-  const d = ACTS[c.k];
+  const c = catalog(S.ck)[a.card];
+  const dicey = c.t === 'a' && c.k === 'dicey';
+  if (dicey && !(ACTS[a.as] && ACTS[a.as].kind === 'm')) return 'Choose which card A V Dicey becomes.';
+  if (!dicey && (c.t !== 'a' || ACTS[c.k].kind !== 'm')) return 'That card is only played in response to another card.';
+  const ak = dicey ? a.as : c.k, d = ACTS[ak];
   let tg = Array.isArray(a.tg) ? a.tg.map(Number) : [];
   const ok = t => Number.isInteger(t) && t >= 0 && t < S.n && t !== si && !S.seats[t].out;
-  if (d.tgt === 'none') tg = c.k === 'fund' ? S.seats.map((x, i) => i).filter(i => i !== si && !S.seats[i].out) : [];
+  if (d.tgt === 'pair' && !(tg.length === 2 && tg[0] !== tg[1] && tg.every(t => Number.isInteger(t) && t >= 0 && t < S.n && !S.seats[t].out))) return 'Choose two players.';
+  if (d.tgt === 'none') tg = ak === 'fund' ? S.seats.map((x, i) => i).filter(i => i !== si && !S.seats[i].out) : [];
   if (d.tgt === 'one' && !(tg.length === 1 && ok(tg[0]))) return 'Choose another player.';
   if (d.tgt === 'two' && !(tg.length === 2 && tg[0] !== tg[1] && tg.every(ok))) return 'Choose two other players.';
   if (d.tgt === 'bill'){
@@ -1121,17 +1408,25 @@ function playCard(S, si, a, env){
     bt = bi >= 0 ? S.seats[tg[0]].bills[bi].t : null;
   }
   me.hand.splice(ci, 1); S.disc.push(a.card); S.mv--;
-  let msg = `${me.nm} plays ${d.name}`;
-  if (tg.length && c.k !== 'fund') msg += ` on ${tg.map(t => nm(S, t)).join(' and ')}`;
+  let msg = `${me.nm} plays ${dicey ? 'A V Dicey as ' : ''}${d.name}`;
+  if (tg.length && ak !== 'fund') msg += ` on ${tg.map(t => t === si ? 'themselves' : nm(S, t)).join(' and ')}`;
   if (bt) msg += `’s ${BILL[bt].name}`;
   log(S, msg + '.');
-  if (c.k === 'larry'){ applyBase(S, {a:'larry', src:si, tg:[]}, env, []); return null; }
-  openResp(S, {a:c.k, src:si, tg, bi, bt}, env);
+  if (dicey || ak === 'larry'){
+    /* A V Dicey is absolute and Larry cannot be stopped: no answer window */
+    S.flash = {a:dicey ? 'dicey' : ak, as:ak, src:si, tg, bt, at:env.now};
+    pauseTurn(S, env);
+    applyBase(S, {a:ak, src:si, tg, bi, bt}, env, []);
+    checkWin(S);
+    if (!S.sub) resumeTurn(S, env);
+    return null;
+  }
+  openResp(S, {a:ak, src:si, tg, bi, bt}, env);
   return null;
 }
 
 function newResp(base, env){
-  return {k:'resp', base, chain:[], mt:base.tg.length > 1, sh:{}, ver:0, lastS:base.src, last:null,
+  return {k:'resp', base, chain:[], mt:base.tg.length > 1 && base.a !== 'fox', sh:{}, lock:{}, ver:0, lastS:base.src, last:null,
     pop:env.now, dl:env.now + TIME.pop + TIME.resp, passed:{}, bt:{}};
 }
 function openResp(S, base, env){
@@ -1145,8 +1440,9 @@ function respond(S, si, a, env){
   if (a.at !== sub.ver) return 'Too late: someone answered first.';
   const me = S.seats[si], ci = me.hand.indexOf(a.card);
   if (ci < 0) return 'You no longer hold that card.';
-  const c = catalog(S.n)[a.card];
+  const c = catalog(S.ck)[a.card];
   if (c.t !== 'a') return 'That card cannot answer this.';
+  if (c.k === 'dicey') return diceyAnswer(S, si, a, env, ci);
   let msg, forT = -1;
   if (c.k === 'jr'){
     if (!jrAllowed(sub, si)) return 'Judicial Review is only for a player the card is aimed at.';
@@ -1169,6 +1465,7 @@ function respond(S, si, a, env){
     forT = Number(a.for);
     if (c.k !== 'sov') return 'Only Parliamentary Sovereignty can answer this.';
     if (!sub.base.tg.includes(forT) || S.seats[forT].out) return 'Choose a targeted player to shield.';
+    if (sub.lock[forT]) return 'A V Dicey has settled that player’s position. It cannot be answered.';
     const ch = sub.sh[forT] || (sub.sh[forT] = []);
     const topS = ch.length ? ch[ch.length - 1][1] : sub.base.src;
     if (topS === si) return 'You cannot answer your own card.';
@@ -1189,6 +1486,42 @@ function respond(S, si, a, env){
     S.disc.push(...me.hand); me.hand = [];
     log(S, `${me.nm} discards their whole hand for the prorogation.`);
   }
+  return null;
+}
+
+/* A V Dicey played in answer: becomes any defence, and nothing can answer it */
+function diceyAnswer(S, si, a, env, ci){
+  const sub = S.sub, me = S.seats[si], as = String(a.as || ''), d = ACTS[as];
+  if (!d || d.kind !== 'd') return 'Choose which defence A V Dicey becomes.';
+  if (sub.mt){
+    let fT;
+    if (as === 'jr'){ if (!jrAllowed(sub, si)) return 'Judicial Review is only for a player the card is aimed at.'; fT = si; }
+    else if (as === 'sov'){
+      fT = Number(a.for);
+      if (!sub.base.tg.includes(fT) || S.seats[fT].out) return 'Choose a targeted player.';
+      if (sub.lock[fT]) return 'That player’s position is already settled.';
+      const ch = sub.sh[fT] || [];
+      if ((ch.length ? ch[ch.length - 1][1] : sub.base.src) === si) return 'You cannot answer your own card.';
+    } else return 'Only Parliamentary Sovereignty or Judicial Review can answer this.';
+    const ch = sub.sh[fT] || (sub.sh[fT] = []);
+    ch.push([as, si]); sub.lock[fT] = 1;
+    me.hand.splice(ci, 1); S.disc.push(a.card);
+    const on = ch.length % 2 === 1;
+    log(S, `${me.nm} plays A V Dicey as ${d.name}: ${on ? (fT === si ? 'they are' : nm(S, fT) + ' is') + ' shielded' : 'the shield on ' + nm(S, fT) + ' is cancelled'}, absolutely.`);
+    sub.ver++; sub.lastS = si; sub.last = ['dicey', si, fT, null, as];
+    sub.pop = env.now; sub.dl = env.now + TIME.pop + TIME.resp; sub.passed = {}; sub.bt = {};
+    return null;
+  }
+  const top = sub.chain.length ? sub.chain[sub.chain.length - 1] : {a:sub.base.a, s:sub.base.src};
+  if (top.s === si) return 'You cannot answer your own card.';
+  if (as === 'jr'){ if (!jrAllowed(sub, si)) return 'Judicial Review is only for a player the card is aimed at.'; }
+  else if (!canCounter(as, top.a)) return 'That defence cannot answer this.';
+  me.hand.splice(ci, 1); S.disc.push(a.card);
+  sub.chain.push({a:as, s:si});
+  log(S, `${me.nm} plays A V Dicey as ${d.name}. It cannot be answered.`);
+  if (as === 'pror' && me.hand.length){ S.disc.push(...me.hand); me.hand = []; log(S, `${me.nm} discards their whole hand for the prorogation.`); }
+  S.flash = {a:'dicey', as, src:si, tg:[], at:env.now};
+  resolveResp(S, env);
   return null;
 }
 
@@ -1265,6 +1598,27 @@ function applyBase(S, b, env, skip){
       S.sub = {k:'fund', src:b.src, wait, dl:env.now + TIME.fund, at0:env.now};
       break;
     }
+    case 'gchq': {
+      if (t0.out || !t0.bills.length) break;
+      const j = pickBill(t0, b.bi, b.bt), bill = t0.bills.splice(j, 1)[0], cat = catalog(S.ck);
+      const keep = bill.c.find(id => cat[id].t === 'b');
+      t0.hand.push(keep);
+      const rest = bill.c.filter(id => id !== keep);
+      log(S, `${t0.nm}’s ${BILL[bill.t].name} is broken up. They take one card back.`);
+      if (rest.length) S.sub = {k:'gchq', src:b.src, tgt:b.tg[0], cards:rest, dl:env.now + TIME.gchq, at0:env.now};
+      break;
+    }
+    case 'fox': {
+      const [x, y] = b.tg.map(i => S.seats[i]);
+      if (x.out || y.out) break;
+      [x.hand, y.hand] = [y.hand, x.hand];
+      log(S, `${x.nm} and ${y.nm} swap their whole hands.`);
+      break;
+    }
+    case 'pgate':
+      if (src.hand.length) S.sub = {k:'pgate', src:b.src, dl:env.now + TIME.pgate, at0:env.now};
+      else log(S, `${src.nm} has nothing to discard.`);
+      break;
     case 'inq': if (!t0.out){ t0.op = b.src; log(S, `${t0.nm} must play with their hand open.`); } break;
     case 'cs': {
       if (t0.out || !t0.bills.length) break;
@@ -1277,19 +1631,58 @@ function applyBase(S, b, env, skip){
   }
 }
 
+function finishGchq(S, si, a, env){
+  const sub = S.sub;
+  if (!sub || sub.k !== 'gchq' || sub.src !== si) return 'There is no bill to share out.';
+  const alloc = a.alloc && typeof a.alloc === 'object' ? a.alloc : {};
+  closeGchq(S, sub.cards.map(id => { const t = Number(alloc[id]); return Number.isInteger(t) && t >= 0 && t < S.n && t !== si && !S.seats[t].out ? t : -1; }), env);
+  return null;
+}
+function closeGchq(S, to, env){
+  const sub = S.sub, got = {};
+  let dis = 0;
+  sub.cards.forEach((id, k) => { const t = to[k]; if (t >= 0){ S.seats[t].hand.push(id); got[t] = (got[t] || 0) + 1; } else { S.disc.push(id); dis++; } });
+  const parts = Object.entries(got).map(([t, n]) => `${n} to ${nm(S, Number(t))}`);
+  if (dis) parts.push(`${dis} discarded`);
+  log(S, `${nm(S, sub.src)} shares out the rest: ${parts.join(', ')}.`);
+  S.sub = null; resumeTurn(S, env);
+}
+function finishPgate(S, si, a, env){
+  const sub = S.sub;
+  if (!sub || sub.k !== 'pgate' || sub.src !== si) return 'There is nothing to discard right now.';
+  const me = S.seats[si];
+  const ids = [...new Set(Array.isArray(a.ids) ? a.ids : [])].filter(id => me.hand.includes(id)).slice(0, 5);
+  closePgate(S, ids, env);
+  return null;
+}
+function closePgate(S, ids, env){
+  const me = S.seats[S.sub.src];
+  me.hand = me.hand.filter(id => !ids.includes(id)); S.disc.push(...ids);
+  S.sub = null;
+  drawN(S, me, ids.length, env);
+  log(S, ids.length ? `${me.nm} discards ${ids.length} card${ids.length === 1 ? '' : 's'} and draws ${ids.length}.` : `${me.nm} keeps their hand.`);
+  resumeTurn(S, env);
+}
+
 function passBill(S, si, a, env){
   const g = turnGuard(S, si); if (g) return g;
   const bd = BILL[a.b]; if (!bd) return 'Unknown bill.';
-  const me = S.seats[si], cat = catalog(S.n);
+  const me = S.seats[si], cat = catalog(S.ck);
   const ids = me.hand.filter(id => cat[id].t === 'b' && cat[id].k === a.b);
   const wilds = me.hand.filter(id => cat[id].t === 'w');
   if (!ids.length) return `A set needs at least one real ${bd.name} card.`;
   const real = ids.slice(0, bd.set), need = bd.set - real.length;
+  if (bd.nowild && need > 0) return `The ${bd.name} needs all ${bd.set} real cards. Henry VIII Clauses cannot be used.`;
   if (wilds.length < need) return `You need ${bd.set} cards for the ${bd.name}, counting Henry VIII Clauses.`;
   const take = real.concat(wilds.slice(0, need));
   me.hand = me.hand.filter(id => !take.includes(id));
   me.bills.push({t:a.b, c:take}); S.mv--; S.fb = true;
   log(S, `The Commons passes ${me.nm}’s ${bd.name}${need ? ` with ${need} Henry VIII Clause${need === 1 ? '' : 's'}` : ''}.`);
+  if (a.b === 'K'){
+    const side = sideOf(me.role);
+    finishWin(S, side, `${me.nm} carried the Codified Constitution through the Commons, a win outright.`);
+    return null;
+  }
   checkWin(S);
   return null;
 }
@@ -1309,7 +1702,7 @@ function offerTrade(S, si, a, env){
   return null;
 }
 function holdsWant(S, seat, want){
-  const cat = catalog(S.n), picked = [];
+  const cat = catalog(S.ck), picked = [];
   for (const [k, v] of Object.entries(want)){
     const ids = seat.hand.filter(id => cat[id].k === k && !picked.includes(id));
     if (ids.length < v) return null;
@@ -1372,18 +1765,18 @@ const LEVELS = ['First-Time Voter', 'Rising Politician', 'Elderly Statesman'];
 const LEVEL_TAG = ['Easy', 'Medium', 'Hard'];
 function lv(S, si){ return S.lvlOf && si != null && S.lvlOf[si] != null ? S.lvlOf[si] : (S.lvl == null ? 1 : S.lvl); }
 function cardValue(S, seat, id){
-  const c = catalog(S.n)[id];
+  const c = catalog(S.ck)[id];
   if (c.t === 'w') return 7;
   if (c.t === 'b'){
-    const have = seat.hand.filter(x => catalog(S.n)[x].k === c.k).length;
+    const have = seat.hand.filter(x => catalog(S.ck)[x].k === c.k).length;
     return 2 + have / BILL[c.k].set * 6;
   }
-  return {sov:5, cs:5, lr:4, vonc:4, ri:4, jr:3.5, diss:3.5, pa:3.5, coal:3, talks:3, fund:3, larry:2.5, pror:2, inq:1}[c.k] || 1;
+  return {dicey:8, gchq:4, fox:2.5, pgate:2, sov:5, cs:5, lr:4, vonc:4, ri:4, jr:3.5, diss:3.5, pa:3.5, coal:3, talks:3, fund:3, larry:2.5, pror:2, inq:1}[c.k] || 1;
 }
 function enemies(S, si){ const s = sideOf(S.seats[si].role); return S.seats.map((x, i) => i).filter(i => i !== si && !S.seats[i].out && sideOf(S.seats[i].role) !== s); }
 function allies(S, si){ const s = sideOf(S.seats[si].role); return S.seats.map((x, i) => i).filter(i => !S.seats[i].out && sideOf(S.seats[i].role) === s); }
-function holding(S, seat, k){ return seat.hand.find(id => catalog(S.n)[id].k === k); }
-function countK(S, seat, k){ return seat.hand.filter(id => catalog(S.n)[id].k === k).length; }
+function holding(S, seat, k){ return seat.hand.find(id => catalog(S.ck)[id].k === k); }
+function countK(S, seat, k){ return seat.hand.filter(id => catalog(S.ck)[id].k === k).length; }
 /* Elderly Statesman: enemy seats ordered so the side closest to winning comes first */
 function threatOrder(S, list){
   const cnt = sideCounts(S);
@@ -1395,7 +1788,7 @@ function jrGuess(S, si, env){
   const L = lv(S, si);
   if (L === 0) return env.rand() < 0.5 ? 'b' : 'a';
   if (L === 1) return 'b';
-  const cat = catalog(S.n), seen = new Set(S.seats[si].hand.concat(S.disc));
+  const cat = catalog(S.ck), seen = new Set(S.seats[si].hand.concat(S.disc));
   S.seats.forEach((s, i) => { s.bills.forEach(b => b.c.forEach(id => seen.add(id))); if (s.op >= 0 && i !== si) s.hand.forEach(id => seen.add(id)); });
   let bills = 0, acts = 0;
   cat.forEach((c, id) => { if (seen.has(id)) return; if (c.t === 'b') bills++; else if (c.t === 'a') acts++; });
@@ -1403,13 +1796,13 @@ function jrGuess(S, si, env){
 }
 
 function botTurnMove(S, si, env){
-  const me = S.seats[si], cat = catalog(S.n), L = lv(S, si), side = sideOf(me.role);
+  const me = S.seats[si], cat = catalog(S.ck), L = lv(S, si), side = sideOf(me.role);
   if (S.mv <= 0) return {k:'end'};
   if (L === 0 && env.rand() < 0.3) return {k:'end'};
   const wilds = me.hand.filter(id => cat[id].t === 'w').length;
   for (const b of BILLS){
     const real = me.hand.filter(id => cat[id].k === b.k).length;
-    if (real >= 1 && real + wilds >= b.set) return {k:'pass', b:b.k};
+    if (real >= 1 && real + (b.nowild ? 0 : wilds) >= b.set) return {k:'pass', b:b.k};
   }
   const en = enemies(S, si);
   let withBills = en.filter(i => S.seats[i].bills.length);
@@ -1427,6 +1820,12 @@ function botTurnMove(S, si, env){
     const t = withBills[0], B = S.seats[t].bills;
     let bi = 0; if (L === 2) B.forEach((b, j) => { if (BILL[b.t].set > BILL[B[bi].t].set) bi = j; });
     return {k:'play', card:id, tg:[t], bi};
+  }
+  if (withBills.length && (id = holding(S, me, 'gchq'))) return {k:'play', card:id, tg:[withBills[0]], bi:0};
+  if (L > 0 && withBills.length && (id = holding(S, me, 'dicey'))){
+    const t = withBills[0], B = S.seats[t].bills;
+    let bi = 0; B.forEach((b, j) => { if (BILL[b.t].set > BILL[B[bi].t].set) bi = j; });
+    return {k:'play', card:id, as:'cs', tg:[t], bi};
   }
   if (S.fb && (id = holding(S, me, 'vonc'))){
     if (withBills.length) return {k:'play', card:id, tg:[withBills[0]], bi:0};
@@ -1457,6 +1856,11 @@ function botTurnMove(S, si, env){
     if (two.length === 2) return {k:'play', card:id, tg:two};
   }
   if ((id = holding(S, me, 'talks')) && me.hand.length > 1 && rich.length && S.seats[rich[0]].hand.length > 1) return {k:'play', card:id, tg:[rich[0]]};
+  if ((id = holding(S, me, 'fox')) && rich.length){
+    const big = rich.slice().sort((x, y) => S.seats[y].hand.length - S.seats[x].hand.length)[0];
+    if (L === 0 ? env.rand() < 0.3 : (me.hand.length <= 3 && S.seats[big].hand.length >= me.hand.length + 3)) return {k:'play', card:id, tg:[si, big]};
+  }
+  if ((id = holding(S, me, 'pgate')) && me.hand.filter(x => x !== id && cardValue(S, me, x) < 3).length >= (L === 0 ? 1 : 3)) return {k:'play', card:id};
   if ((id = holding(S, me, 'fund'))) return {k:'play', card:id};
   if ((id = holding(S, me, 'larry'))) return {k:'play', card:id};
   if ((id = holding(S, me, 'inq')) && rich.length && env.rand() < [0.3, 0.3, 0][L]) return {k:'play', card:id, tg:[rich[0]]};
@@ -1464,25 +1868,31 @@ function botTurnMove(S, si, env){
 }
 
 const ANSWER = [0.45, 0.85, 1], JR_USE = [0.4, 0.7, 0.9];
-const BIG = ['lr', 'vonc', 'cs'];
+const BIG = ['lr', 'vonc', 'cs', 'gchq'];
 function botRespondMT(S, si, env){
   const sub = S.sub, me = S.seats[si], b = sub.base, side = sideOf(me.role), L = lv(S, si);
   const jid = holding(S, me, 'jr');
   if (jid !== undefined && sideOf(S.seats[b.src].role) !== side && jrAllowed(sub, si) && env.rand() < JR_USE[L]) return {k:'resp', card:jid, at:sub.ver, guess:jrGuess(S, si, env)};
-  const id = holding(S, me, 'sov'); if (id === undefined) return null;
-  if (L === 2 && countK(S, me, 'sov') < 2) return null;
+  let id = holding(S, me, 'sov'), viaDicey = false;
+  if (id === undefined && L > 0 && sideOf(S.seats[b.src].role) !== side && (id = holding(S, me, 'dicey')) !== undefined) viaDicey = true;
+  if (id === undefined) return null;
+  if (!viaDicey && L === 2 && countK(S, me, 'sov') < 2) return null;
+  if (viaDicey){
+    const t = [si].concat(b.tg.filter(x => x !== si && sideOf(S.seats[x].role) === side)).find(x => b.tg.includes(x) && !S.seats[x].out && !sub.lock[x] && (sub.sh[x] || []).length % 2 === 0);
+    return t !== undefined && env.rand() < ANSWER[L] * 0.6 ? {k:'resp', card:id, at:sub.ver, as:'sov', for:t} : null;
+  }
   const lastOf = t => { const ch = sub.sh[t] || []; return ch.length ? ch[ch.length - 1][1] : b.src; };
   if (sideOf(S.seats[b.src].role) === side){
     if (L === 0) return null;
     for (const t of b.tg){
       const ch = sub.sh[t] || [];
-      if (ch.length % 2 === 1 && lastOf(t) !== si && sideOf(S.seats[t].role) !== side && env.rand() < (L === 2 ? 0.8 : 0.5)) return {k:'resp', card:id, at:sub.ver, for:t};
+      if (ch.length % 2 === 1 && !sub.lock[t] && lastOf(t) !== si && sideOf(S.seats[t].role) !== side && env.rand() < (L === 2 ? 0.8 : 0.5)) return {k:'resp', card:id, at:sub.ver, for:t};
     }
     return null;
   }
   const order = L === 0 ? [si] : [si].concat(b.tg.filter(t => t !== si && sideOf(S.seats[t].role) === side));
   for (const t of order){
-    if (!b.tg.includes(t) || S.seats[t].out) continue;
+    if (!b.tg.includes(t) || S.seats[t].out || sub.lock[t]) continue;
     const ch = sub.sh[t] || [];
     if (ch.length % 2 === 0 && lastOf(t) !== si && env.rand() < ANSWER[L]) return {k:'resp', card:id, at:sub.ver, for:t};
   }
@@ -1502,10 +1912,12 @@ function botRespond(S, si, env){
   else if (srcAlly) wantBase = !hitsUs;
   else if (b.a === 'larry') wantBase = env.rand() < 0.8;
   else if (b.a === 'fund') wantBase = false;
+  else if (b.a === 'pgate') wantBase = env.rand() < 0.8;
   else wantBase = !hitsUs;
   const baseOnNow = sub.chain.length % 2 === 0;
   if (wantBase === baseOnNow) return null;
   const order = top.a === 'lr' ? ['ri', 'pa', 'jr', 'sov'] : top.a === 'vonc' ? ['diss', 'jr', 'sov', 'pror'] : ['jr', 'sov'];
+  if (sub.lock && Object.keys(sub.lock).length) return null;
   for (const k of order){
     const id = holding(S, me, k);
     if (id === undefined) continue;
@@ -1516,6 +1928,12 @@ function botRespond(S, si, env){
     if (k === 'sov' && L === 2 && !BIG.includes(b.a) && countK(S, me, 'sov') < 2) continue;
     if (env.rand() < ANSWER[L]) return {k:'resp', card:id, at:sub.ver};
     return null;
+  }
+  /* no real defence in hand: use A V Dicey for what matters */
+  const dz = L > 0 ? holding(S, me, 'dicey') : undefined;
+  if (dz !== undefined && (BIG.includes(b.a) || b.a === 'gchq') && (b.tg.includes(si) || L === 2)){
+    const as = order.find(k => k === 'jr' ? jrAllowed(sub, si) : canCounter(k, top.a) && k !== 'pror');
+    if (as && env.rand() < ANSWER[L]) return {k:'resp', card:dz, at:sub.ver, as};
   }
   return null;
 }
@@ -1565,6 +1983,7 @@ function resumeGame(S, si, env){
 }
 
 function tick(S, env){
+  CUR = S;
   if (S.ph !== 'play') return;
   if (S.brief){ if (env.now >= S.brief.until || briefDone(S)) endBrief(S, env); return; }
   if (S.pause) return;
@@ -1624,6 +2043,32 @@ function tick(S, env){
     }
     return;
   }
+  if (sub && sub.k === 'gchq'){
+    const src = S.seats[sub.src];
+    if ((src.bot && now >= sub.at0 + BOT.answer) || now >= sub.dl){
+      let to = sub.cards.map(() => -1);
+      if (src.bot){
+        const L = lv(S, sub.src), others = S.seats.map((x, i) => i).filter(i => i !== sub.src && !S.seats[i].out);
+        const mates = allies(S, sub.src).filter(i => i !== sub.src);
+        to = sub.cards.map((id, k) => L === 0 ? (env.rand() < 0.5 ? others[Math.floor(env.rand() * others.length)] : -1) : (mates.length ? mates[k % mates.length] : -1));
+      }
+      closeGchq(S, to, env);
+    }
+    return;
+  }
+  if (sub && sub.k === 'pgate'){
+    const me = S.seats[sub.src];
+    if ((me.bot && now >= sub.at0 + BOT.answer) || now >= sub.dl){
+      let ids = [];
+      if (me.bot){
+        const L = lv(S, sub.src);
+        ids = L === 0 ? shuffle(me.hand.slice(), env.rand).slice(0, Math.floor(env.rand() * 6))
+          : me.hand.filter(id => cardValue(S, me, id) < (L === 2 ? 3.5 : 3)).sort((x, y) => cardValue(S, me, x) - cardValue(S, me, y)).slice(0, 5);
+      }
+      closePgate(S, ids, env);
+    }
+    return;
+  }
   if (sub && sub.k === 'fund'){
     for (const i of sub.wait.slice()){
       const s = S.seats[i];
@@ -1653,20 +2098,22 @@ function tick(S, env){
 /* ---------- public view sent to every phone ---------- */
 function subPub(sub){
   if (!sub) return null;
-  if (sub.k === 'resp') return {k:'resp', base:sub.base, ch:sub.chain.map(c => [c.a, c.s]), mt:sub.mt ? 1 : 0, sh:sub.sh, ver:sub.ver, last:sub.last, pop:sub.pop, dl:sub.dl, ps:Object.keys(sub.passed).map(Number)};
+  if (sub.k === 'resp') return {k:'resp', base:sub.base, ch:sub.chain.map(c => [c.a, c.s]), mt:sub.mt ? 1 : 0, sh:sub.sh, lk:sub.lock, ver:sub.ver, last:sub.last, pop:sub.pop, dl:sub.dl, ps:Object.keys(sub.passed).map(Number)};
   if (sub.k === 'trade') return {k:'trade', src:sub.src, tgt:sub.tgt, give:sub.give, want:sub.want, dl:sub.dl, dec:sub.dec};
   if (sub.k === 'talks') return {k:'talks', src:sub.src, tgt:sub.tgt, n:sub.n, dl:sub.dl};
   if (sub.k === 'fund') return {k:'fund', src:sub.src, wait:sub.wait, dl:sub.dl};
+  if (sub.k === 'gchq') return {k:'gchq', src:sub.src, tgt:sub.tgt, cards:sub.cards, dl:sub.dl};
+  if (sub.k === 'pgate') return {k:'pgate', src:sub.src, dl:sub.dl};
   if (sub.k === 'elec') return {k:'elec', src:sub.src, cards:sub.cards, n:sub.n, dl:sub.dl, pop:sub.at0};
   return null;
 }
 function pubState(S){
   return {c:S.code, n:S.n, ph:S.ph, cur:S.cur, mv:S.mv, fb:S.fb ? 1 : 0, dk:S.deck.length, dc:S.disc.length, win:S.win, why:S.whyWin || '',
     s:S.seats.map(s => ({nm:s.nm, c:s.cid, b:s.bot ? 1 : 0, r:s.role, h:s.hand, bl:s.bills.map(b => b.t).join(''), o:s.out ? 1 : 0, op:s.op})),
-    pz:S.pause ? {by:S.pause.by, at:S.pause.at} : null, br:S.brief ? {until:S.brief.until, rd:Object.keys(S.brief.ready).map(Number)} : null, lv:lv(S), sub:subPub(S.sub), tdl:S.turnDl, tl:S.turnLeft, log:S.log, ak:S.ak, er:S.er};
+    ck:S.ck, al:S.ally || null, mn:S.minor || null, ei:S.eint ? S.eint.length : 0, fl:S.flash || null, pz:S.pause ? {by:S.pause.by, at:S.pause.at} : null, br:S.brief ? {until:S.brief.until, rd:Object.keys(S.brief.ready).map(Number)} : null, lv:lv(S), sub:subPub(S.sub), tdl:S.turnDl, tl:S.turnLeft, log:S.log, ak:S.ak, er:S.er};
 }
 
-if (typeof module !== 'undefined') module.exports = {BILLS, ACTS, catalog, newGame, handle, tick, pubState, sideCounts, botTurnMove, LEVELS};
+if (typeof module !== 'undefined') module.exports = {BILLS, ACTS, EVENTS, catalog, newGame, handle, tick, pubState, sideCounts, botTurnMove, LEVELS, layoutFor};
 /* ===== Order! Order! phone interface and room networking ===== */
 const LS = {
   get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
@@ -1687,7 +2134,7 @@ let S = null, lobby = null;      // host / solo authority
 let P = null, pRecv = 0, hostSeen = false, hostLostAt = 0;
 let lastKey = '', tickTimer = null, myQ = 0, shownErr = 0, online = new Set();
 
-const ui = {soloLvl:(() => { const v = LS.get('oo-lvl'); return v === 0 || v === 2 ? v : 1; })(), briefKey:'', elecPick:[], elecKey:null, screen:'home', sel:null, aim:null, sheet:null, billPick:null,
+const ui = {want:null, soloN:(() => { const v = LS.get('oo-sn'); return v >= 3 && v <= 8 ? v : 6; })(), soloExp:!!LS.get('oo-sx'), soloRole:LS.get('oo-sr') || '', soloLvl:(() => { const v = LS.get('oo-lvl'); return v === 0 || v === 2 ? v : 1; })(), briefKey:'', elecPick:[], elecKey:null, screen:'home', sel:null, aim:null, sheet:null, billPick:null,
   trade:{tg:null, give:[], want:{}}, talks:{mine:[], theirs:[]}, toast:'', toastAt:0, passKey:'', autoKey:'', joinCode:''};
 
 /* ---------- networking: Firebase Realtime Database ----------
@@ -1739,7 +2186,7 @@ function pushState(hs){
 
 function publish(){
   if (!S && !lobby) return;
-  const hs = S ? pubState(S) : {c:code, ph:'lobby', pl:lobby.players, n:lobby.n, lv:lobby.lvl == null ? 1 : lobby.lvl};
+  const hs = S ? pubState(S) : lobbyState();
   hs.hc = me.cid;
   if (S) hs.on = S.seats.map(s => (s.bot || s.cid === me.cid || online.has(s.cid)) ? 1 : 0);
   const key = JSON.stringify(hs);
@@ -1757,8 +2204,17 @@ function hostOnline(snap){
   if (!S && lobby){
     const others = Object.entries(v).filter(([c]) => c !== me.cid).sort((a, b) => (a[1].t || 0) - (b[1].t || 0));
     lobby.players = [{cid:me.cid, nm:me.nm}].concat(others.map(([c, x]) => ({cid:c, nm:cleanName(x && x.nm) || 'Member'}))).slice(0, 8);
+    const mine = lobby.want && lobby.want[me.cid];
+    lobby.want = mine ? {[me.cid]:mine} : {};
+    others.forEach(([c, x]) => { if (x && x.want && ROLENAME[x.want]) lobby.want[c] = {r:x.want, t:x.wt || 0}; });
   }
   publish();
+}
+function sendWant(r){
+  ui.want = r || null;
+  if (mode === 'host' && lobby){ lobby.want = lobby.want || {}; if (r) lobby.want[me.cid] = {r, t:Date.now()}; else delete lobby.want[me.cid]; publish(); }
+  else if (fb && code) gref('online/' + me.cid).update({want:r || null, wt:firebase.database.ServerValue.TIMESTAMP}).catch(() => toast('Not sent. Check your connection.'));
+  render();
 }
 function hostIntent(snap){
   if (!S) return;
@@ -1794,7 +2250,7 @@ async function hostNew(){
     const ex = await gref('state').get().catch(() => null);
     if (!ex || !ex.exists()) break;
   }
-  mode = 'host'; S = null; lobby = {players:[{cid:me.cid, nm:me.nm}], n:6, lvl:1};
+  mode = 'host'; S = null; lobby = {players:[{cid:me.cid, nm:me.nm}], n:6, lvl:1, exp:false, rm:'choose', want:{}};
   await gref('intents').remove().catch(() => {});
   await goOnline().catch(() => {});
   hostAttach();
@@ -1855,15 +2311,15 @@ async function guestJoin(c){
 function startSolo(){
   if (!requireName()) return;
   mode = 'solo'; code = 'SOLO'; lobby = null;
-  S = newGame('SOLO', [{cid:me.cid, nm:me.nm}], 6, envNow(), ui.soloLvl);
+  S = newGame('SOLO', [{cid:me.cid, nm:me.nm}], ui.soloN, envNow(), ui.soloLvl, soloOpts());
   ui.screen = 'game'; lastKey = '';
   startTicking(); publish();
 }
 
 function hostStart(){
   if (!lobby) return;
-  const n = Math.max(lobby.n, Math.min(8, Math.max(6, lobby.players.length)));
-  S = newGame(code, lobby.players, n, envNow(), lobby.lvl == null ? 1 : lobby.lvl);
+  const n = seatCount(lobby);
+  S = newGame(code, lobby.players, n, envNow(), lobby.lvl == null ? 1 : lobby.lvl, lobbyOpts());
   ui.screen = 'game'; publish();
 }
 
@@ -1909,10 +2365,26 @@ function requireName(){
 }
 function toast(m){ ui.toast = m; ui.toastAt = Date.now(); render(); setTimeout(() => { if (Date.now() - ui.toastAt >= 3200){ ui.toast = ''; render(); } }, 3300); }
 
+/* ---------- lobby: seats and role choice ---------- */
+const ROLENAME = {PM:'Prime Minister', G:'Government MP', O:'Opposition MP', F:'Foreign Power'};
+function seatCount(lob){ return Math.max(lob.n, Math.min(8, Math.max(3, lob.players.length))); }
+function capsFor(n, exp){ const c = {PM:0, G:0, O:0, F:0}; layoutFor(n, exp).forEach(r => c[r]++); return c; }
+function lobbyExp(lob){ return !!lob.exp && seatCount(lob) >= 4; }
+/* first come, first served: earlier requests keep their seat */
+function resolvePicks(lob){
+  const caps = capsFor(seatCount(lob), lobbyExp(lob)), out = {};
+  if (lob.rm === 'random') return out;
+  Object.entries(lob.want || {}).filter(([cid]) => lob.players.some(p => p.cid === cid)).sort((a, b) => (a[1].t || 0) - (b[1].t || 0))
+    .forEach(([cid, w]) => { if (caps[w.r] > 0){ caps[w.r]--; out[cid] = w.r; } });
+  return out;
+}
+function lobbyState(){ return {c:code, ph:'lobby', pl:lobby.players, n:lobby.n, sn:seatCount(lobby), lv:lobby.lvl == null ? 1 : lobby.lvl, ex:lobbyExp(lobby) ? 1 : 0, rm:lobby.rm || 'choose', pk:resolvePicks(lobby)}; }
+function lobbyOpts(){ return {exp:lobbyExp(lobby), picks:resolvePicks(lobby)}; }
+
 /* ---------- view helpers ---------- */
 const local = t => pRecv + (t - (P.ts || pRecv));
 function mySeat(){ return P && P.s ? P.s.findIndex(s => s.c === me.cid) : -1; }
-function cat(){ return catalog(P.n); }
+function cat(){ return catalog(P.ck || 'b'); }
 function typeOfId(id){ return cat()[id].k; }
 function myHand(){ const i = mySeat(); return i >= 0 ? P.s[i].h : []; }
 function countType(hand, k){ return hand.filter(id => typeOfId(id) === k).length; }
@@ -1920,12 +2392,16 @@ function topOf(sub){ return sub.ch.length ? {a:sub.ch[sub.ch.length - 1][0], s:s
 function seatName(i){ return P.s[i] ? P.s[i].nm : '?'; }
 function myTurnFree(){ const i = mySeat(); return P && P.ph === 'play' && i === P.cur && !P.sub && P.mv > 0 && !P.s[i].o; }
 function wildsIn(hand){ return countType(hand, 'wild'); }
-function canPassWith(hand, k){ const r = countType(hand, k); return r >= 1 && r + wildsIn(hand) >= BILL[k].set; }
-function billTotals(){ const c = {G:0, O:0, F:0}; P.s.forEach(s => { c[ROLE[s.r].side] += s.bl.length; }); return c; }
+function canPassWith(hand, k){ const r = countType(hand, k); return r >= 1 && r + (BILL[k].nowild ? 0 : wildsIn(hand)) >= BILL[k].set; }
+function sideP(r){ return r === 'F' && P && P.al ? P.al : ROLE[r].side; }
+function billTotals(){ const c = {G:0, O:0, F:0}; P.s.forEach(s => { c[sideP(s.r)] += s.bl.length; }); return c; }
+function soloOpts(){ const exp = ui.soloExp && ui.soloN >= 4; const r = ui.soloRole && (ui.soloRole !== 'F' || exp) ? ui.soloRole : ''; return {exp, picks:r ? {[me.cid]:r} : {}}; }
 
 const BRIEF = {larry:'Draw 2 cards', lr:'Knock out a bill', coal:'Take 2 random cards', talks:'See a hand, swap 2', vonc:'Knock out a bill or a seat',
   fund:'Everyone gives you a card', inq:'Open a player’s hand', cs:'Take a passed bill', pa:'Cancel a Lords’ Rejection', ri:'Cancel it, turn it back',
-  jr:'Predict bill or action', diss:'Block a no-confidence vote', pror:'Block the vote, lose your hand', sov:'Shield or cancel'};
+  jr:'Predict bill or action', diss:'Block a no-confidence vote', pror:'Block the vote, lose your hand', sov:'Shield or cancel',
+  gchq:'Break up a passed bill', fox:'Two players swap hands', pgate:'Discard and redraw up to 5', dicey:'Any action card. Absolute.'};
+const KIND = {m:'Manoeuvre', d:'Defence', x:'Wild action'};
 function art(k){ return `<span class="c-art" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#i-${k}"/></svg></span>`; }
 function cardFace(id, opts = {}){
   const c = cat()[id], hand = myHand();
@@ -1941,7 +2417,7 @@ function cardFace(id, opts = {}){
   if (c.t === 'b'){
     const b = BILL[c.k], have = countType(hand, c.k), w = wildsIn(hand);
     const ready = !opts.plain && canPassWith(hand, c.k) ? ' is-ready' : '';
-    const foot = opts.plain ? `Set of ${b.set}` : (w && have < b.set ? `${have}/${b.set} + ${Math.min(w, b.set - have)} wild` : `${have} of ${b.set} held`);
+    const foot = b.nowild ? (opts.plain ? 'Set of 6, no wilds' : `${have} of 6 · no wilds`) : opts.plain ? `Set of ${b.set}` : (w && have < b.set ? `${have}/${b.set} + ${Math.min(w, b.set - have)} wild` : `${have} of ${b.set} held`);
     return `<button type="button" class="card bill${sel}${ready}" data-act="${act}" data-id="${id}" style="--band:${b.col}">
       <span class="c-band"><span class="c-set">${b.set}</span><span>Bill</span></span>
       ${art(c.k)}
@@ -1949,8 +2425,8 @@ function cardFace(id, opts = {}){
       <span class="c-foot">${foot}</span></button>`;
   }
   const a = ACTS[c.k];
-  return `<button type="button" class="card act k-${a.kind}${sel}" data-act="${act}" data-id="${id}">
-    <span class="c-kind">${a.kind === 'm' ? 'Manoeuvre' : 'Defence'}</span>
+  return `<button type="button" class="card act k-${a.kind}${c.k === 'dicey' ? ' dicey' : ''}${sel}" data-act="${act}" data-id="${id}">
+    <span class="c-kind">${KIND[a.kind]}</span>
     ${art(c.k)}
     <span class="c-name">${esc(a.name)}</span>
     <span class="c-text">${esc(opts.full ? a.text : BRIEF[c.k] || '')}</span></button>`;
@@ -1959,7 +2435,7 @@ function ico(k){ return `<svg class="chip-i" viewBox="0 0 100 100" aria-hidden="
 function chip(k){
   if (k === 'wild') return `<span class="chip chip-wild">${ico('wild')}${esc(WILD.short)}</span>`;
   if (BILL[k]) return `<span class="chip" style="--band:${BILL[k].col}">${ico(k)}${esc(BILL[k].short)}</span>`;
-  return `<span class="chip chip-act">${ico(k)}${esc(ACTS[k].name)}</span>`;
+  return `<span class="chip chip-act${k === 'dicey' ? ' chip-dicey' : ''}">${ico(k)}${esc(ACTS[k].name)}</span>`;
 }
 function timerBar(dl, total){ return `<div class="tbar" data-dl="${local(dl)}" data-total="${total}"><i></i><span></span></div>`; }
 
@@ -1995,7 +2471,7 @@ function homeView(){
     <header class="mast">
       <p class="eyebrow">A card game of the British constitution</p>
       <h1>Order! Order!</h1>
-      <p class="lede">Pass your bills. Strike down theirs. Survive the vote. For 6 to 8 players on their phones, about 30 minutes a sitting.</p>
+      <p class="lede">Pass your bills. Strike down theirs. Survive the vote. For 3 to 8 players on their phones, about 30 minutes a sitting.</p>
     </header>
     <section class="panel">
       <label class="field" for="nm"><span>Your name</span><input id="nm" maxlength="14" autocomplete="off" value="${esc(me.nm)}" placeholder="e.g. Aisyah"></label>
@@ -2005,8 +2481,13 @@ function homeView(){
       </div>
       <div class="or"><span>or</span></div>
       <button type="button" class="btn brass" data-act="host">Open a new sitting</button>
-      <div class="lvlwrap"><span class="lvl-label">Bots for practice</span>${lvlPicker(ui.soloLvl, 'sololvl')}</div>
-      <button type="button" class="btn ghost" data-act="solo">Practise against bots</button>
+      <details class="practice"${ui.pracOpen ? ' open' : ''}><summary>Practise against bots</summary>
+        <div class="countrow"><span>Seats</span><div class="segs">${[3, 4, 5, 6, 7, 8].map(k => `<button type="button" class="seg${k === ui.soloN ? ' on' : ''}" data-act="solon" data-n="${k}">${k}</button>`).join('')}</div></div>
+        ${expSwitch(ui.soloExp && ui.soloN >= 4, ui.soloN >= 4, 'soloexp')}
+        <div class="lvlwrap"><span class="lvl-label">Your role</span>${soloRolePick()}</div>
+        <div class="lvlwrap"><span class="lvl-label">Bot level</span>${lvlPicker(ui.soloLvl, 'sololvl')}</div>
+        <button type="button" class="btn ghost" data-act="solo">Start practice</button>
+      </details>
       ${resume.join('')}
       ${FB_ON ? '' : '<p class="muted small">Online play is not set up in this copy yet. Practice mode works. See the setup guide.</p>'}
     </section>
@@ -2024,13 +2505,14 @@ function guideBody(start){
   const who = meS ? {PM:'the Prime Minister', G:'a Government MP', O:'an Opposition MP', F:'the Foreign Power'}[meS.r] : '';
   const goal = {G:'Carry 3 bills through the Commons between your side. Keep the Prime Minister in office.', O:'Carry 2 bills through the Commons between your side, or bring down the Prime Minister.', F:'Carry 3 bills through the Commons before the Government does.'};
   const pic = k => `<svg class="g-pic" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-${k}"/></svg>`;
+  const fp = !(P && P.s) || P.s.some(x => x.r === 'F'), cols = fp ? 'g-three' : 'g-three g-two';
   const you = meS ? `<section class="g-you camp-${side}">${pic(EMB[side])}<div><p class="eyebrow">Your role</p><h2>You are ${who}</h2><p>${goal[side]}</p></div></section>` : '';
   return `${you}
-  <section class="g-sec"><h3>Three sides</h3>
-    <div class="g-three">
+  <section class="g-sec"><h3>${fp ? 'Three sides' : 'Two sides'}</h3>
+    <div class="${cols}">
       <div class="camp-G">${pic('gov')}<b>Government</b><span>Prime Minister and Government MPs</span></div>
       <div class="camp-O">${pic('opp')}<b>Opposition</b><span>Opposition MPs</span></div>
-      <div class="camp-F">${pic('fp')}<b>Foreign Power</b><span>Plays alone</span></div>
+      ${fp ? `<div class="camp-F">${pic('fp')}<b>Foreign Power</b><span>Plays alone</span></div>` : ''}
     </div>
     <p>Every player belongs to a side. Each side pushes its own agenda by getting its bills passed, and tries to stop the others.</p></section>
   <section class="g-sec"><h3>Your turn</h3>
@@ -2039,7 +2521,7 @@ function guideBody(start){
       <div class="g-step"><span class="g-moves"><i>1</i><i>2</i><i>3</i></span><b>Up to 3 moves</b></div><span class="g-arrow" aria-hidden="true">→</span>
       <div class="g-step"><span class="g-end">End</span><b>Next player</b></div>
     </div>
-    <p>Start by drawing from the deck: the Prime Minister draws 3, the Foreign Power 4, everyone else 2. You have 2 minutes.</p></section>
+    <p>Start by drawing from the deck: the Prime Minister draws 3${fp ? ', the Foreign Power 4' : ''}, everyone else 2. A lone Opposition MP draws 2 for every Government player still in. You have 2 minutes.</p></section>
   <section class="g-sec"><h3>A move is one of</h3>
     <div class="g-three">
       <div>${pic('hand')}<b>Play an action card</b></div>
@@ -2048,11 +2530,12 @@ function guideBody(start){
     </div>
     <p class="muted">Defence cards answer other players’ cards at any time, and do not use a move.</p></section>
   <section class="g-sec"><h3>How to win</h3>
-    <div class="g-three g-win">
+    <div class="${cols} g-win">
       <div class="camp-G"><b>Government</b><span>3 bills between you</span><em>or every Opposition MP loses their seat</em></div>
       <div class="camp-O"><b>Opposition</b><span>2 bills between you</span><em>or the Prime Minister falls</em></div>
-      <div class="camp-F"><b>Foreign Power</b><span>3 bills</span><em>before the Government</em></div>
-    </div></section>
+      ${fp ? '<div class="camp-F"><b>Foreign Power</b><span>3 bills</span><em>before the Government</em></div>' : ''}
+    </div>
+    <p class="g-codified">${pic('K')}<span><b>Shortcut:</b> any player who passes the Codified Constitution (all 6 real cards, no wilds) wins outright for their side.</span></p></section>
   ${start ? `<div class="g-foot"><button type="button" class="btn brass" data-act="briefready">I’m ready</button><p class="muted small">The sitting starts when everyone is ready, or in <span data-tdl="${local(P.br.until)}"></span>.</p></div>` : ''}`;
 }
 function briefView(){
@@ -2061,13 +2544,39 @@ function briefView(){
     ${guideBody(true)}
   </div></div>`;
 }
+function expSwitch(on, allowed, act){
+  return `<button type="button" class="switch${on ? ' on' : ''}" data-act="${act}" role="switch" aria-checked="${on}" ${allowed ? '' : 'disabled'}>
+    <span class="sw-track"><i></i></span><span class="sw-text"><b>Foreign Interference</b><small>${allowed ? 'Expansion: adds the Foreign Power and its cards' : 'Expansion needs 4 or more seats'}</small></span></button>`;
+}
+function soloRolePick(){
+  const exp = ui.soloExp && ui.soloN >= 4, caps = capsFor(ui.soloN, exp);
+  const opts = [['', 'Random']].concat(['PM', 'G', 'O', 'F'].filter(r => caps[r] > 0).map(r => [r, ROLENAME[r]]));
+  const sel = opts.some(o => o[0] === ui.soloRole) ? ui.soloRole : '';
+  return `<div class="pills">${opts.map(([r, nm]) => `<button type="button" class="pill${r === sel ? ' on' : ''}${r ? ' camp-' + ROLE[r].side : ''}" data-act="solorole" data-r="${r}">${esc(nm)}</button>`).join('')}</div>`;
+}
+function rolePicker(st){
+  const caps = capsFor(st.sn, !!st.ex), pk = st.pk || {}, names = {};
+  Object.entries(pk).forEach(([cid, r]) => { const p = (st.pl || []).find(x => x.cid === cid); (names[r] = names[r] || []).push(p ? p.nm : 'Member'); });
+  const mine = pk[me.cid] || null;
+  const grp = r => {
+    if (!caps[r]) return '';
+    const taken = (names[r] || []).length, full = taken >= caps[r] && mine !== r;
+    return `<button type="button" class="rolegrp camp-${ROLE[r].side}${mine === r ? ' on' : ''}" data-act="pickrole" data-r="${r}" ${full ? 'disabled' : ''}>
+      <b>${ROLENAME[r]}</b><small>${taken} of ${caps[r]} taken</small><span>${(names[r] || []).map(esc).join(', ') || 'Open'}</span></button>`;
+  };
+  const waiting = (ui.want && !mine) ? '<p class="muted small">Waiting for the host to confirm your seat…</p>' : '';
+  return `<div class="rolegrid">${['PM', 'G', 'O', 'F'].map(grp).join('')}</div>${waiting}
+    <button type="button" class="btn ghost" data-act="pickrole" data-r="" ${mine ? '' : 'disabled'}>No preference (seat me at random)</button>`;
+}
 function lobbyView(){
   const isHost = mode === 'host';
-  const pl = isHost ? lobby.players : (P ? P.pl : []);
-  const n = isHost ? lobby.n : (P ? P.n : 6);
-  const seats = Math.max(n, pl.length);
-  const bots = Math.max(0, seats - pl.length);
-  const opts = [6, 7, 8].map(k => `<button type="button" class="seg${k === n ? ' on' : ''}" data-act="count" data-n="${k}" ${k < pl.length ? 'disabled' : ''}>${k}</button>`).join('');
+  const st = isHost ? lobbyState() : (P || {pl:[], n:6, sn:6, rm:'choose'});
+  const pl = st.pl || [], n = st.n, sn = st.sn || Math.max(n, pl.length);
+  const bots = Math.max(0, sn - pl.length);
+  const caps = capsFor(sn, !!st.ex);
+  const teams = `${caps.PM + caps.G} Government v ${caps.O} Opposition${caps.F ? ' + Foreign Power' : ''}`;
+  const opts = [3, 4, 5, 6, 7, 8].map(k => `<button type="button" class="seg${k === n ? ' on' : ''}" data-act="count" data-n="${k}" ${k < pl.length ? 'disabled' : ''}>${k}</button>`).join('');
+  const rmSegs = [['choose', 'Players choose'], ['random', 'Deal at random']].map(([k, t]) => `<button type="button" class="seg${(st.rm || 'choose') === k ? ' on' : ''}" data-act="rolemode" data-m="${k}">${t}</button>`).join('');
   return `<main class="lobby">
     <header class="lobby-head">
       <p class="eyebrow">Sitting code</p>
@@ -2076,12 +2585,15 @@ function lobbyView(){
     </header>
     <section class="panel">
       <h2>Members present <span class="muted">${pl.length} of 8</span></h2>
-      <ol class="roll">${pl.map(p => `<li>${esc(p.nm)}${p.cid === me.cid ? ' <em>you</em>' : ''}</li>`).join('')}
+      <ol class="roll">${pl.map(p => `<li>${esc(p.nm)}${p.cid === me.cid ? ' <em>you</em>' : ''}${st.pk && st.pk[p.cid] ? ` <span class="rtag r-${st.pk[p.cid]}">${ROLENAME[st.pk[p.cid]]}</span>` : ''}</li>`).join('')}
         ${bots ? `<li class="botline">${bots} seat${bots === 1 ? '' : 's'} filled by bots</li>` : ''}</ol>
-      ${isHost ? `<div class="countrow"><span>Seats at the table</span><div class="segs">${opts}</div></div>
-        <div class="lvlwrap"><span class="lvl-label">Bot level</span>${lvlPicker(lobby.lvl == null ? 1 : lobby.lvl, 'lobbylvl')}</div>
-        <p class="muted small">Government always outnumbers the Opposition. One Foreign Power sits at every table.</p>
-        <button type="button" class="btn brass" data-act="start">Begin the sitting</button>` : `<p class="muted small">Bots play as ${esc(LEVELS[P && P.lv != null ? P.lv : 1])} (${LEVEL_TAG[P && P.lv != null ? P.lv : 1].toLowerCase()}).</p>`}
+      <p class="teams">${sn} seats: ${teams}${st.ex ? ' · Foreign Interference on' : ''}</p>
+      ${isHost ? `<div class="countrow"><span>Seats</span><div class="segs">${opts}</div></div>
+        ${expSwitch(!!st.ex, sn >= 4, 'lobbyexp')}
+        <div class="countrow"><span>Roles</span><div class="segs">${rmSegs}</div></div>
+        <div class="lvlwrap"><span class="lvl-label">Bot level</span>${lvlPicker(lobby.lvl == null ? 1 : lobby.lvl, 'lobbylvl')}</div>` : `<p class="muted small">Bots play as ${esc(LEVELS[st.lv != null ? st.lv : 1])} (${LEVEL_TAG[st.lv != null ? st.lv : 1].toLowerCase()}).</p>`}
+      ${(st.rm || 'choose') === 'choose' ? `<h3 class="lobby-h3">Choose your role</h3>${rolePicker({...st, sn})}` : '<p class="note">Roles will be dealt at random when the sitting begins.</p>'}
+      ${isHost ? '<button type="button" class="btn brass" data-act="start">Begin the sitting</button>' : ''}
       <button type="button" class="btn ghost" data-act="leave">Leave</button>
     </section>
   </main>`;
@@ -2098,7 +2610,9 @@ function gameView(){
   const tot = billTotals();
   const hostGone = mode === 'guest' && hostLostAt && Date.now() > hostLostAt;
   const timer = P.ph === 'play' ? (P.br ? `<span class="clock paused">${TIME.turn / 60000}:00</span>` : P.tdl ? `<span class="clock" data-tdl="${local(P.tdl)}"></span>` : `<span class="clock paused">${Math.ceil((P.tl || 0) / 1000)}s</span>`) : '';
-  const score = ['G', 'O', 'F'].map(k => `<span class="score s-${k}">${SIDE[k]} <b>${tot[k]}</b><small>/${NEED[k]}</small></span>`).join('');
+  const lbl = k => P.al === k ? `${SIDE[k]} + FP` : SIDE[k];
+  const score = (P.s.some(x => x.r === 'F') && !P.al ? ['G', 'O', 'F'] : ['G', 'O']).map(k => `<span class="score s-${k}">${lbl(k)} <b>${tot[k]}</b><small>/${NEED[k]}</small></span>`).join('')
+    + (P.ei ? `<span class="score s-ei" title="Election Integrity cards waiting on the table">${ico('eint')}×${P.ei}</span>` : '');
   const seats = P.s.map((s, i) => seatView(s, i, my)).join('');
   return `<div class="game">
     <header class="bar">
@@ -2111,7 +2625,7 @@ function gameView(){
     </header>
     ${hostGone ? '<div class="alert">The host has dropped out. The game resumes when their screen is back.</div>' : ''}
     <section class="scores">${score}</section>
-    <section class="seats${P.n >= 7 ? ' c4' : ''}">${seats}</section>
+    <section class="seats${P.n >= 7 ? ' c4' : P.n === 4 ? ' c2' : ''}">${seats}</section>
     <section class="feed">${bannerView(my)}<p class="lastlog">${esc(P.log[P.log.length - 1] || '')}</p></section>
     ${meS ? dockView(my, meS) : '<div class="dock"><p class="muted">You are watching this sitting.</p></div>'}
     ${modalView(my)}
@@ -2120,7 +2634,7 @@ function gameView(){
 
 const ROLETAG = {PM:'PM', G:'GOV', O:'OPP', F:'FP'};
 function seatView(s, i, my){
-  const cls = ['seat', 'camp-' + ROLE[s.r].side];
+  const cls = ['seat', 'camp-' + sideP(s.r)];
   if (s.r === 'PM') cls.push('is-pm');
   if (i === P.cur && P.ph === 'play') cls.push('is-cur');
   if (s.o) cls.push('is-out');
@@ -2161,8 +2675,8 @@ function bannerView(my){
     return `<p class="banner">Waiting for everyone to finish the quick guide: <b>${rd} of ${humans}</b> ready. Starts in <span data-tdl="${local(P.br.until)}"></span>.</p>`;
   }
   if (ui.aim){
-    const need = ui.aim.kind === 'two' ? `Choose two players (${ui.aim.picks.length} of 2)` : (ui.aim.kind === 'bill' ? 'Tap a player with a Commons-passed bill' : ui.aim.kind === 'vonc' ? 'Choose a player. With no bills, they are eliminated' : 'Choose a player');
-    return `<p class="banner aim"><b>${esc(ACTS[ui.aim.k].name)}:</b> ${need}. <button type="button" class="linkish" data-act="cancelaim">Cancel</button></p>`;
+    const need = ui.aim.kind === 'two' ? `Choose two players (${ui.aim.picks.length} of 2)` : ui.aim.kind === 'pair' ? `Choose any two players, yourself included if you like (${ui.aim.picks.length} of 2)` : (ui.aim.kind === 'bill' ? 'Tap a player with a Commons-passed bill' : ui.aim.kind === 'vonc' ? 'Choose a player. With no bills, they are eliminated' : 'Choose a player');
+    return `<p class="banner aim"><b>${ui.aim.as ? 'A V Dicey as ' : ''}${esc(ACTS[ui.aim.k].name)}:</b> ${need}. <button type="button" class="linkish" data-act="cancelaim">Cancel</button></p>`;
   }
   const sub = P.sub;
   if (sub){
@@ -2177,6 +2691,8 @@ function bannerView(my){
     }
     if (sub.k === 'trade') return `<div class="banner"><p>${esc(seatName(sub.src))} offers ${sub.tgt === -1 ? 'the whole House' : esc(seatName(sub.tgt))} a trade${sub.tgt === -1 ? '. First to accept takes it' : ''}.</p>${timerBar(sub.dl, TIME.trade)}</div>`;
     if (sub.k === 'talks') return `<div class="banner"><p>${esc(seatName(sub.src))} is in cross-party talks with ${esc(seatName(sub.tgt))}.</p>${timerBar(sub.dl, TIME.talks)}</div>`;
+    if (sub.k === 'gchq') return `<div class="banner"><p><b>GCHQ Strike.</b> ${esc(seatName(sub.src))} is sharing out the rest of ${esc(seatName(sub.tgt))}’s bill.</p>${timerBar(sub.dl, TIME.gchq)}</div>`;
+    if (sub.k === 'pgate') return `<div class="banner"><p><b>Partygate.</b> ${esc(seatName(sub.src))} is choosing cards to discard and redraw.</p>${timerBar(sub.dl, TIME.pgate)}</div>`;
     if (sub.k === 'elec') return `<div class="banner aim"><p><b>Election Interference.</b> The Foreign Power is choosing ${sub.n} of the top ${sub.cards.length} cards of the deck.</p>${timerBar(sub.dl, TIME.pop + TIME.elec)}</div>`;
     if (sub.k === 'fund') return `<div class="banner"><p>Party Funding for ${esc(seatName(sub.src))}: waiting on ${sub.wait.length} donor${sub.wait.length === 1 ? '' : 's'}.</p>${timerBar(sub.dl, TIME.fund)}</div>`;
   }
@@ -2190,13 +2706,13 @@ function dockView(my, meS){
     if (a.t !== b.t) return r[a.t] - r[b.t];
     return a.k < b.k ? -1 : a.k > b.k ? 1 : 0;
   });
-  const side = ROLE[meS.r].side;
+  const side = sideP(meS.r);
   const canAct = myTurnFree();
   const cards = hand.length ? hand.map(id => cardFace(id, {sel:ui.sel === id})).join('') : '<p class="muted empty">No cards in hand.</p>';
   return `<div class="dock">
     <div class="dock-head">
       <span class="role r-${meS.r}">${ROLE[meS.r].name}</span>
-      <span class="goal">${meS.o ? 'You have lost your seat.' : side === 'F' ? 'Carry 3 bills through the Commons before the Government does.' : side === 'G' ? 'Government needs 3 bills through the Commons. Keep the PM in office.' : 'Opposition needs 2 bills through the Commons, or bring down the PM.'}</span>
+      <span class="goal">${meS.o ? 'You have lost your seat.' : meS.r === 'F' && P.al === 'O' ? 'Allied with the Opposition: 2 bills between you, or bring down the PM. A win is yours.' : meS.r === 'F' && P.al === 'G' ? 'Absorbed into the Government: help it carry 3 bills.' : side === 'F' ? 'Carry 3 bills through the Commons before the Government does.' : side === 'G' ? 'Government needs 3 bills through the Commons. Keep the PM in office.' : 'Opposition needs 2 bills through the Commons, or bring down the PM.'}</span>
     </div>
     <div class="hand-scroll" aria-label="Your hand">${cards}</div>
     <div class="dock-actions">
@@ -2208,7 +2724,7 @@ function dockView(my, meS){
 
 function validAimSeat(aim, i){
   const s = P.s[i];
-  if (!s || s.o || i === mySeat()) return false;
+  if (!s || s.o || (i === mySeat() && aim.kind !== 'pair')) return false;
   if (aim.kind === 'bill') return s.bl.length > 0;
   return true;
 }
@@ -2220,7 +2736,7 @@ function myCounters(sub){
     const sov = P.s[my].h.find(id => typeOfId(id) === 'sov');
     const out = [];
     for (const t of (sov === undefined ? [] : sub.base.tg)){
-      if (P.s[t].o) continue;
+      if (P.s[t].o || (sub.lk && sub.lk[t])) continue;
       const ch = (sub.sh && sub.sh[t]) || [];
       const lastS = ch.length ? ch[ch.length - 1][1] : sub.base.src;
       if (lastS === my) continue;
@@ -2228,12 +2744,31 @@ function myCounters(sub){
       const label = ch.length % 2 ? `Cancel the shield on ${who}` : (t === my ? 'Shield yourself' : `Shield ${who}`);
       out.push({id:sov, for:t, label, sub:ch.length % 2 ? 'Parliamentary Sovereignty removes their protection.' : 'Parliamentary Sovereignty protects this player from the card.'});
     }
-    return out.concat(jrOptions(sub, my));
+    return out.concat(jrOptions(sub, my), diceyOptions(sub, my));
   }
   const top = topOf(sub); if (top.s === my) return [];
   const seen = new Set(), out = [];
   for (const id of P.s[my].h){ const k = typeOfId(id); if (!seen.has(k) && canCounter(k, top.a)){ seen.add(k); out.push({id, for:-1, label:esc(ACTS[k].name), sub:esc(ACTS[k].text)}); } }
-  return out.concat(jrOptions(sub, my));
+  return out.concat(jrOptions(sub, my), diceyOptions(sub, my));
+}
+function diceyOptions(sub, my){
+  const id = P.s[my].h.find(x => typeOfId(x) === 'dicey');
+  if (id === undefined) return [];
+  const note = 'Absolute: nobody can answer it.', lk = sub.lk || {}, out = [];
+  if (sub.mt){
+    for (const t of sub.base.tg){
+      if (P.s[t].o || lk[t]) continue;
+      const ch = (sub.sh && sub.sh[t]) || [];
+      if ((ch.length ? ch[ch.length - 1][1] : sub.base.src) === my) continue;
+      const who = t === my ? 'yourself' : esc(seatName(t));
+      out.push({id, as:'sov', for:t, label:`A V Dicey: ${ch.length % 2 ? 'cancel the shield on ' + who : 'shield ' + who}`, sub:note});
+    }
+    return out;
+  }
+  const top = topOf(sub); if (top.s === my) return [];
+  for (const k of Object.keys(ACTS)) if (ACTS[k].kind === 'd' && k !== 'jr' && canCounter(k, top.a)) out.push({id, as:k, for:-1, label:`A V Dicey as ${esc(ACTS[k].name)}`, sub:note});
+  if (sub.base.tg.includes(my) && sub.base.src !== my && sub.ch.length % 2 === 0) out.push({id, as:'jr', for:my, label:'A V Dicey as Judicial Review (succeeds outright)', sub:note});
+  return out;
 }
 function jrOptions(sub, my){
   const id = P.s[my].h.find(x => typeOfId(x) === 'jr');
@@ -2291,11 +2826,13 @@ function modalView(my){
   if (P.pz && P.ph === 'play') return pauseView(my);
   if (P.ph === 'over'){
     const w = P.win;
-    const rows = P.s.map(s => `<li class="${ROLE[s.r].side === w ? 'won' : ''}"><span>${esc(s.nm)}</span><span class="role r-${s.r}">${ROLE[s.r].name}</span><span class="muted">${s.bl.length} bill${s.bl.length === 1 ? '' : 's'}</span></li>`).join('');
-    const mine = my >= 0 && ROLE[P.s[my].r].side === w;
+    const res = r => ROLE[r].side === w ? 'won' : P.mn && ROLE[r].side === P.mn ? 'minor' : '';
+    const rows = P.s.map(s => `<li class="${res(s.r)}"><span>${esc(s.nm)}</span><span class="role r-${s.r}">${ROLE[s.r].name}</span><span class="muted">${res(s.r) === 'minor' ? 'minor victor' : s.bl.length + ' bill' + (s.bl.length === 1 ? '' : 's')}</span></li>`).join('');
+    const mr = my >= 0 ? res(P.s[my].r) : '';
     return `<div class="modal over"><div class="mbox">
-      <p class="eyebrow">${mine ? 'Your side carries the House' : 'The House has divided'}</p>
+      <p class="eyebrow">${mr === 'won' ? 'Your side carries the House' : mr === 'minor' ? 'You share the victory as a minor victor' : 'The House has divided'}</p>
       <h2 class="win w-${w}">${SIDE[w]} wins</h2>
+      ${P.mn ? '<p class="muted">An assisted coup: the Opposition are minor victors.</p>' : ''}
       <p>${esc(P.why || '')}</p>
       <ul class="results">${rows}</ul>
       <div class="mrow">
@@ -2305,6 +2842,7 @@ function modalView(my){
       </div></div></div>`;
   }
   const sub = P.sub;
+  if (flashOn() && !(sub && sub.k === 'resp' && inPop(sub) && local(sub.pop) > local(P.fl.at))) return flashView();
   if (sub && sub.k === 'elec' && inPop(sub)) return elecPopView(sub);
   if (sub && sub.k === 'resp' && inPop(sub)) return popView(sub);
   if (!sub || my < 0 || P.s[my].o) return '';
@@ -2319,7 +2857,7 @@ function modalView(my){
       <p class="muted">${sub.mt ? 'Parliamentary Sovereignty shields one targeted player. Anyone may play it, for themselves or for someone else.' : 'You can answer this. Anyone at the table may.'}</p>
       ${shieldList(sub)}
       ${timerBar(sub.dl, TIME.resp)}
-      <div class="counters">${cs.map(o => `<button type="button" class="btn counter" data-act="counter" data-id="${o.id}" data-for="${o.for}" data-guess="${o.guess || ''}"><b>${o.label}</b><small>${o.sub}</small></button>`).join('')}</div>
+      <div class="counters">${cs.map(o => `<button type="button" class="btn counter" data-act="counter" data-id="${o.id}" data-for="${o.for}" data-guess="${o.guess || ''}" data-as="${o.as || ''}"><b>${o.label}</b><small>${o.sub}</small></button>`).join('')}</div>
       <button type="button" class="btn ghost" data-act="letpass">Let it pass</button>
     </div></div>`;
   }
@@ -2352,6 +2890,30 @@ function modalView(my){
       <div class="mrow"><button type="button" class="btn brass" data-act="tkdone" ${even ? '' : 'disabled'}>${t.mine.length ? `Swap ${t.mine.length}` : 'No deal'}</button></div>
     </div></div>`;
   }
+  if (sub.k === 'gchq' && sub.src === my){
+    const keyG = sub.cards.join(',');
+    if (ui.gKey !== keyG){ ui.gKey = keyG; ui.gAlloc = {}; }
+    const others = P.s.map((x, i) => ({x, i})).filter(o => o.i !== my && !o.x.o);
+    const opt = cur => `<option value="-1"${cur === -1 ? ' selected' : ''}>Discard</option>` + others.map(o => `<option value="${o.i}"${cur === o.i ? ' selected' : ''}>${esc(o.x.nm)} (${ROLESHORT[o.x.r]})</option>`).join('');
+    return `<div class="modal"><div class="mbox wide">
+      <p class="eyebrow">GCHQ Strike</p><h2>Share out the rest of ${esc(seatName(sub.tgt))}’s bill</h2>
+      <p class="muted">${esc(seatName(sub.tgt))} has taken one card back. Give each remaining card to another player, or discard it. You cannot keep any.</p>
+      ${timerBar(sub.dl, TIME.gchq)}
+      <div class="galloc">${sub.cards.map(id => { const cur = ui.gAlloc[id] == null ? -1 : ui.gAlloc[id]; return `<label class="grow-row">${chip(typeOfId(id))}<select data-gchq="${id}" aria-label="Where this card goes">${opt(cur)}</select></label>`; }).join('')}</div>
+      <div class="mrow"><button type="button" class="btn brass" data-act="gdone">Confirm</button></div>
+    </div></div>`;
+  }
+  if (sub.k === 'pgate' && sub.src === my){
+    const keyP = String(sub.dl);
+    if (ui.pKey !== keyP){ ui.pKey = keyP; ui.pPick = []; }
+    return `<div class="modal"><div class="mbox wide">
+      <p class="eyebrow">Partygate</p><h2>Discard up to 5 cards</h2>
+      <p class="muted">You draw the same number back from the deck. If time runs out, you keep your hand.</p>
+      ${timerBar(sub.dl, TIME.pgate)}
+      <div class="minis">${P.s[my].h.map(id => cardFace(id, {act:'pgpick', sel:ui.pPick.includes(id)})).join('')}</div>
+      <div class="mrow"><button type="button" class="btn brass" data-act="pgdone">${ui.pPick.length ? `Discard ${ui.pPick.length} and draw ${ui.pPick.length}` : 'Keep my hand'}</button></div>
+    </div></div>`;
+  }
   if (sub.k === 'elec' && sub.src === my){
     if (ui.elecKey !== sub.pop){ ui.elecKey = sub.pop; ui.elecPick = []; }
     const n = ui.elecPick.length;
@@ -2380,6 +2942,29 @@ function elecPopView(sub){
     <p class="pop-on">${esc(seatName(sub.src))} looks at the top ${sub.cards.length} cards.</p>
   </div></div>`;
 }
+function flashBox(src, as, what){
+  const camp = P.s[src] ? ROLE[P.s[src].r].side : 'G';
+  return `<div class="pop" aria-live="polite"><div class="popbox camp-${camp}">
+    <p class="pop-who">${esc(seatName(src))} plays A V Dicey</p>
+    <div class="card act k-x dicey popcard"><span class="c-kind">Wild action</span>${art('dicey')}<span class="c-name">A V Dicey</span><span class="c-text">as ${esc(ACTS[as].name)}</span></div>
+    <p class="pop-on">${what ? what + '. ' : ''}<b>Absolute: it cannot be answered.</b></p>
+  </div></div>`;
+}
+function flashOn(){ return !!(P && P.fl && Date.now() < local(P.fl.at) + TIME.pop); }
+function flashView(){
+  const f = P.fl;
+  if (f.a === 'ev'){
+    const e = EVENTS[f.ev];
+    return `<div class="pop" aria-live="polite"><div class="popbox camp-F"><p class="pop-who">${esc(seatName(f.src))} draws</p>
+      <div class="card act popcard event"><span class="c-kind">Foreign Interference</span>${art(f.ev)}<span class="c-name">${esc(e.name)}</span><span class="c-text">${esc(e.short)}</span></div>
+      <p class="pop-on">${esc(f.note || '')}</p></div></div>`;
+  }
+  if (f.a === 'dicey') return flashBox(f.src, f.as, f.tg && f.tg.length ? `on ${f.tg.map(t => t === f.src ? 'themselves' : esc(seatName(t))).join(' and ')}${f.bt ? `’s ${esc(BILL[f.bt].name)}` : ''}` : '');
+  const d = ACTS[f.a], camp = P.s[f.src] ? ROLE[P.s[f.src].r].side : 'G';
+  return `<div class="pop" aria-live="polite"><div class="popbox camp-${camp}"><p class="pop-who">${esc(seatName(f.src))} plays</p>
+    <div class="card act k-${d.kind} popcard"><span class="c-kind">${KIND[d.kind]}</span>${art(f.a)}<span class="c-name">${esc(d.name)}</span><span class="c-text">${esc(BRIEF[f.a] || '')}</span></div>
+    <p class="pop-on">It cannot be stopped.</p></div></div>`;
+}
 function inPop(sub){ return sub.pop != null && Date.now() < local(sub.pop) + TIME.pop; }
 function popView(sub){
   const b = sub.base;
@@ -2390,6 +2975,10 @@ function popView(sub){
     line = ch.length % 2 ? `${esc(seatName(top.s))} shields ${t === top.s ? 'themselves' : esc(seatName(t))}` : `${esc(seatName(top.s))} cancels the shield on ${esc(seatName(t))}`;
   }
   if (!(sub.mt ? sub.last : sub.ch.length) && b.defl) line = 'Royal Intervention turns the rejection back';
+  if (sub.last && sub.last[0] === 'dicey'){
+    const r = sub.last, t = r[2], ch = sub.sh[t] || [];
+    return flashBox(r[1], r[4], ch.length % 2 ? `shields ${t === r[1] ? 'themselves' : esc(seatName(t))}` : `cancels the shield on ${esc(seatName(t))}`);
+  }
   if (sub.last && sub.last[0] === 'jr'){
     const r = sub.last;
     return `<div class="pop" aria-live="polite"><div class="popbox camp-${P.s[r[1]] ? ROLE[P.s[r[1]].r].side : 'G'}">
@@ -2404,7 +2993,7 @@ function popView(sub){
   const camp = P.s[top.s] ? ROLE[P.s[top.s].r].side : 'G';
   return `<div class="pop" aria-live="polite"><div class="popbox camp-${camp}">
     <p class="pop-who">${line}</p>
-    <div class="card act k-${d.kind} popcard"><span class="c-kind">${d.kind === 'm' ? 'Manoeuvre' : 'Defence'}</span>${art(top.a)}<span class="c-name">${esc(d.name)}</span><span class="c-text">${esc(BRIEF[top.a] || '')}</span></div>
+    <div class="card act k-${d.kind} popcard"><span class="c-kind">${KIND[d.kind]}</span>${art(top.a)}<span class="c-name">${esc(d.name)}</span><span class="c-text">${esc(BRIEF[top.a] || '')}</span></div>
     ${on ? `<p class="pop-on">${on}</p>` : ''}
   </div></div>`;
 }
@@ -2448,6 +3037,10 @@ function cardSheet(id){
     const ok = canPassWith(hand, c.k), can = myTurnFree() && ok;
     const useW = Math.max(0, b.set - Math.min(have, b.set));
     const label = ok ? (useW ? `Pass in the Commons (${useW} wild)` : 'Pass in the Commons') : `You hold ${have} of ${b.set}${w ? ` +${w} wild` : ''}`;
+    if (b.nowild) return `<div class="bigcard">${cardFace(id, {act:'noop'})}</div>
+      <h2>${esc(b.name)}</h2>
+      <p>The only set of 6, and there are only 6 in the deck. <b>Henry VIII Clauses cannot be used.</b> Whoever passes it through the Commons wins the game outright for their side.</p>
+      <button type="button" class="btn brass" data-act="passbill" data-k="${c.k}" ${can ? '' : 'disabled'}>${ok ? 'Pass in the Commons and win' : `You hold ${have} of 6`}</button>`;
     return `<div class="bigcard">${cardFace(id, {act:'noop'})}</div>
       <h2>${esc(b.name)}</h2>
       <p>Collect ${b.set} cards of this bill, then pass it as one move. Henry VIII Clauses can fill missing slots. Passed bills sit on your seat and count for your side. The same bill can be passed twice.</p>
@@ -2455,7 +3048,18 @@ function cardSheet(id){
   }
   const a = ACTS[c.k];
   let btn = '';
-  if (a.kind === 'm'){
+  if (a.kind === 'x'){
+    const free = myTurnFree(), my = mySeat();
+    const list = Object.keys(ACTS).filter(k => ACTS[k].kind === 'm').map(k => {
+      const t = ACTS[k].tgt;
+      let why = '';
+      if (k === 'vonc' && !P.fb) why = 'after the first bill';
+      else if (t === 'bill' && !P.s.some((x, i) => i !== my && !x.o && x.bl.length)) why = 'no passed bills';
+      return `<button type="button" class="btn ghost asopt" data-act="playas" data-id="${id}" data-k="${k}" ${free && !why ? '' : 'disabled'}>${ico(k)} ${esc(ACTS[k].name)}${why ? ` <small class="muted">${why}</small>` : ''}</button>`;
+    }).join('');
+    btn = `<h3>Play it as</h3><div class="aslist">${list}</div>${free ? '' : '<p class="muted small">On your turn you can play it as any manoeuvre.</p>'}
+      <p class="note">When someone else plays a card, you will also be offered A V Dicey as any defence that fits. Nobody can answer it.</p>`;
+  } else if (a.kind === 'm'){
     let why = '';
     if (!myTurnFree()) why = 'Wait for your turn';
     else if (c.k === 'vonc' && !P.fb) why = 'Not until the first bill has passed';
@@ -2486,36 +3090,51 @@ function tradeSheet(){
 }
 
 function rulesBody(){
-  const acts = Object.values(ACTS).map(a => `<li><b>${esc(a.name)}</b> <span class="kindtag">${a.kind === 'm' ? 'Manoeuvre' : 'Defence'}</span><br>${esc(a.text)}</li>`).join('');
-  const bills = BILLS.map(b => `<li>${chip(b.k)} ${esc(b.name)} <span class="muted">set of ${b.set}, ${b.set + 2} in the deck</span></li>`).join('');
+  const acts = Object.values(ACTS).map(a => `<li><b>${esc(a.name)}</b> <span class="kindtag">${KIND[a.kind]}</span><br>${esc(a.text)}</li>`).join('');
+  const bills = BILLS.map(b => `<li>${chip(b.k)} ${esc(b.name)} <span class="muted">set of ${b.set}, ${b.copies || b.set + 2} in the deck${b.nowild ? ', no wilds' : ''}</span></li>`).join('');
+  const evs = Object.entries(EVENTS).map(([k, e]) => `<li>${ico(k)} <b>${esc(e.name)}</b> <span class="kindtag">${e.n} in the deck</span><br>${esc(e.text)}</li>`).join('');
+  const seatRows = [3, 4, 5, 6, 7, 8].map(n => { const b = capsFor(n, false), x = n >= 4 ? capsFor(n, true) : null;
+    return `<tr><td>${n}</td><td>${b.PM + b.G} v ${b.O}</td><td>${x ? `${x.PM + x.G} v ${x.O} + FP` : '—'}</td></tr>`; }).join('');
   return `<h2>How to play</h2>
   ${P && P.s ? '<button type="button" class="btn ghost" data-act="guide">Open the quick guide</button>' : ''}
   <h3>Sides</h3>
   <ul class="rules">
-    <li><b>Government</b> (the Prime Minister and Government MPs) wins by passing 3 bills between them.</li>
-    <li><b>Opposition</b> wins by passing 2 bills, or by bringing down the Prime Minister.</li>
-    <li><b>Foreign Power</b> plays alone and wins by passing 3 bills before the Government does.</li>
-    <li>If every Opposition MP loses their seat, the Government wins. All roles are public.</li>
+    <li><b>Government</b> (the Prime Minister and Government MPs) wins by passing 3 bills between them, or when every Opposition MP has lost their seat.</li>
+    <li><b>Opposition</b> wins by passing 2 bills between them, or by bringing down the Prime Minister.</li>
+    <li><b>Codified Constitution:</b> whoever passes it through the Commons wins outright for their side. It needs all 6 real cards (there are only 6), and Henry VIII Clauses cannot be used.</li>
+    <li>All roles are public. The host chooses whether players pick their roles in the lobby or are dealt them at random.</li>
   </ul>
+  <h3>Seats</h3>
+  <p class="muted small">Even tables split equally; odd tables give the Government one more seat. The Foreign Power is not counted.</p>
+  <div class="tablewrap"><table class="seattab"><thead><tr><th>Players</th><th>Base game</th><th>Foreign Interference</th></tr></thead><tbody>${seatRows}</tbody></table></div>
   <h3>Each side’s advantages</h3>
   <ul class="rules">
-    <li><b>Government:</b> the most seats at the table, and the Prime Minister draws 3 cards a turn.</li>
-    <li><b>Opposition:</b> needs only 2 bills to win.</li>
-    <li><b>Foreign Power:</b> draws 4 cards a turn, and Election Interference hands it 5 of the top 10 cards.</li>
+    <li><b>Government:</b> the Prime Minister draws 3 cards a turn, and holds a majority on odd tables.</li>
+    <li><b>Opposition:</b> needs only 2 bills to win. When only one Opposition MP is left, they draw 2 cards for every Government player still in.</li>
   </ul>
   <h3>Your turn</h3>
   <ul class="rules">
-    <li>Draw 2 cards. The Prime Minister draws 3 and the Foreign Power draws 4.</li>
+    <li>Draw 2 cards. The Prime Minister draws 3, the Foreign Power 4, and a lone Opposition MP 2 for every Government player still in.</li>
     <li>Make up to 3 moves: play a manoeuvre card, pass a bill, or make a trade that is accepted. You have 2 minutes.</li>
     <li>Trades go to one player or to the whole House. On an open offer, the first player to accept gets the deal.</li>
     <li>Defence cards are played in answer to someone else’s card, by anyone, on any turn. Everyone has 30 seconds to answer. Answering is not a move. Answers can be answered in turn.</li>
     <li>Anyone still in the game can pause at any time. The player who paused can resume at once; everyone else can after 30 seconds. All clocks stop while paused.</li>
     <li>No hand limit. When the deck is down to 10 cards, the discard pile is shuffled back in.</li>
+    <li>The base deck holds 212 cards at every table size; Foreign Interference adds 15, making 227.</li>
   </ul>
-  <h3>Bills</h3><ul class="rules plain">${bills}<li>${chip('wild')} <b>${esc(WILD.name)}</b> <span class="muted">wild, 10 in the deck (plus 1 per extra player)</span><br>${esc(WILD.text)}</li></ul>
+  <h3>Bills</h3><ul class="rules plain">${bills}<li>${chip('wild')} <b>${esc(WILD.name)}</b> <span class="muted">wild, 12 in the deck</span><br>${esc(WILD.text)}</li></ul>
   <p class="muted small">Bills on the table have passed the Commons but still await the Lords and Royal Assent, so they can be knocked out. The same bill can be passed twice. A knocked-out bill sends all its cards, wilds included, to the discard pile. A bill taken by Confidence and Supply keeps its wilds.</p>
-  <h3>Action cards</h3><ul class="rules plain">${acts}<li><b>${esc(ELEC.name)}</b> <span class="kindtag">Triggered on draw, 5 in the deck</span><br>${esc(ELEC.text)} If the Foreign Power has lost its seat, it has no effect.</li></ul>
-  <p class="muted small">Larry the Chief Mouser and Election Interference cannot be stopped. Against Coalition Agreement or Party Funding, Parliamentary Sovereignty shields one player: the card still hits everyone else. A shield can itself be cancelled by another Parliamentary Sovereignty. Judicial Review is only for the player a card is aimed at: predict bill or action, and the top card of the deck is revealed and discarded. Prorogation costs your whole hand as soon as you play it. A Lords’ Rejection turned back by Royal Intervention knocks out the most recent bill of the player who used it.</p>`;
+  <h3>Action cards</h3><ul class="rules plain">${acts}</ul>
+  <p class="muted small">A V Dicey can be played as any other action card and cannot be answered: played as Judicial Review it succeeds without a guess. Larry the Chief Mouser cannot be stopped. GCHQ Strike: the targeted player keeps one real card of the bill; whoever played it gives each other card to another player (the target included) or discards it. Fox Hunting: any two players, yourself included, swap hands. Against Coalition Agreement or Party Funding, Parliamentary Sovereignty shields one player: the card still hits everyone else. A shield can itself be cancelled by another Parliamentary Sovereignty. Judicial Review is only for the player a card is aimed at: predict bill or action, and the top card of the deck is revealed and discarded (a card triggered on draw counts as a win for the claimant). Prorogation costs your whole hand as soon as you play it. A Lords’ Rejection turned back by Royal Intervention knocks out the most recent bill of the player who used it.</p>
+  <h3 class="exp-h">Expansion: Foreign Interference</h3>
+  <p class="muted small">For 4 to 8 players, switched on by the host in the lobby.</p>
+  <ul class="rules">
+    <li><b>Foreign Power</b> plays alone, draws 4 cards a turn, and wins by passing 3 bills before the Government does.</li>
+    <li>Five kinds of card join the deck. Each is played the moment it is drawn: the draw is lost and nothing can stop it. If the Foreign Power has lost its seat, they have no effect.</li>
+    <li><b>After Assisted Coup</b> the Foreign Power and the Opposition are one side: their bills count together towards 2, the Government must also unseat the Foreign Power to win by emptying the Opposition benches, and a win counts as a Foreign Power victory with the Opposition as minor victors. The Foreign Power keeps its 4-card draw but never counts as a lone Opposition MP.</li>
+    <li><b>After National Security</b> the Foreign Power is part of the Government: their bills count together towards 3, and a win counts as a Government victory. Whichever of the two cards comes first is permanent; the other then has no effect.</li>
+  </ul>
+  <ul class="rules plain evlist">${evs}</ul>`;
 }
 
 /* ---------- events ---------- */
@@ -2536,6 +3155,12 @@ app.addEventListener('click', ev => {
     case 'log': ui.sheet = 'log'; render(); break;
     case 'closesheet': ui.sheet = null; ui.billPick = null; render(); break;
     case 'count': if (lobby){ lobby.n = Number(el.dataset.n); publish(); } break;
+    case 'lobbyexp': if (lobby){ lobby.exp = !lobby.exp; publish(); } break;
+    case 'rolemode': if (lobby){ lobby.rm = el.dataset.m; publish(); } break;
+    case 'pickrole': { const r = el.dataset.r || null; const cur = P && P.pk ? P.pk[me.cid] : null; sendWant(r && r === cur ? null : r); break; }
+    case 'solon': ui.soloN = Number(el.dataset.n); ui.pracOpen = true; LS.set('oo-sn', ui.soloN); render(); break;
+    case 'soloexp': ui.soloExp = !ui.soloExp; ui.pracOpen = true; LS.set('oo-sx', ui.soloExp); render(); break;
+    case 'solorole': ui.soloRole = el.dataset.r; ui.pracOpen = true; LS.set('oo-sr', ui.soloRole); render(); break;
     case 'start': hostStart(); break;
     case 'leave': leave(); break;
     case 'again': backToLobby(); break;
@@ -2543,13 +3168,17 @@ app.addEventListener('click', ev => {
       if (ui.aim) return;
       ui.sel = id; ui.sheet = 'card'; render(); break;
     case 'passbill': ui.sheet = null; ui.sel = null; send({k:'pass', b:el.dataset.k}); break;
-    case 'playcard': {
-      const k = typeOfId(id), tgt = ACTS[k].tgt;
+    case 'playcard': case 'playas': {
+      const as = act === 'playas' ? el.dataset.k : undefined;
+      const k = as || typeOfId(id), tgt = ACTS[k].tgt;
       ui.sheet = null; ui.sel = null;
-      if (tgt === 'none') send({k:'play', card:id});
-      else { ui.aim = {card:id, k, kind:tgt, picks:[]}; render(); }
+      if (tgt === 'none') send({k:'play', card:id, as});
+      else { ui.aim = {card:id, k, kind:tgt, picks:[], as}; render(); }
       break;
     }
+    case 'gdone': if (P && P.sub && P.sub.k === 'gchq') send({k:'gchq', alloc:Object.assign({}, ui.gAlloc)}); break;
+    case 'pgpick': toggleMax(ui.pPick, id, 5); render(); break;
+    case 'pgdone': if (P && P.sub && P.sub.k === 'pgate'){ send({k:'pgate', ids:ui.pPick.slice()}); ui.pPick = []; } break;
     case 'cancelaim': ui.aim = null; render(); break;
     case 'seat': onSeat(i); break;
     case 'bill': {
@@ -2557,7 +3186,7 @@ app.addEventListener('click', ev => {
       const bi = Number(el.dataset.bi);
       if (ui.aim && (ui.aim.kind === 'bill' || ui.aim.kind === 'vonc') && validAimSeat(ui.aim, i)){
         const a = ui.aim; ui.aim = null; ui.sheet = null; ui.billPick = null;
-        send({k:'play', card:a.card, tg:[i], bi});
+        send({k:'play', card:a.card, tg:[i], bi, as:a.as});
       } else if (!ui.aim){ const k = P.s[i].bl[bi]; toast(`${BILL[k].name}, passed by the Commons for ${P.s[i].nm}. Awaiting the Lords.`); }
       else onSeat(i);
       break;
@@ -2572,7 +3201,7 @@ app.addEventListener('click', ev => {
       const w = {}; Object.entries(ui.trade.want).forEach(([k, v]) => { if (v > 0) w[k] = v; });
       ui.sheet = null; send({k:'trade', tg:ui.trade.tg, give:ui.trade.give.slice(), want:w}); break;
     }
-    case 'counter': if (P && P.sub && P.sub.k === 'resp'){ ui.passKey = respKey(P.sub); send({k:'resp', card:id, at:P.sub.ver, for:Number(el.dataset.for), guess:el.dataset.guess || undefined}); } break;
+    case 'counter': if (P && P.sub && P.sub.k === 'resp'){ ui.passKey = respKey(P.sub); send({k:'resp', card:id, at:P.sub.ver, for:Number(el.dataset.for), guess:el.dataset.guess || undefined, as:el.dataset.as || undefined}); } break;
     case 'letpass': if (P && P.sub && P.sub.k === 'resp'){ ui.passKey = respKey(P.sub); send({k:'rpass', at:P.sub.ver}); render(); } break;
     case 'taccept': send({k:'tans', yes:true}); break;
     case 'treject': send({k:'tans', yes:false}); break;
@@ -2580,7 +3209,7 @@ app.addEventListener('click', ev => {
     case 'tkmine': { const n = P.sub ? P.sub.n : 2; toggleMax(ui.talks.mine, id, n); render(); break; }
     case 'tkdone': send({k:'talks', mine:ui.talks.mine.slice(), theirs:ui.talks.theirs.slice()}); ui.talks = {mine:[], theirs:[]}; break;
     case 'donate': send({k:'give', card:id}); break;
-    case 'sololvl': ui.soloLvl = Number(el.dataset.n); LS.set('oo-lvl', ui.soloLvl); render(); break;
+    case 'sololvl': ui.soloLvl = Number(el.dataset.n); ui.pracOpen = true; LS.set('oo-lvl', ui.soloLvl); render(); break;
     case 'lobbylvl': if (lobby){ lobby.lvl = Number(el.dataset.n); publish(); } break;
     case 'guide': ui.sheet = 'guide'; render(); break;
     case 'briefready': if (P && P.br){ ui.briefKey = P.c + ':' + P.br.until; send({k:'ready'}); render(); } break;
@@ -2595,6 +3224,11 @@ app.addEventListener('keydown', ev => {
   else if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.matches('.seat')){ ev.preventDefault(); onSeat(Number(ev.target.dataset.i)); }
   else if (ev.key === 'Escape' && ui.sheet){ ui.sheet = null; render(); }
 });
+app.addEventListener('toggle', ev => { if (ev.target.matches && ev.target.matches('details.practice')) ui.pracOpen = ev.target.open; }, true);
+app.addEventListener('change', ev => {
+  const g = ev.target.closest && ev.target.closest('select[data-gchq]');
+  if (g){ ui.gAlloc = ui.gAlloc || {}; ui.gAlloc[g.dataset.gchq] = Number(g.value); }
+});
 app.addEventListener('input', ev => {
   if (ev.target.id === 'nm') me.nm = ev.target.value;
   if (ev.target.id === 'code'){ ev.target.value = ev.target.value.toUpperCase(); ui.joinCode = ev.target.value; }
@@ -2607,15 +3241,15 @@ function onSeat(i){
   if (!aim){ ui.seatI = i; ui.sheet = 'seat'; render(); return; }
   if (!validAimSeat(aim, i)){ toast(aim.kind === 'bill' ? 'That player has no Commons-passed bills.' : 'Choose another player still in the House.'); return; }
   const s = P.s[i];
-  if (aim.kind === 'two'){
+  if (aim.kind === 'two' || aim.kind === 'pair'){
     toggle(aim.picks, i);
-    if (aim.picks.length === 2){ ui.aim = null; send({k:'play', card:aim.card, tg:aim.picks.slice()}); }
+    if (aim.picks.length === 2){ ui.aim = null; send({k:'play', card:aim.card, tg:aim.picks.slice(), as:aim.as}); }
     else render();
     return;
   }
   if ((aim.kind === 'bill' || aim.kind === 'vonc') && s.bl.length > 1){ ui.billPick = i; ui.sheet = 'billpick'; render(); return; }
   ui.aim = null;
-  send({k:'play', card:aim.card, tg:[i], bi:0});
+  send({k:'play', card:aim.card, tg:[i], bi:0, as:aim.as});
 }
 
 /* ---------- clocks ---------- */
@@ -2640,7 +3274,7 @@ function frame(){
     el.classList.toggle('low', sec <= 10);
   });
   if (mode === 'guest' && hostLostAt && now > hostLostAt && !ui.lostShown){ ui.lostShown = true; render(); }
-  const popNow = !!(P && P.sub && (P.sub.k === 'resp' || P.sub.k === 'elec') && inPop(P.sub));
+  const popNow = !!(P && ((P.sub && (P.sub.k === 'resp' || P.sub.k === 'elec') && inPop(P.sub)) || flashOn()));
   if (popNow !== ui.popOn){ ui.popOn = popNow; render(); }
   requestAnimationFrame(frame);
 }
